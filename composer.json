@@ -6,6 +6,8 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
+        "ext-mbstring": "*",
+        "ext-mcrypt": "*",
         "laravel/framework": "5.2.*"
     },
     "require-dev": {
