@@ -2,6 +2,16 @@
 	"folders":
 	[
 		{
+            "file_exclude_patterns":
+            [
+                "*.sublime*",
+                "*.lock"
+            ],
+            "folder_exclude_patterns":
+            [
+                "vendor",
+                ".phpintel"
+            ],
 			"path": "."
 		}
 	]

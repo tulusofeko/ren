@@ -13,7 +13,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Load menu to all view
+        $menus = json_decode(file_get_contents(
+            base_path() . '/resources/views/data/menu.json')
+        );
+
+        view()->share('menus', $menus);
     }
 
     /**

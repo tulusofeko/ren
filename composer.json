@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "ext-mbstring": "*",
         "ext-mcrypt": "*",
-        "laravel/framework": "5.2.*"
+        "laravel/framework": "5.2.*",
+        "symfony/yaml": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

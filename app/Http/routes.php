@@ -11,6 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use Symfony\Component\Yaml\Yaml;
+
+Route::get('/', 'DashboardController@v1');
+
+Route::get('/data/menu', ['as' => 'menu', function () {
+    return response()->json(json_decode(
+        file_get_contents(base_path() . '/resources/views/data/menu.json')
+    ));
+}]);

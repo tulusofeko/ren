@@ -4,6 +4,98 @@
 		"selected_items":
 		[
 			[
+				"var",
+				"var_dump"
+			],
+			[
+				"men",
+				"$menus〔variable〕"
+			],
+			[
+				"tree",
+				"treechild〔variable〕"
+			],
+			[
+				"c",
+				"childs"
+			],
+			[
+				"add",
+				"addClass〔function〕"
+			],
+			[
+				"chil",
+				"childs"
+			],
+			[
+				"typ",
+				"typeof〔keyword〕"
+			],
+			[
+				"chi",
+				"childs"
+			],
+			[
+				"menu",
+				"menuTreeGen〔function〕"
+			],
+			[
+				"la",
+				"label"
+			],
+			[
+				"lab",
+				"labelcolor"
+			],
+			[
+				"label",
+				"labelcolor"
+			],
+			[
+				"tre",
+				"treechild"
+			],
+			[
+				"to",
+				"toUpperCase"
+			],
+			[
+				"app",
+				"appendTo〔function〕"
+			],
+			[
+				"side",
+				"sidemenu〔variable〕"
+			],
+			[
+				"sid",
+				"sidemenu〔variable〕"
+			],
+			[
+				"js",
+				"json_decode"
+			],
+			[
+				"json",
+				"json_last_error〔function〕"
+			],
+			[
+				"yaml",
+				"yaml_parse_file"
+			],
+			[
+				"base",
+				"base_path〔function〕"
+			],
+			[
+				"res",
+				"response〔function〕"
+			],
+			[
+				"inc",
+				"includes"
+			],
+			[
 				"cl",
 				"class	Attr"
 			],
@@ -64,10 +156,6 @@
 				"border"
 			],
 			[
-				"to",
-				"toggle"
-			],
-			[
 				"boder",
 				"border"
 			],
@@ -108,10 +196,6 @@
 				"clip"
 			],
 			[
-				"men",
-				"menggunakan"
-			],
-			[
 				"menam",
 				"menampilkan"
 			],
@@ -126,10 +210,6 @@
 			[
 				"PS",
 				"PSR-1"
-			],
-			[
-				"var",
-				"variabel"
 			],
 			[
 				"sebe",
@@ -320,10 +400,6 @@
 				"transparent"
 			],
 			[
-				"base",
-				"base-line-height"
-			],
-			[
 				"tag",
 				"tag-list"
 			],
@@ -438,87 +514,46 @@
 			[
 				"COnsta",
 				"Constants"
-			],
-			[
-				"nam",
-				"namespace"
-			],
-			[
-				"pret",
-				"prettyprint"
-			],
-			[
-				"class",
-				"class〔keyword〕"
-			],
-			[
-				"pre",
-				"prettyprint"
-			],
-			[
-				"ut",
-				"utp_data"
-			],
-			[
-				"samp",
-				"samping"
-			],
-			[
-				"un",
-				"untuk"
-			],
-			[
-				"bas",
-				"base_url"
-			],
-			[
-				"dis",
-				"display"
-			],
-			[
-				"pull",
-				"pull-right	 bootstrap.min.css"
-			],
-			[
-				"col-md",
-				"col-md-6	 bootstrap.min.css"
-			],
-			[
-				"fa-tw",
-				"fa-twitter-square	 font-awesome.min.css"
-			],
-			[
-				"fa-fac",
-				"fa-facebook-square	 font-awesome.min.css"
-			],
-			[
-				"fa-share-square",
-				"fa-share-square-o	 font-awesome.min.css"
-			],
-			[
-				"fa-share-",
-				"fa-share-square	 font-awesome.min.css"
-			],
-			[
-				"tr",
-				"trimsize"
-			],
-			[
-				"fa-arrow",
-				"fa-arrow-circle-up	 font-awesome.min.css"
-			],
-			[
-				"hid",
-				"hide〔function〕"
-			],
-			[
-				"di",
-				"div	Tag"
 			]
 		]
 	},
 	"buffers":
 	[
+		{
+			"contents": "<!-- sidebar: style can be found in sidebar.less -->\n<section class=\"sidebar\">\n  <!-- Sidebar user panel -->\n  <div class=\"user-panel\">\n    <div class=\"pull-left image\">\n      <img src=\"dist/img/user2-160x160.jpg\" class=\"img-circle\" alt=\"User Image\">\n    </div>\n    <div class=\"pull-left info\">\n      <p>Alexander Pierce</p>\n      <a href=\"#\"><i class=\"fa fa-circle text-success\"></i> Online</a>\n    </div>\n  </div>\n  <!-- search form -->\n  <form action=\"#\" method=\"get\" class=\"sidebar-form\">\n    <div class=\"input-group\">\n      <input type=\"text\" name=\"q\" class=\"form-control\" placeholder=\"Search...\">\n      <span class=\"input-group-btn\">\n        <button type=\"submit\" name=\"search\" id=\"search-btn\" class=\"btn btn-flat\"><i class=\"fa fa-search\"></i></button>\n      </span>\n    </div>\n  </form>\n  <!-- /.search form -->\n  <!-- sidebar menu: : style can be found in sidebar.less -->\n  <ul id=\"sidemenu\" class=\"sidebar-menu\" data-menu-data=\"{{ route('menu') }}\">\n    <!-- Menu will loaded by js -->\n    \n    @foreach ($menus as $menu)\n\n    @endforeach\n  </ul>\n</section>\n<!-- /.sidebar -->",
+			"file": "resources/views/includes/sidebar.blade.php",
+			"file_size": 1081,
+			"file_write_time": 131058081721918380,
+			"settings":
+			{
+				"buffer_size": 1086,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "resources/views/includes/javascript.blade.php",
+			"settings":
+			{
+				"buffer_size": 3915,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "app/Http/routes.php",
+			"settings":
+			{
+				"buffer_size": 656,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "resources/views/data/menu.json",
+			"settings":
+			{
+				"buffer_size": 6387,
+				"line_ending": "Unix"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -527,10 +562,62 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 357.0,
-		"last_filter": "dele",
+		"height": 225.0,
+		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
+			[
+				"ren",
+				"File: Rename"
+			],
+			[
+				"renam",
+				"File: Rename"
+			],
+			[
+				"rena",
+				"File: Rename"
+			],
+			[
+				"re",
+				"File: Rename"
+			],
+			[
+				"yml",
+				"Set Syntax: YAML"
+			],
+			[
+				"move",
+				"File: Move"
+			],
+			[
+				"new",
+				"File: New File Relative to Current View"
+			],
+			[
+				"wrap",
+				"Word Wrap: Toggle"
+			],
+			[
+				"set blad",
+				"Set Syntax: Laravel Blade"
+			],
+			[
+				"sniff",
+				"PHP Code Sniffer: Sniff this file"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Package Control: List Packages"
+			],
 			[
 				"dele",
 				"File: Delete"
@@ -542,14 +629,6 @@
 			[
 				"set mark",
 				"Set Syntax: Markdown"
-			],
-			[
-				"renam",
-				"File: Rename"
-			],
-			[
-				"wrap",
-				"Word Wrap: Toggle"
 			],
 			[
 				"emoji",
@@ -580,20 +659,8 @@
 				"Octopress: Deploy"
 			],
 			[
-				"insta",
-				"Package Control: Install Package"
-			],
-			[
-				"move",
-				"File: Move"
-			],
-			[
 				"del",
 				"File: Delete"
-			],
-			[
-				"new",
-				"File: New File Relative to Current View"
 			],
 			[
 				"mo",
@@ -602,14 +669,6 @@
 			[
 				"remo",
 				"Package Control: Remove Package"
-			],
-			[
-				"rena",
-				"File: Rename"
-			],
-			[
-				"re",
-				"File: Rename"
 			],
 			[
 				"inst",
@@ -686,10 +745,6 @@
 			[
 				"sideb",
 				"Side Bar: Refresh"
-			],
-			[
-				"ren",
-				"File: Rename"
 			],
 			[
 				"mark",
@@ -820,10 +875,6 @@
 				"File: Duplicate"
 			],
 			[
-				"packa",
-				"Package Control: List Packages"
-			],
-			[
 				"install",
 				"Package Control: Install Package"
 			],
@@ -904,7 +955,7 @@
 				"Package Control: Install Package"
 			]
 		],
-		"width": 575.0
+		"width": 510.0
 	},
 	"console":
 	{
@@ -936,11 +987,43 @@
 	[
 		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte",
 		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app",
-		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app/Http"
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app/Providers",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/data"
 	],
 	"file_history":
 	[
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app/Providers/AppServiceProvider.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/head.blade.php",
+		"/run/media/nsetyo/5ED03A32022EBB3A/.root/.hard/PPPD-320/PHA_r-l.me_pppd-320.srt",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/resources/views/utp-input.blade.php",
 		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app/Http/routes.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/layouts/default.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/resources/views/personil-dashboard.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/resources/views/utp-edit.blade.php",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/YAML.sublime-settings",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/composer.json",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/sidebar.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/dashboard-v1.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/header.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/ctrl-sidebar.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/javascript.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/resources/views/includes/footer.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/app/Http/Controllers/DashboardController.php",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/blade.sublime-settings",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/JSON.sublime-settings",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/resources/views/dashboard.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/resources/views/layouts/admin.blade.php",
+		"/home/nsetyo/Documents/Work/WebDev/laravel-adminlte/laravel-lte.sublime-project",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/app/Http/Controllers/DashboardController.php",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/app/Http/routes.php",
+		"/home/nsetyo/.config/sublime-text-3/Packages/Phpcs/phpcs.sublime-settings",
+		"/home/nsetyo/.config/sublime-text-3/Packages/User/phpcs.sublime-settings",
+		"/home/nsetyo/Documents/Work/WebDev/tulang/tulang.sublime-project",
+		"/home/nsetyo/Documents/Work/WebDev/simwasdal/simwasdal.sublime-project",
 		"/home/nsetyo/Documents/Work/Others/nsetyo.web.id/nsetyo.github.io/_templates/draft",
 		"/home/nsetyo/Documents/Work/Others/nsetyo.web.id/nsetyo.github.io/assets/css/main.scss",
 		"/home/nsetyo/Documents/Work/Others/nsetyo.web.id/nsetyo.github.io/_drafts/terminal-tips-01-membuat-banyak-files-dengan-nama-serupa.md",
@@ -985,6 +1068,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sidebar-menu",
+			"path",
 			"files",
 			"&shy;",
 			".codehilite ",
@@ -1110,9 +1195,7 @@
 			"tools",
 			"todo",
 			"tool",
-			"tools",
-			"todo",
-			"tool"
+			"tools"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1142,8 +1225,170 @@
 	"groups":
 	[
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "resources/views/includes/sidebar.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1086,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1000,
+								1000
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/Laravel Blade Highlighter/blade.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "resources/views/includes/javascript.blade.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3915,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2198,
+								2198
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/Laravel Blade Highlighter/blade.sublime-syntax",
+							"word_wrap": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 594.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "app/Http/routes.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 656,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								643,
+								643
+							]
+						],
+						"settings":
+						{
+							"auto_complete": false,
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/PHP/PHP.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "resources/views/data/menu.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6387,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6377,
+								6377
+							]
+						],
+						"settings":
+						{
+							"auto_complete": true,
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html"
+								},
+								{
+									"characters": ".#",
+									"selector": "text.html"
+								}
+							],
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 4077.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -1208,16 +1453,48 @@
 		"selected_items":
 		[
 			[
+				"route",
+				"app/Http/routes.php"
+			],
+			[
+				"rout",
+				"app/Http/routes.php"
+			],
+			[
+				"men",
+				"resources/views/data/menu.json"
+			],
+			[
+				"head",
+				"resources/views/includes/head.blade.php"
+			],
+			[
+				"jav",
+				"resources/views/includes/javascript.blade.php"
+			],
+			[
+				"side",
+				"resources/views/includes/sidebar.blade.php"
+			],
+			[
+				"compos",
+				"composer.json"
+			],
+			[
+				"java",
+				"resources/views/includes/javascript.blade.php"
+			],
+			[
+				"defa",
+				"resources/views/layouts/default.blade.php"
+			],
+			[
 				"main",
 				"assets/css/main.scss"
 			],
 			[
 				"dra",
 				"_templates/draft"
-			],
-			[
-				"men",
-				"src/_data/menus.yml"
 			],
 			[
 				"footer",
@@ -1242,10 +1519,6 @@
 			[
 				"conf",
 				"_config.yml"
-			],
-			[
-				"head",
-				"src/_includes/header.html"
 			],
 			[
 				"def",
@@ -1368,10 +1641,6 @@
 				"dist/bootstrap/css/bootstrap-social.css"
 			],
 			[
-				"side",
-				"_includes/sidebar.html"
-			],
-			[
 				"boots",
 				"dist/bootstrap/css/bootstrap.css"
 			],
@@ -1476,10 +1745,6 @@
 				"CodeIgniter-3.0.1/application/config/autoload.php"
 			],
 			[
-				"rout",
-				"CodeIgniter-3.0.1/application/config/routes.php"
-			],
-			[
 				"au",
 				"CodeIgniter-3.0.1/application/libraries/Auth.php"
 			],
@@ -1561,9 +1826,13 @@
 	"select_project":
 	{
 		"height": 500.0,
-		"last_filter": "blog",
+		"last_filter": "blo",
 		"selected_items":
 		[
+			[
+				"blo",
+				"~/Documents/Work/Others/nsetyo.web.id/nsetyo.github.io/blog.sublime-project"
+			],
 			[
 				"blog",
 				"~/Documents/Work/Others/nsetyo.web.id/nsetyo.github.io/blog.sublime-project"

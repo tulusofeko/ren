@@ -1,0 +1,259 @@
+[   
+    {
+        "title" : "Main Navigation",
+        "type"  : "header"
+    },
+    {
+        "title" : "Dashboard",
+        "type"  : "treeview",
+        "icon"  : "fa-dashboard",
+        "childs": 
+        [
+            {
+                "url"   : "/",
+                "title" : "Dashboard v1"
+            },
+            {
+                "url"   : "/index2.html",
+                "title" : "Dashboard v2"
+            }
+        ]
+    },
+    {
+        "title"  : "Layout Options",
+        "type"   : "treeview",
+        "icon"   : "fa-files-o",
+        "label"  : 
+            [
+                "4", 
+                "primary"
+            ],
+        "childs" : 
+        [
+            {
+                "url" : "/pages/layout/top-nav.html",
+                "title": "Top Navigation"
+            },
+            {
+                "url" : "/pages/layout/boxed.html",
+                "title": "Boxed"
+            },
+            {
+                "url" : "/pages/layout/fixed.html",
+                "title": "Fixed"
+            },
+            {
+                "url" : "/pages/layout/collapsed-sidebar.html",
+                "title": "Collapsed Sidebar"
+            }
+        ]
+    },
+    {
+        "title": "Widgets",
+        "type" : "menu",
+        "url"  : "pages/widgets.html",
+        "icon" : "fa-th",
+        "label": 
+            [
+                "new",
+                "success"
+            ]
+    },
+    {
+        "title"  : "Charts",
+        "type"   : "treeview",
+        "icon"   : "fa-pie-chart",
+        "childs" : 
+        [
+            {
+                "url" : "pages/charts/chartjs.html",
+                "title": "ChartJS"
+            },
+            {
+                "url" : "pages/charts/morris.html",
+                "title": "Morris"
+            },
+            {
+                "url" : "pages/charts/flot.html",
+                "title": "Flot"
+            },
+            {
+                "url" : "pages/charts/inline.html",
+                "title": "Inline charts"
+            }
+        ]
+    },
+    {
+        "title"  : "UI Elements",
+        "type"   : "treeview",
+        "icon"   : "fa-laptop",
+        "childs" : 
+        [
+            {
+                "url" : "pages/UI/general.html",
+                "title": "General"
+            },
+            {
+                "url" : "pages/UI/icons.html",
+                "title": "Icons"
+            },
+            {
+                "url" : "pages/UI/buttons.html",
+                "title": "Buttons"
+            },
+            {
+                "url" : "pages/UI/sliders.html",
+                "title": "Sliders"
+            },
+            {
+                "url" : "pages/UI/timeline.html",
+                "title": "Timeline"
+            },
+            {
+                "url" : "pages/UI/modals.html",
+                "title": "Modals"
+            }
+        ]
+    },
+    {
+        "title"  : "Forms",
+        "type"   : "treeview",
+        "icon"   : "fa-edit",
+        "childs" : 
+        [
+            {
+                "url" : "pages/forms/general.html",
+                "title": "General Elements"
+            },
+            {
+                "url" : "pages/forms/advanced.html",
+                "title": "Advanced Elements"
+            },
+            {
+                "url" : "pages/forms/editors.html",
+                "title": "Editors"
+            }
+        ]
+    },
+    {
+        "title"  : "Tables",
+        "type"   : "treeview",
+        "icon"   : "fa-table",
+        "childs" : 
+        [
+            {
+                "url" : "pages/tables/simple.html",
+                "title": "Simple tables"
+            },
+            {
+                "url" : "pages/tables/data.html",
+                "title": "Data tables"
+            }
+        ]
+    },
+    {
+        "title" : "Calendar",
+        "url"   : "pages/calendar.html",
+        "type"  : "menu",
+        "icon"  : "fa-calendar",
+        "label" : [ "3", "danger"]
+    },
+    {
+        "title" : "Mailbox",
+        "url"   : "pages/mailbox/mailbox.html",
+        "type"  : "menu",
+        "icon"  : "fa-envelope",
+        "label" : [ "12", " bg-yellow"]
+    },
+    {
+        "title"  : "Examples",
+        "type"   : "treeview",
+        "icon"   : "fa-folder",
+        "childs" : 
+        [
+            {
+                "url" : "pages/examples/invoice.html",
+                "title": "Invoice"
+            },
+            {
+                "url" : "pages/examples/profile.html",
+                "title": "Profile"
+            },
+            {
+                "url" : "pages/examples/login.html",
+                "title": "Login"
+            },
+            {
+                "url" : "pages/examples/register.html",
+                "title": "Register"
+            },
+            {
+                "url" : "pages/examples/lockscreen.html",
+                "title": "Lockscreen"
+            },
+            {
+                "url" : "pages/examples/404.html",
+                "title": "404 Error"
+            },
+            {
+                "url" : "pages/examples/500.html",
+                "title": "500 Error"
+            },
+            {
+                "url" : "pages/examples/blank.html",
+                "title": "Blank Page"
+            }
+        ]
+    },
+    {
+        "title"  : "Multilevel",
+        "type"   : "treeview",
+        "icon"   : "fa-share",
+        "childs" : 
+        [
+            {
+                "url" : "#",
+                "title": "Level One"
+            },
+            {
+                "url"   : "#",
+                "title" : "Level Two",
+                "childs": 
+                [
+                    {
+                        "url"   : "#",
+                        "title" : "Level Three"
+                    },
+                    {
+                        "url"   : "#",
+                        "title" : "Level Three"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "title" : "Documentation",
+        "url"   : "documentation/index.html",
+        "icon"  : "fa-book"
+    },
+    {
+        "title" : "LABELS",
+        "type"  : "header"
+    },
+    {
+        "title" : "Important",
+        "url"   : "#",
+        "icon"  : "fa-circle-o text-red"
+    },
+    {
+        "title" : "Warning",
+        "url"   : "#",
+        "icon"  : "fa-circle-o text-yellow"
+    },
+    {
+        "title" : "Information",
+        "url"   : "#",
+        "icon"  : "fa-circle-o text-aqua"
+    }
+]
