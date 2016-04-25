@@ -15,7 +15,7 @@ class AppServiceProvider extends ServiceProvider
     {
         // Load menu to all view
         $menus = json_decode(file_get_contents(
-            base_path() . '/resources/views/data/menu.json')
+            base_path() . '/resources/views/data/menu-ren.json')
         );
 
         view()->share('menus', $menus);

@@ -2,6 +2,30 @@
 
 @section('title', 'Dashboard')
 
+@section('custom-css')
+<!-- iCheck -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/iCheck/flat/blue.css') }}">
+<!-- Morris chart -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/morris/morris.css') }}">
+<!-- jvectormap -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/jvectormap/jquery-jvectormap-1.2.2.css') }}">
+<!-- Date Picker -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/datepicker/datepicker3.css') }}">
+<!-- Daterange picker -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/daterangepicker/daterangepicker-bs3.css') }}">
+<!-- bootstrap wysihtml5 - text editor -->
+<link rel="stylesheet" href="{{ asset('adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
+
+@endsection
+
+@section('content-header')
+<h1> Dashboard <small>Control panel</small> </h1>
+<ol class="breadcrumb">
+  <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+  <li class="active">Dashboard</li>
+</ol>
+@endsection
+
 @section('content')
 <!-- Small boxes (Stat box) -->
 <div class="row">
@@ -424,4 +448,24 @@
   </section><!-- right col -->
 </div><!-- /.row (main row) -->
 
+@endsection
+
+@section('custom-js')
+<!-- Morris.js charts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="{{ asset('adminlte/plugins/morris/morris.min.js') }}"></script>
+<!-- Sparkline -->
+<script src="{{ asset('adminlte/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+<!-- jvectormap -->
+<script src="{{ asset('adminlte/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js') }}"></script>
+<script src="{{ asset('adminlte/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+<!-- jQuery Knob Chart -->
+<script src="{{ asset('adminlte/plugins/knob/jquery.knob.js') }}"></script>
+<!-- daterangepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script src="{{ asset('adminlte/plugins/daterangepicker/daterangepicker.js') }}"></script>
+<!-- datepicker -->
+<script src="{{ asset('adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="{{ asset('adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
 @endsection

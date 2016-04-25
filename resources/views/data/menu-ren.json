@@ -1,0 +1,41 @@
+[   
+    {
+        "title" : "MAIN NAVIGATION",
+        "type"  : "header"
+    },
+    {
+        "title" : "Dashboard",
+        "icon"  : "fa-dashboard",
+        "childs": 
+        [
+            {
+                "url"   : "/",
+                "title" : "Dashboard v1"
+            },
+            {
+                "url"   : "/index2.html",
+                "title" : "Dashboard v2"
+            }
+        ]
+    },
+    {
+        "title"  : "Kelola Data",
+        "icon"   : "fa-server",
+        "childs" : 
+        [
+            {
+                "url"   : "/unit/eselon1",
+                "title" : "Eselon 1"
+            },
+            {
+                "url"   : "/unit",
+                "title" : "Eselon 2"
+            },
+            {
+                "url"   : "/unit",
+                "title" : "Eselon 3"
+            }
+        ]
+
+    }
+]
