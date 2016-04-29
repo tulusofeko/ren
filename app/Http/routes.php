@@ -13,21 +13,46 @@
 
 use Symfony\Component\Yaml\Yaml;
 
-Route::get('/', 'DashboardController@v1');
-
-Route::get('/data/menu', ['as' => 'menu', function () {
-    return response()->json(json_decode(
-        file_get_contents(base_path() . '/resources/views/data/menu.json')
-    ));
-}]);
-
 /**
  * -----------------------------------------------------------------------------
  * View
  * -----------------------------------------------------------------------------
  */
 Route::group(['as' => 'view.'], function () {
-    Route::group(['prefix' => 'unit'], function () {
-        Route::get('/eselon1', 'Eselon1Controller@index')->name('eselon1');
+    
+    Route::get('/', 'DashboardController@v1');
+    
+    Route::get('/unit/eselon-satu', 'EselonSatuController@index')
+        ->name('eselon_satu');
+    
+    Route::get('/unit/eselon-satu/{alias}', function ($alias) {
+        return response()->json(
+            App\EselonSatu::where('codename', '=', $alias)->firstOrFail()
+        );
+    });
+});
+
+/**
+ * -----------------------------------------------------------------------------
+ * API
+ * -----------------------------------------------------------------------------
+ */
+Route::group(['as' => 'api.'], function () {
+    Route::group(['prefix' => 'unit', 'as' => 'eselon_satu.'], function () {
+        Route::post(
+            '/eselon-satu/create', 'EselonSatuController@create'
+        )->name('create');
+
+        Route::put(
+            '/eselon-satu/update/{codename}', 'EselonSatuController@update'
+        )->name('update');
+        
+        Route::delete(
+            '/eselon-satu/hapus/{eselon_satu}', 'EselonSatuController@delete'
+        )->name('delete');
+        
+        Route::any(
+            '/eselon-satu/datatbl', 'EselonSatuController@data'
+        )->name('datatables');
     });
 });

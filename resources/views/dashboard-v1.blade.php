@@ -468,4 +468,9 @@
 <script src="{{ asset('adminlte/plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{ asset('adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
+
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{{ asset('adminlte/dist/js/pages/dashboard.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
 @endsection

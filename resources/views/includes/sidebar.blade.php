@@ -21,7 +21,7 @@
   </form>
   <!-- /.search form -->
   <!-- sidebar menu: : style can be found in sidebar.less -->
-  <ul id="sidemenu" class="sidebar-menu" data-menu-data="{{ route('menu') }}">
+  <ul id="sidemenu" class="sidebar-menu">
     <!-- Menu will loaded by js -->
     <?php $generator =  function ($menus) use (&$generator) { ?>
       @foreach ($menus as $menu)
