@@ -24,6 +24,9 @@ Route::group(['as' => 'view.'], function () {
     
     Route::get('/unit/eselon-satu', 'EselonSatuController@index')
         ->name('eselon_satu');
+
+    Route::get('/unit/eselon-dua', 'EselonDuaController@index')
+        ->name('eselon_dua');
     
     Route::get('/unit/eselon-satu/{alias}', function ($alias) {
         return response()->json(
