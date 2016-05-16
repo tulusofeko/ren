@@ -69,25 +69,25 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title"><i class="ion-android-delete"></i> Hapus Data </h4>
         </div>
-        <div class="modal-body overlay-wrapper">
+        <form method="post">
+          <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
-          <form id="hapus-eselon-satu" action="{{ route('view.eselon_satu') }}/hapus" method="post">
             <p>Data yang dihapus tidak dapat dikembalikan lagi.</p>
             <div class="form-group">
               <input type="hidden" name="id">
               <input type="hidden" name="_method" value="DELETE">
               <input type="hidden" name="_token"  value="{{ csrf_token() }}">
             </div>
-          </form>
-          <div class="overlay" style="display: none;">
-            <i class="fa fa-refresh fa-spin"></i>
+            <div class="overlay" style="display: none;">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer clearfix">
-          <button form="hapus-eselon-satu" type="submit" class="btn btn-danger">Hapus</button>
-          <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-          <!-- Modal footer -->
-        </div>
+          <div class="modal-footer clearfix">
+            <button type="submit" class="btn btn-danger">Hapus</button>
+            <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+            <!-- Modal footer -->
+          </div>
+        </form>
       </div><!-- /.modal-content -->
     </div>
   </div>
@@ -99,4 +99,124 @@
   <!-- DataTables -->
   <script src="{{ url('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  
+  <!-- Form validation -->
+  <script>
+  $(document).ready(function() {
+      $('#create-unitkerja').parsley({
+          errorClass    : 'has-error',
+          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
+          errorTemplate : '<li class="small text-danger"></li>',
+          classHandler: function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+          errorsContainer: function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+      });
+      window.Parsley.addAsyncValidator('verifyunit', function (xhr) {
+          console.log(this); // jQuery Object[ input[name="q"] ]
+          console.log(this.$element); // jQuery Object[ input[name="q"] ]
+
+          return false;
+      });
+  });
+  </script>
+  
+  @yield('ukjs')
+
+  <script>
+
+  function flashMessage(data) {
+
+      var error, message;
+
+      if (typeof data.error != "number" ) {
+          error   = data.status;
+          message = data.statusText;
+      } else {
+          error   = data.error;
+          message = data.message;
+      }
+
+      $('#flash-message').html(
+        "<div class='alert'>" +
+          "<button type='button' class='close' data-dismiss='alert' " + 
+            "aria-hidden='true'>×</button>" +
+          "<p class='alert-messages'></p>"  +
+        "</div>"
+      );
+
+      if (data.error === 0) {
+          $('#flash-message .alert').addClass('alert-success');
+          $('#flash-message .alert .alert-messages').html(message);
+
+      } else {
+          $('#flash-message .alert').addClass('alert-danger');
+
+          $('#flash-message .alert .alert-messages').html(
+              "Error " + error + ": " + message
+          );
+      }
+      $('#flash-message').slideDown(function() {
+          setTimeout(function() {
+              $('#flash-message').slideUp("slow", function() {
+                  $('#flash-message .alert').removeClass('alert-success');
+                  $('#flash-message .alert').removeClass('alert-danger');
+                  $('#flash-message .alert .alert-messages').html('');
+              });
+          }, 4000);
+      }); 
+  }
+
+  $('#formunitkerja').on('hide.bs.modal', function (e) {
+      $('#create-unitkerja').parsley().reset(); // reset form on modal hide
+      $(this).find('.overlay').hide();
+  });
+
+  $('#hapusunitkerja').on('hide.bs.modal', function (e) {
+      $('#hapusunitkerja form').parsley().reset(); // reset form on modal hide
+      $(this).find('.overlay').hide();
+  });
+
+  $('#hapusunitkerja').on('show.bs.modal', function (e) {
+      var modal = $(this);
+      var data  = table.row( $(e.relatedTarget).parents('tr') ).data();
+          modal.find('.modal-title').html("Hapus " + data.name);
+          modal.find('.modal-body input[name="id"]').val(data.id);  
+
+      $('#hapusunitkerja form').parsley().on('form:submit', function() {
+          var formData = {
+              '_method'  : 'DELETE',
+              '_token'   : $('#hapusunitkerja form input[name=_token]').val()
+          },  id = $('#hapusunitkerja form input[name=id]').val();
+
+          $.ajax({
+              type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+              url         : $('#hapusunitkerja form').attr('action') + "/" + id, // the url where we want to POST
+              data        : formData, // our data object
+              dataType    : 'json', // what type of data do we expect back from the server
+              encode      : true,
+              beforeSend  : function () {
+                  $('#hapusunitkerja').find('.overlay').show();
+              }
+          }).done(function (result) {
+              $('#hapusunitkerja').modal('hide');
+              
+              table.ajax.reload(null, false);
+
+              flashMessage(result);    
+                           
+          }).fail(function(result) {
+              $('#hapusunitkerja').modal('hide');
+              
+              flashMessage(result);    
+          });
+
+          return false;
+      });  
+  });
+  </script>
 @endsection

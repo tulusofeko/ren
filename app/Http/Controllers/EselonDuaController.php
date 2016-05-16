@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\EselonSatu;
 use App\EselonDua;
 use Illuminate\Http\Request;
 use Yajra\Datatables\Datatables;
@@ -17,14 +18,16 @@ class EselonDuaController extends Controller
 
     public function index()
     {
-        return view("eselon-dua");
+        $eselon_satu = EselonSatu::all();
+        return view("eselon-dua", ['eselon_satu' => $eselon_satu]);
     }
 
     public function create(Request $request)
     {
         $eselon_dua = new EselonDua;
-        $eselon_dua->name      = ucfirst($request->input('name'));
-        $eselon_dua->codename  = strtoupper($request->input('codename'));
+        $eselon_dua->name        = ucfirst($request->input('name'));
+        $eselon_dua->codename    = strtoupper($request->input('codename'));
+        $eselon_dua->eselonsatu  = $request->input('eselon_satu');
 
         if ($eselon_dua->save()) {
             return response()->json(["error" => 0]);
@@ -37,8 +40,9 @@ class EselonDuaController extends Controller
     {
         $eselon_dua = EselonDua::firstOrNew(['codename' => $codename]);
 
-        $eselon_dua->name      = ucfirst($request->input('name'));
-        $eselon_dua->codename  = strtoupper($request->input('codename'));
+        $eselon_dua->name        = ucfirst($request->input('name'));
+        $eselon_dua->codename    = strtoupper($request->input('codename'));
+        $eselon_dua->eselonsatu  = $request->input('eselon_satu');
 
         if ($eselon_dua->save()) {
             return response()->json(["error" => 0]);

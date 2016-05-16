@@ -1,130 +1,69 @@
-@extends('layouts.adminlte')
+@extends('unit-kerja')
 
 @section('title', 'Data Unit Kerja Eselon II')
 
-@section('custom-css')
-<!-- DataTables -->
-<link rel="stylesheet" href="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+@section('unitkerja', 'Eselon II')
+
+@section('tabel-unitkerja')
+  <table id="unitkerja" class="table table-bordered table-hover table-striped" 
+    data-url="{{ route('api.eselon_dua.datatables') }}"
+  >
+    <thead>
+      <tr>
+        <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
+        <th>Unit Kerja</th>
+        <th>Alias</th>
+        <th>Eselon I</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 @endsection
 
-@section('content-header')
-  <h1> Eselon II <small>dashboard</small> </h1>
-  <ol class="breadcrumb">
-    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-    <li><a href="#">Unit Kerja</a></li>
-    <li class="active">Eselon II</li>
-  </ol>
-@endsection 
 
-@section('content')
-  <div class="row">
-    <div class="col-xs-12">
-      <div class="box">
-        <div class="box-header">
-          <h3 class="box-title">Daftar Unit Kerja Eselon II</h3>
-          <div class="pull-right box-tools  no-print">
-              <button class="btn btn-success btn-social" data-toggle="modal" data-target="#formunitkerja" data-method="post" title="Tambah Data Eselon II">
-                <i class="fa fa-plus"> </i> Tambah Data Eselon II
-              </button>
-            </div>
-        </div><!-- /.box-header -->
-        <div class="box-body">
-          <div id="flash-message" style="display: none">
-            <div class="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <p class="alert-messages"></p>
-              
-            </div>
-          </div>
-          <table id="unitkerja" class="table table-bordered table-hover table-striped" data-url="{{ route('api.eselon_satu.datatables') }}">
-            <thead>
-              <tr>
-                <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
-                <th>Unit Kerja</th>
-                <th>Alias</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
+@section('form-unitkerja')
+  <form id="create-unitkerja" action="{{ route('api.eselon_dua.create') }}" 
+    method="post"
+  >
+    <div class="form-group">
+      <label>Nama Unit Kerja Eselon II</label>
+      <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon II" type="text" required/>
     </div>
-  </div>
-  <div class="modal fade" id="formunitkerja">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"></h4>
-        </div>
-        <div class="modal-body overlay-wrapper">
-          <!-- Modal body -->
-          <form id="create-eselon-satu" action="{{ route('api.eselon_satu.create') }}" method="post">
-            <div class="form-group">
-              <label>Nama Unit Kerja Eselon II</label>
-              <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon II" type="text" required/>
-            </div>
-            <div class="form-group">
-              <label>Alias</label>
-              <input class="form-control" name="codename" placeholder="Alias" type="text" required data-remote="{{ route('view.eselon_dua') }}/{value}" data-parsley-remote-reverse="true" data-parsley-remote-message="Alias sudah ada" maxlength="2" />
-            </div>
-            <div class="form-group">
-              <input type="hidden" name="_method" value="POST">
-              <input type="hidden" name="_token" value="{{ csrf_token() }}">
-            </div>
-          </form>
-          <div class="overlay" style="display: none;">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-        <div class="modal-footer clearfix">
-          <button form="create-eselon-satu" type="submit" class="btn btn-primary">Simpan</button>
-          <button class="btn btn-danger" data-dismiss="modal">Batal</button>
-          <!-- Modal footer -->
-        </div>
-      </div><!-- /.modal-content -->
+    <div class="form-group">
+      <label>Alias</label>
+      <input class="form-control" name="codename" placeholder="Alias" type="text" 
+        required maxlength="3"
+        data-remote="{{ route('view.eselon_dua') }}/{value}" 
+        data-parsley-remote-reverse="true" 
+        data-parsley-remote-message="Alias sudah ada" 
+      />
     </div>
-  </div>
-  <div class="modal fade" id="hapusunitkerja">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"><i class="ion-android-delete"></i> Hapus Data </h4>
-        </div>
-        <div class="modal-body overlay-wrapper">
-          <!-- Modal body -->
-          <form id="hapus-eselon-satu" action="{{ route('view.eselon_satu') }}/hapus" method="post">
-            <p>Data yang dihapus tidak dapat dikembalikan lagi.</p>
-            <div class="form-group">
-              <input type="hidden" name="id">
-              <input type="hidden" name="_method" value="DELETE">
-              <input type="hidden" name="_token"  value="{{ csrf_token() }}">
-            </div>
-          </form>
-          <div class="overlay" style="display: none;">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-        <div class="modal-footer clearfix">
-          <button form="hapus-eselon-satu" type="submit" class="btn btn-danger">Hapus</button>
-          <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-          <!-- Modal footer -->
-        </div>
-      </div><!-- /.modal-content -->
+    <div class="form-group">
+      <label>Eselon I</label>
+      <select name="eselon_satu" style="width: 100%;height: 24px;" required
+        data-parsley-required-message="Pilih Eselon I"
+      >
+        <option value>Pilih Unit Eselon I</option>
+        @foreach ($eselon_satu as $unit)
+            <option value="{{ $unit->codename }}"> 
+              {{ $unit->name }} ({{ $unit->codename }})
+            </option>
+        @endforeach
+      </select>
     </div>
-  </div>
+    <div class="form-group">
+      <input type="hidden" name="_method" value="POST">
+      <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    </div>
+  </form>
 @endsection
 
-@section('custom-js')
-  @include('includes.parsley')
-  <!-- DataTables -->
-  <script src="{{ url('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
-  <script src="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
-  <!-- Datatable related -->
+@section('ukjs')
   <script>
+    $('#hapusunitkerja form').attr('action', '{{ route("api.eselon_dua.delete", "") }}');
+
     var table = $('#unitkerja').DataTable({
         "jQueryUI"   : true,
         "paging"     : true,
@@ -155,8 +94,14 @@
                 name: 'name'
             },
             {
+                className: 'text-center',
                 data: 'codename',
                 name: 'codename'
+            },
+            {
+                className: 'text-center',
+                data: 'eselonsatu',
+                name: 'eselonsatu'
             },
             {
                 className: 'text-center',
@@ -182,34 +127,14 @@
         }
     });
   </script>
-  <!-- Form validation -->
+
+   <!-- Modal related -->
   <script>
-  $(document).ready(function() {
-      $('#create-eselon-satu').parsley({
-          errorClass    : 'has-error',
-          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
-          errorTemplate : '<li class="small text-danger"></li>',
-          classHandler: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-          errorsContainer: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-      });
-
-  });
-  </script>
-
-  <!-- Modal related -->
-  <script>
-
   $('#formunitkerja').on('show.bs.modal', function (e) {
-      $('#create-eselon-satu')[0].reset();
+      $('#create-unitkerja')[0].reset();
 
       var data   = $(e.relatedTarget).data(), 
-          action = $('#create-eselon-satu').attr('action'),
+          action = $('#create-unitkerja').attr('action'),
           modal  = $(this), base = $('base').attr('href');
           remote = modal.find('.modal-body input[name="codename"]').data('remote');
 
@@ -218,30 +143,33 @@
       modal.find('.modal-body input[name="_method"]').val('POST');
 
       if (data.method == "put") {
-          var eselon_satu  = table.row( $(e.relatedTarget).parents('tr') ).data();
+          var eselon_dua  = table.row( $(e.relatedTarget).parents('tr') ).data();
               
 
           modal.find('.modal-title').html(
               "<i class='fa fa-edit'></i> Edit Data"
           );
           
-          action =  base+ "/unit/eselon-satu/update/" + eselon_satu.codename;
+          action =  base+ "/unit/eselon-satu/update/" + eselon_dua.codename;
 
-          $('#formunitkerja input[name="codename"]').val(eselon_satu.codename);
-          $('#formunitkerja input[name="codename"]').removeAttr('data-parsley-remote');
-          $('#formunitkerja input[name="name"]').val(eselon_satu.name);
-          $('#formunitkerja input[name="_method"]').val('PUT');
+          $('#formunitkerja [name="codename"]').val(eselon_dua.codename);
+          $('#formunitkerja [name="codename"]').removeAttr('data-parsley-remote');
+          $('#formunitkerja [name="name"]').val(eselon_dua.name);
+          $('#formunitkerja [name="eselon_satu"]').val(eselon_dua.eselonsatu);
+          $('#formunitkerja [name="_method"]').val('PUT');
           
           
       }
       
-      $('#create-eselon-satu').parsley().on('form:submit', function() {
+      $('#create-unitkerja').parsley().on('form:submit', function() {
           var formData = {
-            'name'     : $('#create-eselon-satu input[name=name]').val(),
-            'codename' : $('#create-eselon-satu input[name=codename]').val(),
-            '_method'  : $('#create-eselon-satu input[name=_method]').val(),
-            '_token'   : $('#create-eselon-satu input[name=_token]').val()
+            'name'        : $('#create-unitkerja [name=name]').val(),
+            'codename'    : $('#create-unitkerja [name=codename]').val(),
+            'eselon_satu' : $('#create-unitkerja [name=eselon_satu]').val(),
+            '_method'     : $('#create-unitkerja [name=_method]').val(),
+            '_token'      : $('#create-unitkerja [name=_token]').val()
           };
+          console.log(formData);
           $.ajax({
               type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
               url         : action, // the url where we want to POST
@@ -290,76 +218,6 @@
           return false;
       });
 
-  });
-
-  $('#formunitkerja').on('hide.bs.modal', function (e) {
-      $('#create-eselon-satu').parsley().reset(); // reset form on modal hide
-      $(this).find('.overlay').hide();
-  });
-
-  $('#hapusunitkerja').on('hide.bs.modal', function (e) {
-      $('#hapus-eselon-satu').parsley().reset(); // reset form on modal hide
-      $(this).find('.overlay').hide();
-  });
-
-  $('#hapusunitkerja').on('show.bs.modal', function (e) {
-      var modal = $(this);
-      var data  = table.row( $(e.relatedTarget).parents('tr') ).data();
-          modal.find('.modal-title').append(data.name);
-          modal.find('.modal-body input[name="id"]').val(data.id);  
-
-      $('#hapus-eselon-satu').parsley().on('form:submit', function() {
-          var formData = {
-            '_method'  : 'DELETE',
-            '_token'   : $('#hapus-eselon-satu input[name=_token]').val()
-          }, id = $('#hapus-eselon-satu input[name=id]').val();
-
-          $.ajax({
-              type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-              url         : $('#hapus-eselon-satu').attr('action') + "/" + id, // the url where we want to POST
-              data        : formData, // our data object
-              dataType    : 'json', // what type of data do we expect back from the server
-              encode      : true,
-              beforeSend  : function () {
-                $('#hapusunitkerja').find('.overlay').show();
-              }
-          }).done(function (result) {
-                if (result.error == 0) {
-                    $('#hapusunitkerja').modal('hide');
-                    
-                    table.ajax.reload(null, false);
-
-                    $('#flash-message .alert').addClass('alert-success');
-                    $('#flash-message .alert .alert-messages').html("Data berhasil dihapus");
-
-                    $('#flash-message').slideDown(function() {
-                        setTimeout(function() {
-                            $('#flash-message').slideUp("slow", function() {
-                                $('#flash-message .alert').removeClass('alert-success');
-                                $('#flash-message .alert .alert-messages').html('');
-                            });
-                        }, 2000);
-                    });
-                }
-
-                // here we will handle errors and validation messages
-          }).fail(function(result) {
-              $('#hapusunitkerja').modal('hide');
-              $('#flash-message .alert').addClass('alert-danger');
-              $('#flash-message .alert .alert-messages').html("Penghapusan data gagal");
-
-              $('#flash-message').slideDown(function() {
-                  setTimeout(function() {
-                      $('#flash-message').slideUp("slow", function() {
-                          $('#flash-message .alert').removeClass('alert-dager');
-                          $('#flash-message .alert .alert-messages').html('');
-                      });
-                  }, 2000);
-              });
-          });
-
-          return false;
-      });  
   });
 
   </script>

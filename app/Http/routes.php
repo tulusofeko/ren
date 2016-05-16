@@ -24,13 +24,19 @@ Route::group(['as' => 'view.'], function () {
     
     Route::get('/unit/eselon-satu', 'EselonSatuController@index')
         ->name('eselon_satu');
-
-    Route::get('/unit/eselon-dua', 'EselonDuaController@index')
-        ->name('eselon_dua');
     
     Route::get('/unit/eselon-satu/{alias}', function ($alias) {
         return response()->json(
             App\EselonSatu::where('codename', '=', $alias)->firstOrFail()
+        );
+    });    
+    
+    Route::get('/unit/eselon-dua', 'EselonDuaController@index')
+        ->name('eselon_dua');
+
+    Route::get('/unit/eselon-dua/{alias}', function ($alias) {
+        return response()->json(
+            App\EselonDua::where('codename', '=', $alias)->firstOrFail()
         );
     });
 });
@@ -40,22 +46,42 @@ Route::group(['as' => 'view.'], function () {
  * API
  * -----------------------------------------------------------------------------
  */
-Route::group(['as' => 'api.'], function () {
-    Route::group(['prefix' => 'unit', 'as' => 'eselon_satu.'], function () {
+Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
+    Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], 
+    function () {
         Route::post(
-            '/eselon-satu/create', 'EselonSatuController@create'
+            '/create', 'EselonSatuController@create'
         )->name('create');
 
         Route::put(
-            '/eselon-satu/update/{codename}', 'EselonSatuController@update'
+            '/update/{eselon_satu}', 'EselonSatuController@update'
         )->name('update');
         
         Route::delete(
-            '/eselon-satu/hapus/{eselon_satu}', 'EselonSatuController@delete'
+            '/hapus/{eselon_satu}', 'EselonSatuController@delete'
         )->name('delete');
         
         Route::any(
-            '/eselon-satu/datatbl', 'EselonSatuController@data'
+            '/datatbl', 'EselonSatuController@data'
+        )->name('datatables');
+    });
+
+    Route::group(['prefix' => 'unit/eselon-dua', 'as' => 'eselon_dua.'], 
+    function () {
+        Route::post(
+            '/create', 'EselonDuaController@create'
+        )->name('create');
+
+        Route::put(
+            '/update/{codename}', 'EselonDuaController@update'
+        )->name('update');
+        
+        Route::delete(
+            '/hapus/{eselon_satu}', 'EselonDuaController@delete'
+        )->name('delete');
+        
+        Route::any(
+            '/datatbl', 'EselonDuaController@data'
         )->name('datatables');
     });
 });

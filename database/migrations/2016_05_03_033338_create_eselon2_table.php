@@ -14,8 +14,8 @@ class CreateEselon2Table extends Migration
     {
         Schema::create('eselon_dua', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('codename', 16);
-            $table->string('eselonsatu', 16);
+            $table->string('codename', 4);
+            $table->string('eselonsatu', 3);
             $table->string('name');
             $table->timestamps();
             $table->unique('codename');
