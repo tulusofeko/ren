@@ -23,7 +23,6 @@ class EselonSatuController extends Controller
 
     public function create(Request $request)
     {
-        $message_raw = "";
         
         try {
             $name     = $request->input("name");
@@ -41,6 +40,7 @@ class EselonSatuController extends Controller
             $eselon_satu->save();
 
             $error   = 0;
+            $msg_raw = "";
             $message = "Penyimpanan berhasil";
         } catch (InvalidArgumentException $e) {
             $error   = $e->getCode();
