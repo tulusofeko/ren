@@ -10,7 +10,8 @@
         "ext-mcrypt": "*",
         "laravel/framework": "5.2.*",
         "symfony/yaml": "*",
-        "yajra/laravel-datatables-oracle": "^6.10"
+        "yajra/laravel-datatables-oracle": "^6.10",
+        "doctrine/dbal" : "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
