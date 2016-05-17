@@ -39,6 +39,9 @@ Route::group(['as' => 'view.'], function () {
             App\EselonDua::where('codename', '=', $alias)->firstOrFail()
         );
     });
+
+    Route::get('/unit/eselon-tiga', 'EselonTigaController@index')
+        ->name('eselon_tiga');
 });
 
 /**
@@ -73,15 +76,34 @@ Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
         )->name('create');
 
         Route::put(
-            '/update/{codename}', 'EselonDuaController@update'
+            '/update/{eselon_dua}', 'EselonDuaController@update'
         )->name('update');
         
         Route::delete(
-            '/hapus/{eselon_satu}', 'EselonDuaController@delete'
+            '/hapus/{eselon_dua}', 'EselonDuaController@delete'
         )->name('delete');
         
         Route::any(
             '/datatbl', 'EselonDuaController@data'
+        )->name('datatables');
+    });
+
+    Route::group(['prefix' => 'unit/eselon-tiga', 'as' => 'eselon_tiga.'], 
+    function () {
+        Route::post(
+            '/create', 'EselonTiga@create'
+        )->name('create');
+
+        Route::put(
+            '/update/{eselon_dua}', 'EselonTiga@update'
+        )->name('update');
+        
+        Route::delete(
+            '/hapus/{eselon_dua}', 'EselonTiga@delete'
+        )->name('delete');
+        
+        Route::any(
+            '/datatbl', 'EselonTiga@data'
         )->name('datatables');
     });
 });
