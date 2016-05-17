@@ -116,12 +116,6 @@
               return element.parents('.form-group');
           },
       });
-      window.Parsley.addAsyncValidator('verifyunit', function (xhr) {
-          console.log(this); // jQuery Object[ input[name="q"] ]
-          console.log(this.$element); // jQuery Object[ input[name="q"] ]
-
-          return false;
-      });
   });
   </script>
   
@@ -133,12 +127,16 @@
 
       var error, message;
 
-      if (typeof data.error != "number" ) {
+      if (typeof parseInt(data.error) != "number" ) {
           error   = data.status;
           message = data.statusText;
       } else {
           error   = data.error;
           message = data.message;
+      }
+      
+      if (typeof data.raw != "undefined" ) {
+          console.log(data.raw);
       }
 
       $('#flash-message').html(

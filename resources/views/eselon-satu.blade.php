@@ -29,17 +29,18 @@
   >
     <div class="form-group">
       <label>Nama Unit Kerja Eselon I</label>
-      <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon I" type="text"/>
+      <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon I" type="text" required />
     </div>
     <div class="form-group">
       <label>Alias</label>
-      <input class="form-control" name="codename" placeholder="Alias" type="text" 
+      <input class="form-control" name="codename" placeholder="Alias" 
+        type="text" required maxlength="2" 
+        data-remote="{{ route('view.eselon_satu') }}/{value}" 
         data-parsley-remote-validator="reverse" 
         data-parsley-remote-message="Alias sudah ada"
       />
     </div>
     <div class="form-group">
-      <input type="hidden" name="_oldcn">
       <input type="hidden" name="_method" value="POST">
       <input type="hidden" name="_token"  value="{{ csrf_token() }}">
     </div>
@@ -58,7 +59,6 @@
         "paging"     : true,
         "lengthMenu" : [ 5, 10, 25, 50, 75, 100, "All" ],
         "autoWidth"  : false,
-        "stateSave"  : false,
         "order"      : [[ 2, 'asc' ]],
         "serverSide" : true,
         "ajax": {
@@ -145,16 +145,16 @@
       
       $('#formunitkerja [name="codename"]').parsley()
           .on('field:validate', function(field) {
-              // var lmn = this.$element;
-              // var rem = lmn.data('remote');
+              var lmn = this.$element;
+              var rem = lmn.data('remote');
               
-              // if (lmn.data('edit') == this.value) {
-              //     this.removeConstraint('remote');
-              // } else {
-              //     this.addConstraint({
-              //         'remote' : lmn.data('parsleyRemote') 
-              //     });
-              // }
+              if (lmn.data('edit') == this.value) {
+                  this.removeConstraint('remote');
+              } else {
+                  this.addConstraint({
+                      'remote' : lmn.data('parsleyRemote') 
+                  });
+              }
 
           });
 

@@ -145,7 +145,6 @@
       if (data.method == "put") {
           var eselon_dua  = table.row( $(e.relatedTarget).parents('tr') ).data();
               
-
           modal.find('.modal-title').html(
               "<i class='fa fa-edit'></i> Edit Data"
           );
