@@ -24,8 +24,9 @@
 
 
 @section('form-unitkerja')
-  <form id="create-unitkerja" action="{{ route('api.eselon_dua.create') }}" 
-    method="post"
+  <form id="create-unitkerja" method="post"
+    action="{{ route('api.eselon_dua.create') }}"
+    data-edit="{{ route('api.eselon_dua.update', "/") }}/"  
   >
     <div class="form-group">
       <label>Nama Unit Kerja Eselon II</label>
@@ -149,17 +150,33 @@
               "<i class='fa fa-edit'></i> Edit Data"
           );
           
-          action =  base+ "/unit/eselon-satu/update/" + eselon_dua.codename;
+          action =  $('#create-unitkerja').data('edit') + eselon_dua.id;
 
           $('#formunitkerja [name="codename"]').val(eselon_dua.codename);
-          $('#formunitkerja [name="codename"]').removeAttr('data-parsley-remote');
+          $('#formunitkerja [name="codename"]').data('edit', eselon_dua.codename);
           $('#formunitkerja [name="name"]').val(eselon_dua.name);
           $('#formunitkerja [name="eselon_satu"]').val(eselon_dua.eselonsatu);
           $('#formunitkerja [name="_method"]').val('PUT');
           
-          
+      } else {
+          $('#formunitkerja [name="codename"]').removeData('edit');
       }
       
+      $('#formunitkerja [name="codename"]').parsley()
+          .on('field:validate', function(field) {
+              var lmn = this.$element;
+              var rem = lmn.data('remote');
+              
+              if (lmn.data('edit') == this.value) {
+                  this.removeConstraint('remote');
+              } else {
+                  this.addConstraint({
+                      'remote' : lmn.data('parsleyRemote') 
+                  });
+              }
+
+          });
+
       $('#create-unitkerja').parsley().on('form:submit', function() {
           var formData = {
             'name'        : $('#create-unitkerja [name=name]').val(),
@@ -168,7 +185,7 @@
             '_method'     : $('#create-unitkerja [name=_method]').val(),
             '_token'      : $('#create-unitkerja [name=_token]').val()
           };
-          console.log(formData);
+
           $.ajax({
               type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
               url         : action, // the url where we want to POST
@@ -179,39 +196,18 @@
                 $('#formunitkerja').find('.overlay').show();
               }
           }).done(function (result) {
+              $('#formunitkerja').modal('hide');
+              
+              table.ajax.reload(null, false);
 
-                if (result.error == 0) {
-                    $('#formunitkerja').modal('hide');
-                    
-                    table.ajax.reload(null, false);
+              flashMessage(result);
 
-                    $('#flash-message .alert').addClass('alert-success');
-                    $('#flash-message .alert .alert-messages').html("Data berhasil disimpan");
-
-                    $('#flash-message').slideDown(function() {
-                        setTimeout(function() {
-                            $('#flash-message').slideUp("slow", function() {
-                                $('#flash-message .alert').removeClass('alert-success');
-                                $('#flash-message .alert .alert-messages').html('');
-                            });
-                        }, 2000);
-                    });
-                }
-
-                // here we will handle errors and validation messages
           }).fail(function(result) {
               $('#formunitkerja').modal('hide');
-              $('#flash-message .alert').addClass('alert-danger');
-              $('#flash-message .alert .alert-messages').html("Gagal menyimpan data");
-
-              $('#flash-message').slideDown(function() {
-                  setTimeout(function() {
-                      $('#flash-message').slideUp("slow", function() {
-                          $('#flash-message .alert').removeClass('alert-dager');
-                          $('#flash-message .alert .alert-messages').html('');
-                      });
-                  }, 2000);
-              });
+              
+              table.ajax.reload(null, false);
+              
+              flashMessage(result);
           });
 
           return false;

@@ -127,7 +127,7 @@
 
       var error, message;
 
-      if (typeof parseInt(data.error) != "number" ) {
+      if (typeof data.error == "function" ) {
           error   = data.status;
           message = data.statusText;
       } else {
