@@ -1,5 +1,10 @@
 @extends('unit-kerja')
 
+@section('css')
+  <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+  @parent
+@endsection
+
 @section('title', 'Data Unit Kerja Eselon II')
 
 @section('unitkerja', 'Eselon II')
@@ -46,10 +51,10 @@
       <select name="eselon_satu" style="width: 100%;height: 24px;" required
         data-parsley-required-message="Pilih Eselon I"
       >
-        <option value>Pilih Unit Eselon I</option>
+        <option></option>
         @foreach ($eselon_satu as $unit)
             <option value="{{ $unit->codename }}"> 
-              {{ $unit->name }} ({{ $unit->codename }})
+              {{ $unit->codename }} - {{ $unit->name }}
             </option>
         @endforeach
       </select>
@@ -61,8 +66,18 @@
   </form>
 @endsection
 
+@section('custom-js')
+  <script src="{{ url('vendor/select2/js/select2.min.js') }}"></script>
+  @parent
+@endsection
+
 @section('ukjs')
   <script>
+    $('[name=eselon_satu]').select2({ 
+        placeholder: "Pilih Unit Eselon Satu",
+        minimumResultsForSearch: Infinity
+    });
+
     $('#hapusunitkerja form').attr('action', '{{ route("api.eselon_dua.delete", "") }}');
 
     var table = $('#unitkerja').DataTable({

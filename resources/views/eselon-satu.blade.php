@@ -47,7 +47,6 @@
   </form>
 @endsection
 
-
 @section('ukjs')
   
   <!-- Datatable related -->

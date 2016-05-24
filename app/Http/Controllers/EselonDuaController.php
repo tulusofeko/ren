@@ -20,7 +20,7 @@ class EselonDuaController extends Controller
 
     public function index()
     {
-        $eselon_satu = EselonSatu::all();
+        $eselon_satu = EselonSatu::all()->sortBy('codename');
         return view("eselon-dua", ['eselon_satu' => $eselon_satu]);
     }
 
