@@ -39,7 +39,7 @@
     </div>
     <div class="form-group">
       <label>Alias</label>
-      <input class="form-control" name="codename" placeholder="Alias" type="text" 
+      <input class="form-control" name="codename" placeholder="Kode" type="text" 
         required maxlength="3"
         data-remote="{{ route('view.eselon_dua') }}/{value}" 
         data-parsley-remote-reverse="true" 
@@ -148,7 +148,8 @@
   <script>
   $('#formunitkerja').on('show.bs.modal', function (e) {
       $('#create-unitkerja')[0].reset();
-
+      $("[name='eselon_satu']").select2("val", "");
+      
       var data   = $(e.relatedTarget).data(), 
           action = $('#create-unitkerja').attr('action'),
           modal  = $(this), base = $('base').attr('href');

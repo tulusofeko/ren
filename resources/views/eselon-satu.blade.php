@@ -33,7 +33,7 @@
     </div>
     <div class="form-group">
       <label>Alias</label>
-      <input class="form-control" name="codename" placeholder="Alias" 
+      <input class="form-control" name="codename" placeholder="Kode" 
         type="text" required maxlength="2" 
         data-remote="{{ route('view.eselon_satu') }}/{value}" 
         data-parsley-remote-validator="reverse" 

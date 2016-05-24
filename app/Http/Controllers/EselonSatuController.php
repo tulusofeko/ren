@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\EselonSatu;
 use Illuminate\Http\Request;
-use Yajra\Datatables\Datatables;
 use Exception, InvalidArgumentException;
 use Illuminate\Database\QueryException;
 
@@ -14,8 +13,9 @@ use Illuminate\Database\QueryException;
  * Dashboard Controller
  * -----------------------------------------------------------------------------
  */
-class EselonSatuController extends Controller 
+class EselonSatuController extends UnitKerjaController 
 {
+    protected $table = "eselon_satu";
 
     public function index()
     {
@@ -24,7 +24,6 @@ class EselonSatuController extends Controller
 
     public function create(Request $request)
     {
-        
         try {
             $name     = $request->input("name");
             $codename = $request->input("codename");
@@ -72,7 +71,6 @@ class EselonSatuController extends Controller
                 );
             }
 
-
             $eselon_satu->name     = $name;
             $eselon_satu->codename = $codename;
 
@@ -97,42 +95,4 @@ class EselonSatuController extends Controller
             "raw"     => $msg_raw
         ]);
     }
-
-    public function delete(EselonSatu $eselon_satu)
-    {
-        try {
-            $eselon_satu->delete();
-
-            $error   = 0;
-            $message = "Data berhasil dihapus";
-            $msg_raw = $message;
-            
-        }  catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
-        
-        return response()->json([
-            "error"       => $error, 
-            "message"     => $message,
-            "message_raw" => $msg_raw
-        ]);
-    }
-
-    /**
-     * Datatable Personil Controller
-     * @return mixed
-     */
-    public function data()
-    {
-        $eselon_satu = EselonSatu::all();
-
-        return Datatables::of($eselon_satu)->make(true);
-    }
-
 }
