@@ -19,7 +19,11 @@
         ]
     },
     {
-        "title"  : "Kelola Data",
+        "title" : "KELOLA DATA",
+        "type"  : "header"
+    },
+    {
+        "title"  : "Unit Kerja",
         "icon"   : "fa-server",
         "childs" : 
         [

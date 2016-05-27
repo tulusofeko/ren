@@ -171,6 +171,7 @@
 
   $('#formunitkerja').on('hide.bs.modal', function (e) {
       $('#create-unitkerja').parsley().reset(); // reset form on modal hide
+      $("[name='parent']").select2("val", "");
       $(this).find('.overlay').hide();
   });
 
@@ -217,11 +218,10 @@
       });  
   });
   </script>
-    <!-- Modal related -->
+  <!-- Modal related -->
   <script>
   $('#formunitkerja').on('show.bs.modal', function (e) {
       $('#create-unitkerja')[0].reset();
-      $("[name='parent']").select2("val", "");
 
       var data   = $(e.relatedTarget).data(), 
           action = $('#create-unitkerja').attr('action'),
