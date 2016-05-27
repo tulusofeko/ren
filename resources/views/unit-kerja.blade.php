@@ -217,4 +217,92 @@
       });  
   });
   </script>
+    <!-- Modal related -->
+  <script>
+  $('#formunitkerja').on('show.bs.modal', function (e) {
+      $('#create-unitkerja')[0].reset();
+      $("[name='parent']").select2("val", "");
+
+      var data   = $(e.relatedTarget).data(), 
+          action = $('#create-unitkerja').attr('action'),
+          modal  = $(this), base = $('base').attr('href');
+          remote = modal.find('.modal-body input[name="codename"]').data('remote');
+
+      modal.find('.modal-title').html("<i class='ion-person-add'></i> Tambah Data");
+      modal.find('.modal-body input[name="codename"]').attr('data-parsley-remote', remote);
+      modal.find('.modal-body input[name="_method"]').val('POST');
+
+      if (data.method == "put") {
+          var unit = table.row( $(e.relatedTarget).parents('tr') ).data();
+          console.log(unit);    
+          modal.find('.modal-title').html(
+              "<i class='fa fa-edit'></i> Edit Data"
+          );
+          
+          action =  $('#create-unitkerja').data('edit') + unit.id;
+
+          $('#formunitkerja [name="codename"]').val(unit.codename);
+          $('#formunitkerja [name="codename"]').data('edit', unit.codename);
+          $('#formunitkerja [name="name"]').val(unit.name);
+          $('#formunitkerja [name="parent"]').val(unit.parent).trigger("change");
+          $('#formunitkerja [name="_method"]').val('PUT');
+          
+      } else {
+          $('#formunitkerja [name="codename"]').removeData('edit');
+      }
+      
+      $('#formunitkerja [name="codename"]').parsley()
+          .on('field:validate', function(field) {
+              var lmn = this.$element;
+              var rem = lmn.data('remote');
+              
+              if (lmn.data('edit') == this.value) {
+                  this.removeConstraint('remote');
+              } else {
+                  this.addConstraint({
+                      'remote' : lmn.data('parsleyRemote') 
+                  });
+              }
+
+          });
+
+      $('#create-unitkerja').parsley().on('form:submit', function() {
+          var formData = {
+            'name'     : $('#create-unitkerja [name=name]').val(),
+            'codename' : $('#create-unitkerja [name=codename]').val(),
+            'parent'   : $('#create-unitkerja [name=parent]').val(),
+            '_method'  : $('#create-unitkerja [name=_method]').val(),
+            '_token'   : $('#create-unitkerja [name=_token]').val()
+          };
+
+          $.ajax({
+              type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+              url         : action, // the url where we want to POST
+              data        : formData, // our data object
+              dataType    : 'json', // what type of data do we expect back from the server
+              encode      : true,
+              beforeSend  : function () {
+                $('#formunitkerja').find('.overlay').show();
+              }
+          }).done(function (result) {
+              $('#formunitkerja').modal('hide');
+              
+              table.ajax.reload(null, false);
+
+              flashMessage(result);
+
+          }).fail(function(result) {
+              $('#formunitkerja').modal('hide');
+              
+              table.ajax.reload(null, false);
+              
+              flashMessage(result);
+          });
+
+          return false;
+      });
+
+  });
+
+  </script>
 @endsection

@@ -15,11 +15,15 @@ use Illuminate\Database\QueryException;
  */
 class EselonSatuController extends UnitKerjaController 
 {
+    protected $model = "App\EselonSatu";
     protected $table = "eselon_satu";
 
-    public function index()
-    {
-        return view("eselon-satu");
+    /**
+     * Eselon I data dashboard table and data management 
+     */
+    public function index() 
+    { 
+        return view("eselon-satu"); 
     }
 
     public function create(Request $request)
@@ -59,8 +63,10 @@ class EselonSatuController extends UnitKerjaController
         ]);
     }
 
-    public function update(EselonSatu $eselon_satu, Request $request)
+    public function update($id, Request $request)
     {
+        $eselon_satu = EselonSatu::find($id);
+        
         try {
             $name     = $request->input("name");
             $codename = $request->input("codename");
