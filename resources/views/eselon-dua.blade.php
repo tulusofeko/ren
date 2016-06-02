@@ -1,10 +1,5 @@
 @extends('unit-kerja')
 
-@section('css')
-  <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
-  @parent
-@endsection
-
 @section('title', 'Data Unit Kerja Eselon II')
 
 @section('unitkerja', 'Eselon II')
@@ -22,11 +17,9 @@
         <th>Aksi</th>
       </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody> </tbody>
   </table>
 @endsection
-
 
 @section('form-unitkerja')
   <form id="create-unitkerja" method="post" action="{{ route('api.eselon_dua.create') }}"
@@ -38,8 +31,7 @@
     </div>
     <div class="form-group">
       <label>Alias</label>
-      <input class="form-control" name="codename" placeholder="Kode" type="text" 
-        required maxlength="3"
+      <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
         data-remote="{{ route('view.eselon_dua') }}/{value}" 
         data-parsley-remote-reverse="true" 
         data-parsley-remote-message="Alias sudah ada" 
@@ -63,11 +55,6 @@
       <input type="hidden" name="_token" value="{{ csrf_token() }}">
     </div>
   </form>
-@endsection
-
-@section('custom-js')
-  <script src="{{ url('vendor/select2/js/select2.min.js') }}"></script>
-  @parent
 @endsection
 
 @section('ukjs')
@@ -131,14 +118,17 @@
             
             $('td', row).eq(0).html(table.page.info().start + index + 1);
 
-            var btn_edit, base = $('base').attr('href');
+            var btn_edit, btn_del;
+
                 btn_edit  = "<buton class='btn btn-primary' data-toggle='modal'";
                 btn_edit += "data-target='#formunitkerja' data-method='put'>"
                 btn_edit += "<i class='fa fa-edit'></i></buton> ";
-                btn_edit += "<buton class='btn btn-danger' data-toggle='modal'";
-                btn_edit += "data-target='#hapusunitkerja'>"
-                btn_edit += "<i class='fa fa-trash'></i></buton>";
-            $('td', row).eq(-1).html( btn_edit );
+            
+                btn_del   = "<buton class='btn btn-danger' data-toggle='modal'";
+                btn_del  += "data-target='#hapusunitkerja'>"
+                btn_del  += "<i class='fa fa-trash'></i></buton>";
+            
+            $('td', row).eq(-1).html( btn_edit + btn_del );
         }
     });
   </script>

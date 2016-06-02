@@ -28,9 +28,10 @@ class UnitKerjaController extends Controller
             $unit->parent   = $parent;
             $unit->save();
 
-            $error   = 0;
-            $message = "Data berhasil disimpan"; 
-            $msg_raw = $message;
+            return response()->json([
+                "message" => $message,
+                "raw"     => $msg_raw
+            ], 200);
         } catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
@@ -45,7 +46,7 @@ class UnitKerjaController extends Controller
             "error"   => $error, 
             "message" => $message,
             "raw"     => $msg_raw
-        ]);
+        ], 500);
         
     }
 
@@ -92,7 +93,7 @@ class UnitKerjaController extends Controller
     public function delete($id) 
     {
         try {
-            DB::table($this->table)->where('id', '=', $id)->delete();
+            DB::table($this->tab)->where('id', '=', $id)->delete();
 
             $error   = 0;
             $message = "Data berhasil dihapus";
