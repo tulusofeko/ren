@@ -225,13 +225,14 @@
           }).fail(function(result) {
               $('#formunitkerja').modal('hide');
 
+              console.log(result);
               var data = {};
               
-              if (typeof result.error == "function" ) {
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
               
               flashMessage(data, true);
@@ -276,12 +277,12 @@
               $('#hapusunitkerja').modal('hide');
               
               var data = {};
-              
-              if (typeof result.error == "function" ) {
+
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
               
               flashMessage(data, true);

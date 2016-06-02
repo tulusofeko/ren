@@ -22,6 +22,7 @@ class UnitKerjaController extends Controller
                     "Data yang dimasukkan kosong", 44
                 );
             }
+
             $unit           = new $this->model;
             $unit->name     = $name;
             $unit->codename = $codename;
@@ -29,9 +30,9 @@ class UnitKerjaController extends Controller
             $unit->save();
 
             return response()->json([
-                "message" => $message,
-                "raw"     => $msg_raw
+                "message" => "Data berhasil disimpan"
             ], 200);
+
         } catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
@@ -70,9 +71,9 @@ class UnitKerjaController extends Controller
             $unit->parent   = $parent;
             $unit->save();
 
-            $error   = 0;
-            $message = "Data berhasil disimpan";
-            $msg_raw = $message;
+            return response()->json([
+                "message" => "Data berhasil disimpan"
+            ], 200);
         } catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
@@ -87,17 +88,17 @@ class UnitKerjaController extends Controller
             "error"   => $error, 
             "message" => $message,
             "raw"     => $msg_raw
-        ]);
+        ], 500);
     }
 
     public function delete($id) 
     {
         try {
-            DB::table($this->tab)->where('id', '=', $id)->delete();
+            DB::table($this->table)->where('id', '=', $id)->delete();
 
-            $error   = 0;
-            $message = "Data berhasil dihapus";
-            $msg_raw = $message;
+            return response()->json([
+                "message" => "Data berhasil dihapus"
+            ], 200);
             
         }  catch (QueryException $e) {
             $error   = $e->getCode();
@@ -110,10 +111,10 @@ class UnitKerjaController extends Controller
         }
         
         return response()->json([
-            "error"       => $error, 
-            "message"     => $message,
-            "message_raw" => $msg_raw
-        ]);
+            "error"   => $error, 
+            "message" => $message,
+            "raw"     => $msg_raw
+        ], 500);
     }
 
     /**
