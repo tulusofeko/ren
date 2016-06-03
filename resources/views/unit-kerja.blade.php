@@ -35,7 +35,7 @@
         <div class="box-body">
           <div id="flash-message" style="display: none">
             <div class="alert">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+              <button type="button" class="close" aria-hidden="true">×</button>
               <p class="alert-messages"></p>
             </div>
           </div>
@@ -119,6 +119,11 @@
               var element = ParsleyField.$element;
               return element.parents('.form-group');
           },
+      });
+  });
+  $(function(){
+      $("#flash-message .close").on("click", function(){
+          $("#flash-message").hide();
       });
   });
   </script>
