@@ -48,6 +48,24 @@ Route::group(['as' => 'view.'], function () {
             App\EselonTiga::where('codename', '=', $alias)->firstOrFail()
         );
     });
+
+    Route::get('/program', 'ProgramController@manage')
+        ->name('program');
+
+    Route::get('/program/{kode}', function ($kode) {
+        return response()->json(
+            App\Program::where('code', '=', $kode)->firstOrFail()
+        );
+    });
+
+    Route::get('/kegiatan', 'KegiatanController@manage')
+        ->name('kegiatan');
+
+    Route::get('/kegiatan/{kode}', function ($kode) {
+        return response()->json(
+            App\Kegiatan::where('code', '=', $kode)->firstOrFail()
+        );
+    });
 });
 
 /**
@@ -110,6 +128,42 @@ Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
         
         Route::any(
             '/datatbl', 'EselonTigaController@data'
+        )->name('datatables');
+    });
+
+    Route::group(['prefix' => 'program', 'as' => 'program.'], function () {
+        Route::post(
+            '/create', 'ProgramController@create'
+        )->name('create');
+
+        Route::put(
+            '/update/{program}', 'ProgramController@update'
+        )->name('update');
+        
+        Route::delete(
+            '/hapus/{program}', 'ProgramController@delete'
+        )->name('delete');
+        
+        Route::any(
+            '/datatbl', 'ProgramController@data'
+        )->name('datatables');
+    });
+
+    Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
+        Route::post(
+            '/create', 'KegiatanController@create'
+        )->name('create');
+
+        Route::put(
+            '/update/{kegiatan}', 'KegiatanController@update'
+        )->name('update');
+        
+        Route::delete(
+            '/hapus/{kegiatan}', 'KegiatanController@delete'
+        )->name('delete');
+        
+        Route::any(
+            '/datatbl', 'KegiatanController@data'
         )->name('datatables');
     });
 });

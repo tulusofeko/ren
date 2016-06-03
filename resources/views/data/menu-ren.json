@@ -41,5 +41,15 @@
             }
         ]
 
+    },
+    {
+        "url"   : "/program",
+        "title" : "Program",
+        "icon"  : "fa-list-ul"
+    },
+    {
+        "url"   : "/kegiatan",
+        "title" : "Kegiatan",
+        "icon"  : "fa-cubes"
     }
 ]
