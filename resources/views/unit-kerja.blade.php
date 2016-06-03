@@ -225,7 +225,6 @@
           }).fail(function(result) {
               $('#formunitkerja').modal('hide');
 
-              console.log(result);
               var data = {};
               
               if (typeof result.responseJSON != "undefined" ) {
