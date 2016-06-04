@@ -161,6 +161,11 @@
           },
       });
   });
+  $(function(){
+      $("#flash-message .close").on("click", function(){
+          $("#flash-message").hide();
+      });
+  });
   </script>
 
   <!-- Flash messages -->
