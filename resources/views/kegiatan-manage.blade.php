@@ -260,7 +260,7 @@
         "lengthMenu" : [ 5, 10, 25, 50, 75, 100, "All" ],
         "autoWidth"  : false,
         "stateSave"  : false,
-        "order"      : [[ 1, 'asc' ], [ 2, 'asc' ]],
+        "order"      : [[ 2, 'asc' ], [ 1, 'asc' ]],
         "serverSide" : true,
         "ajax": {
             "url": $('#kegiatans').data('url'),
