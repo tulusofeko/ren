@@ -19,6 +19,11 @@
         ]
     },
     {
+        "title" : "Data Usulan RKT",
+        "url"   : "/rkt",
+        "icon"  : "fa-table"
+    },
+    {
         "title" : "KELOLA DATA",
         "type"  : "header"
     },
