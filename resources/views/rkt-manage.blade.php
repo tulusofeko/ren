@@ -39,16 +39,9 @@
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header">
-          <h3 class="box-title">Daftar Program</h3>
-          <div class="pull-right box-tools  no-print">
-            <!-- Header Button -->
-            <button class="btn btn-success btn-social" title="Tambah Data Program"
-              data-toggle="modal" 
-              data-target="#formprogram" 
-              data-method="post" 
-            >
-                <i class="fa fa-plus"> </i> Tambah Data Program
-            </button>
+          <h3 class="box-title">Daftar Usulan RKT</h3>
+          <div class="pull-right box-tools  no-print" id="box-action">
+              <!-- Header Button -->
           </div>
         </div><!-- /.box-header -->
         <div class="box-body">
@@ -182,36 +175,6 @@
   //         },
   //     });
   // });
-  $('#usulan').treegrid({
-      url       : $('#usulan').data('url'),
-      idField   : 'mak',
-      treeField : 'name',
-      method    : 'GET',
-      lines     : true,
-      columns   :[[
-          {
-              title : 'Kode',
-              field : 'code',
-              width : 60,
-              align : 'center'
-          },
-          {
-              title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
-              field : 'name',
-              width : 480,
-          },
-          {
-              title : 'Jumlah Pelaksana',
-              field : 'pegawai',
-              width : 120
-          },
-          {
-              title : 'Durasi Pelaksanaan',
-              field : 'waktu',
-              width : 120
-          }
-      ]]
-  });
   </script>
 
   <!-- Flash messages -->
@@ -245,6 +208,59 @@
           }, 4000);
       }); 
   }
+  </script>
+
+  <!-- TreeGrid -->
+  <script>
+  function button_switcher(row)
+  {
+      var button = '';
+
+      switch(row.level) {
+          case 'kegiatan':
+              button += '<button class="btn btn-success btn-social" data-toggle="modal" '; 
+              button += 'title="Tambah Data Program"';
+              button += 'data-target="#formprogram">';
+              button += '<i class="fa fa-plus"> </i> Rekam Output </button>';
+      }
+
+      $('#box-action').empty();
+
+      $('#box-action').html(button);
+
+  }
+
+  $('#usulan').treegrid({
+      url       : $('#usulan').data('url'),
+      idField   : 'mak',
+      treeField : 'name',
+      method    : 'GET',
+      lines     : true,
+      columns   :[[
+          {
+              title : 'Kode',
+              field : 'code',
+              width : 60,
+              align : 'center'
+          },
+          {
+              title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
+              field : 'name',
+              width : 580,
+          },
+          {
+              title : 'Jumlah Pelaksana',
+              field : 'pegawai',
+              width : 120
+          },
+          {
+              title : 'Durasi Pelaksanaan',
+              field : 'waktu',
+              width : 120
+          }
+      ]],
+      onClickRow: button_switcher
+  });
   </script>
 
   <script>
@@ -299,13 +315,13 @@
 
     //         var btn_edit, btn_del;
 
-    //             btn_edit  = "<buton class='btn btn-primary' data-toggle='modal'";
+    //             btn_edit  = "<button class='btn btn-primary' data-toggle='modal'";
     //             btn_edit += "data-target='#formprogram' data-method='put'>"
-    //             btn_edit += "<i class='fa fa-edit'></i></buton> ";
+    //             btn_edit += "<i class='fa fa-edit'></i></button> ";
             
-    //             btn_del  = "<buton class='btn btn-danger' data-toggle='modal'";
+    //             btn_del  = "<button class='btn btn-danger' data-toggle='modal'";
     //             btn_del += "data-target='#hapusprogram'>"
-    //             btn_del += "<i class='fa fa-trash'></i></buton>";
+    //             btn_del += "<i class='fa fa-trash'></i></button>";
             
     //         $('td', row).eq(-1).html( btn_edit + btn_del );
     //     }

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kegiatan extends Model implements Uraian
 {
-    protected $appends = array('state', 'parentId', 'mak');
+    protected $appends = ['state', 'parentId', 'mak', 'level'];
 
     /**
      * Set the Programs's name.
@@ -32,6 +32,11 @@ class Kegiatan extends Model implements Uraian
     public function getMakAttribute($value)
     {
         return $this->parentId . '.' . $this->code;
+    }
+
+    public function getlevelAttribute($value)
+    {
+        return 'kegiatan';
     }
 
     public function getChilds()
