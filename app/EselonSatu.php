@@ -2,9 +2,7 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class EselonSatu extends Model
+class EselonSatu extends UnitKerja
 {
     protected $table = "eselon_satu";
 }
