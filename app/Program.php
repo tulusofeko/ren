@@ -2,22 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Program extends Model implements Uraian
+class Program extends Usulan
 {
-    protected $appends = ['state', 'parentId', 'mak', 'level'];
-
-    /**
-     * Set the Programs's name.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = ucwords(strtolower($value));
-    }
 
     public function getStateAttribute($value)
     {
@@ -27,16 +13,6 @@ class Program extends Model implements Uraian
     public function getParentIdAttribute($value)
     {
         return '051.01';
-    }
-
-    public function getMakAttribute($value)
-    {
-        return '051.01.'. $this->code;
-    }
-
-    public function getlevelAttribute($value)
-    {
-        return 'program';
     }
 
     public function getChilds()

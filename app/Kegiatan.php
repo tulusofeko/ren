@@ -2,22 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Kegiatan extends Model implements Uraian
+class Kegiatan extends Usulan
 {
-    protected $appends = ['state', 'parentId', 'mak', 'level'];
-
-    /**
-     * Set the Programs's name.
-     *
-     * @param  string  $value
-     * @return string
-     */
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = ucwords(strtolower($value));
-    }
 
     public function getStateAttribute($value)
     {
@@ -26,17 +12,14 @@ class Kegiatan extends Model implements Uraian
     
     public function getParentIdAttribute($value)
     {
-        return '051.01.' . $this->program;
+        $parent = Program::where('code', $this->program)->firstOrFail();
+        
+        return $parent->mak;
     }
 
     public function getMakAttribute($value)
     {
         return $this->parentId . '.' . $this->code;
-    }
-
-    public function getlevelAttribute($value)
-    {
-        return 'kegiatan';
     }
 
     public function getChilds()
