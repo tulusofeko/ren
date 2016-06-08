@@ -15,155 +15,91 @@ use Symfony\Component\Yaml\Yaml;
 
 /**
  * -----------------------------------------------------------------------------
- * View
+ * Routes
  * -----------------------------------------------------------------------------
  */
-Route::group(['as' => 'view.'], function () {
     
-    Route::get('/', 'DashboardController@v1');
+Route::get('/', function () { return view("dashboard-v1"); });
     
-    Route::get('/unit/eselon-satu', 'EselonSatuController@index')
-        ->name('eselon_satu');
+
     
-    Route::get('/unit/eselon-satu/{alias}', function ($alias) {
-        return response()->json(
-            App\EselonSatu::where('codename', '=', $alias)->firstOrFail()
-        );
-    });    
+// Eselon Satu Controller Route
+Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], function () {
+
+    Route::get('/{codename?}', 'EselonSatuController@show')->name('show');
     
-    Route::get('/unit/eselon-dua', 'EselonDuaController@index')
-        ->name('eselon_dua');
+    Route::post('/create', 'EselonSatuController@create')->name('create');
 
-    Route::get('/unit/eselon-dua/{alias}', function ($alias) {
-        return response()->json(
-            App\EselonDua::where('codename', '=', $alias)->firstOrFail()
-        );
-    });
+    Route::put('/update/{eselon_satu}', 'EselonSatuController@update')->name('update');
+    
+    Route::delete('/hapus/{eselon_satu}', 'EselonSatuController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'EselonSatuController@data')->name('datatables');
 
-    Route::get('/unit/eselon-tiga', 'EselonTigaController@index')
-        ->name('eselon_tiga');
-
-    Route::get('/unit/eselon-tiga/{alias}', function ($alias) {
-        return response()->json(
-            App\EselonTiga::where('codename', '=', $alias)->firstOrFail()
-        );
-    });
-
-    Route::get('/program', 'ProgramController@manage')
-        ->name('program');
-
-    Route::get('/program/{kode}', function ($kode) {
-        return response()->json(
-            App\Program::where('code', '=', $kode)->firstOrFail()
-        );
-    });
-
-    Route::get('/kegiatan', 'KegiatanController@manage')
-        ->name('kegiatan');
-
-    Route::get('/kegiatan/{kode}', function ($kode) {
-        return response()->json(
-            App\Kegiatan::where('code', '=', $kode)->firstOrFail()
-        );
-    });
 });
 
-/**
- * -----------------------------------------------------------------------------
- * API
- * -----------------------------------------------------------------------------
- */
-Route::group(['prefix' => 'api', 'as' => 'api.'], function () {
-    Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], 
-    function () {
-        Route::post(
-            '/create', 'EselonSatuController@create'
-        )->name('create');
+// Eselon Dua Controller Route
+Route::group(['prefix' => 'unit/eselon-dua', 'as' => 'eselon_dua.'], function () {
 
-        Route::put(
-            '/update/{eselon_satu}', 'EselonSatuController@update'
-        )->name('update');
-        
-        Route::delete(
-            '/hapus/{eselon_satu}', 'EselonSatuController@delete'
-        )->name('delete');
-        
-        Route::any(
-            '/datatbl', 'EselonSatuController@data'
-        )->name('datatables');
-    });
+    Route::get('/{codename?}', 'EselonDuaController@show')->name('show');
 
-    Route::group(['prefix' => 'unit/eselon-dua', 'as' => 'eselon_dua.'], 
-    function () {
-        Route::post(
-            '/create', 'EselonDuaController@create'
-        )->name('create');
+    Route::post('/create', 'EselonDuaController@create')->name('create');
 
-        Route::put(
-            '/update/{id}', 'EselonDuaController@update'
-        )->name('update');
-        
-        Route::delete(
-            '/hapus/{eselon_dua}', 'EselonDuaController@delete'
-        )->name('delete');
-        
-        Route::any(
-            '/datatbl', 'EselonDuaController@data'
-        )->name('datatables');
-    });
+    Route::put('/update/{id}', 'EselonDuaController@update')->name('update');
+    
+    Route::delete('/hapus/{eselon_dua}', 'EselonDuaController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'EselonDuaController@data')->name('datatables');
 
-    Route::group(['prefix' => 'unit/eselon-tiga', 'as' => 'eselon_tiga.'], 
-    function () {
-        Route::post(
-            '/create', 'EselonTigaController@create'
-        )->name('create');
+});
 
-        Route::put(
-            '/update/{id}', 'EselonTigaController@update'
-        )->name('update');
-        
-        Route::delete(
-            '/hapus/{eselon_tiga}', 'EselonTigaController@delete'
-        )->name('delete');
-        
-        Route::any(
-            '/datatbl', 'EselonTigaController@data'
-        )->name('datatables');
-    });
+// Eselon Tiga Controller Route
+Route::group(['prefix' => 'unit/eselon-tiga', 'as' => 'eselon_tiga.'], function () {
 
-    Route::group(['prefix' => 'program', 'as' => 'program.'], function () {
-        Route::post(
-            '/create', 'ProgramController@create'
-        )->name('create');
+    Route::get('/{codename?}', 'EselonTigaController@show')->name('show');
 
-        Route::put(
-            '/update/{program}', 'ProgramController@update'
-        )->name('update');
-        
-        Route::delete(
-            '/hapus/{program}', 'ProgramController@delete'
-        )->name('delete');
-        
-        Route::any(
-            '/datatbl', 'ProgramController@data'
-        )->name('datatables');
-    });
+    Route::post('/create', 'EselonTigaController@create')->name('create');
 
-    Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
-        Route::post(
-            '/create', 'KegiatanController@create'
-        )->name('create');
+    Route::put('/update/{id}', 'EselonTigaController@update')->name('update');
+    
+    Route::delete('/hapus/{eselon_tiga}', 'EselonTigaController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'EselonTigaController@data')->name('datatables');
 
-        Route::put(
-            '/update/{kegiatan}', 'KegiatanController@update'
-        )->name('update');
-        
-        Route::delete(
-            '/hapus/{kegiatan}', 'KegiatanController@delete'
-        )->name('delete');
-        
-        Route::any(
-            '/datatbl', 'KegiatanController@data'
-        )->name('datatables');
-    });
+});
+
+// Program Controller Route
+Route::group(['prefix' => 'program', 'as' => 'program.'], function () {
+
+    Route::get('/{kode?}', 'ProgramController@show')->name('show');
+
+    Route::post('/create', 'ProgramController@create')->name('create');
+
+    Route::put('/update/{program}', 'ProgramController@update')->name('update');
+    
+    Route::delete('/hapus/{program}', 'ProgramController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'ProgramController@data')->name('datatables');
+});
+
+// Kegiatan Controller Route
+Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
+
+    Route::get('/{kode?}', 'KegiatanController@show')->name('show');
+
+    Route::post('/create', 'KegiatanController@create')->name('create');
+
+    Route::put('/update/{kegiatan}', 'KegiatanController@update')->name('update');
+    
+    Route::delete('/hapus/{kegiatan}', 'KegiatanController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'KegiatanController@data')->name('datatables');
+});
+
+// RKT Controller
+Route::group(['prefix' => 'rkt', 'as' => 'rkt.'], function () {
+    
+    Route::get('/rkt', 'RktController@manage')->name('show');
+
+    Route::any('/getdata', 'RktController@get')->name('getdata');
 });

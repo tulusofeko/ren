@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\EselonSatu;
 use Illuminate\Http\Request;
-use Exception, InvalidArgumentException;
 use Illuminate\Database\QueryException;
+use Exception, InvalidArgumentException;
+use App\EselonSatu;
 
 /**
  * -----------------------------------------------------------------------------
@@ -21,9 +20,13 @@ class EselonSatuController extends UnitKerjaController
     /**
      * Eselon I data dashboard table and data management 
      */
-    public function index() 
+    public function show($codename = null) 
     { 
-        return view("eselon-satu"); 
+        if (empty($codename)) return view("eselon-satu"); 
+
+        return response()->json(
+            EselonSatu::where('codename', $codename)->firstOrFail()
+        );
     }
 
     public function create(Request $request)
@@ -39,13 +42,14 @@ class EselonSatuController extends UnitKerjaController
             }
 
             $eselon_satu           = new EselonSatu;
-            $eselon_satu->name     = ucfirst($request->input('name'));
-            $eselon_satu->codename = strtoupper($request->input('codename'));
+            $eselon_satu->name     = $name;
+            $eselon_satu->codename = $codename;
             $eselon_satu->save();
 
-            $error   = 0;
-            $message = "Data berhasil disimpan";
-            $msg_raw = $message;
+            return response()->json([
+                "message" => "Data berhasil disimpan"
+            ], 200);
+
         } catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
@@ -60,7 +64,7 @@ class EselonSatuController extends UnitKerjaController
             "error"   => $error, 
             "message" => $message,
             "raw"     => $msg_raw
-        ]);
+        ], 500);
     }
 
     public function update($id, Request $request)
@@ -82,9 +86,10 @@ class EselonSatuController extends UnitKerjaController
 
             $eselon_satu->save();
 
-            $error   = 0;
-            $message = "Data berhasil disimpan";
-            $msg_raw = $message;
+            return response()->json([
+                "message" => "Data berhasil disimpan"
+            ], 200);
+
         } catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
@@ -99,6 +104,6 @@ class EselonSatuController extends UnitKerjaController
             "error"   => $error, 
             "message" => $message,
             "raw"     => $msg_raw
-        ]);
+        ], 500);
     }
 }

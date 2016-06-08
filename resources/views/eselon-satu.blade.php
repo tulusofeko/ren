@@ -6,13 +6,13 @@
 
 @section('tabel-unitkerja')
   <table id="unitkerja" class="table table-bordered table-hover table-striped" 
-    data-url="{{ route('api.eselon_satu.datatables') }}"
+    data-url="{{ route('eselon_satu.datatables') }}"
   >
     <thead>
       <tr>
         <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
         <th>Unit Kerja</th>
-        <th>Alias</th>
+        <th>Kode</th>
         <th>Aksi</th>
       </tr>
     </thead>
@@ -21,19 +21,19 @@
 @endsection
 
 @section('form-unitkerja')
-  <form id="create-unitkerja" action="{{ route('api.eselon_satu.create') }}"
-    data-edit="{{ route('api.eselon_satu.update', "/") }}/" method="post"
+  <form id="create-unitkerja" action="{{ route('eselon_satu.create') }}"
+    data-edit="{{ route('eselon_satu.update', "/") }}/" method="post"
   >
     <div class="form-group">
       <label>Nama Unit Kerja Eselon I</label>
       <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon I" type="text" required />
     </div>
     <div class="form-group">
-      <label>Alias</label>
+      <label>Kode</label>
       <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="2"
-        data-remote="{{ route('view.eselon_satu') }}/{value}" 
+        data-remote="{{ route('eselon_satu.show') }}/{value}" 
         data-parsley-remote-validator="reverse" 
-        data-parsley-remote-message="Alias sudah ada"
+        data-parsley-remote-message="Kode sudah ada"
       />
     </div>
     <div class="form-group">
@@ -46,7 +46,7 @@
 @section('ukjs')
   <!-- Datatable related -->
   <script>
-    $('#hapusunitkerja form').attr('action', '{{ route("api.eselon_satu.delete", "") }}');
+    $('#hapusunitkerja form').attr('action', '{{ route("eselon_satu.delete", "") }}');
 
     var table = $('#unitkerja').DataTable({
         "jQueryUI"   : true,
@@ -56,12 +56,8 @@
         "order"      : [[ 2, 'asc' ]],
         "serverSide" : true,
         "ajax": {
-            "url": $('#unitkerja').data('url'),
-            "type": "POST",
-            "data":
-            {
-                '_token': '{{ csrf_token() }}'
-            }
+            "url"  : $('#unitkerja').data('url'),
+            "type" : "POST"
         },
         "columns": [
             {
@@ -77,8 +73,9 @@
                 name: 'name'
             },
             {
-                data: 'codename',
-                name: 'codename'
+                className : 'text-center',
+                data      : 'codename',
+                name      : 'codename'
             },
             {
                 className: 'text-center',

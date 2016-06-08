@@ -118,13 +118,11 @@ class UnitKerjaController extends Controller
     }
 
     /**
-     * Datatable Personil Controller
+     * Datatable UnitKerja Controller
      * @return mixed
      */
     public function data()
     {
-        $data = DB::table($this->table);
-
-        return Datatables::of($data)->make(true);
+        return Datatables::of(DB::table($this->table))->make(true);
     }
 }

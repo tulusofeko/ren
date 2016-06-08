@@ -70,35 +70,33 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="formprogram">
+  <div class="modal fade" id="formoutput">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4 class="modal-title"></h4>
+          <h4 class="modal-title">Tambah Output</h4>
         </div>
         <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
-          <form id="create-program" method="post" action="{{ route('api.program.create') }}"
-            data-edit="{{ route('api.program.update', "/") }}/"  
+          <form id="create-output" method="post" action="{{ route('api.output.create') }}"
+            data-edit="{{ route('api.output.update', "/") }}/"  
           >
             <div class="form-group">
-              <label>Kode Program</label>
-              <input class="form-control" name="code" placeholder="Kode Program" type="text" required maxlength="2"
-                data-remote="{{ route('view.program') }}/{value}" 
-                data-parsley-remote-reverse="true" 
-                data-parsley-remote-message="Kode Program sudah ada" 
-              />
+              <label>Kegiatan</label>
+              <input class="form-control" name="kegiatan" type="text" disabled>
+            </div>
+            <div class="form-group">
+              <label>Kode Output</label>
+              <input class="form-control" name="code" placeholder="Kode Output" type="text" required maxlength="2">
             </div>
 
             <div class="form-group">
-              <label>Nama Program</label>
-              <input class="form-control" name="name" placeholder="Name Program" type="text" required
-              />
+              <label>Nama Output</label>
+              <input class="form-control" name="name" placeholder="Name Output" type="text" required />
             </div>
             <div class="form-group">
               <input type="hidden" name="_method" value="POST">
-              <input type="hidden" name="_token" value="{{ csrf_token() }}">
             </div>
           </form>
 
@@ -107,7 +105,7 @@
           </div>
         </div>
         <div class="modal-footer clearfix">
-          <button form="create-program" type="submit" class="btn btn-primary">Simpan</button>
+          <button form="create-output" type="submit" class="btn btn-primary">Simpan</button>
           <button class="btn btn-danger" data-dismiss="modal">Batal</button>
           <!-- Modal footer -->
         </div>
@@ -216,11 +214,13 @@
   {
       var button = '';
 
+      console.log(row);
+
       switch(row.level) {
           case 'kegiatan':
               button += '<button class="btn btn-success btn-social" data-toggle="modal" '; 
               button += 'title="Tambah Data Program"';
-              button += 'data-target="#formprogram">';
+              button += 'data-target="#formoutput">';
               button += '<i class="fa fa-plus"> </i> Rekam Output </button>';
       }
 

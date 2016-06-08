@@ -3,17 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Program;
 use DB;
 use Exception, InvalidArgumentException;
 use Yajra\Datatables\Datatables;
+use App\Http\Requests;
+use App\Program;
 
 class ProgramController extends Controller
 {
-    public function manage()
+    public function show($kode = null)
     {
-        return view("program-manage");
+        if (empty($kode)) {
+            return view("program-manage");
+        }
+
+        return response()->json(Program::where('code', $kode)->firstOrFail());
     }
 
     public function create(Request $request)
@@ -117,8 +121,6 @@ class ProgramController extends Controller
 
     public function data()
     {
-        $data = Program::all();
-
-        return Datatables::of($data)->make(true);
+        return Datatables::of(Program::all())->make(true);
     }
 }

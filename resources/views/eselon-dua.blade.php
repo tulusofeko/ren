@@ -6,13 +6,13 @@
 
 @section('tabel-unitkerja')
   <table id="unitkerja" class="table table-bordered table-hover table-striped" 
-    data-url="{{ route('api.eselon_dua.datatables') }}"
+    data-url="{{ route('eselon_dua.datatables') }}"
   >
     <thead>
       <tr>
         <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
         <th>Unit Kerja</th>
-        <th>Alias</th>
+        <th>Kode</th>
         <th>Eselon I</th>
         <th>Aksi</th>
       </tr>
@@ -22,19 +22,19 @@
 @endsection
 
 @section('form-unitkerja')
-  <form id="create-unitkerja" method="post" action="{{ route('api.eselon_dua.create') }}"
-    data-edit="{{ route('api.eselon_dua.update', "/") }}/"  
+  <form id="create-unitkerja" method="post" action="{{ route('eselon_dua.create') }}"
+    data-edit="{{ route('eselon_dua.update', "/") }}/"  
   >
     <div class="form-group">
       <label>Nama Unit Kerja Eselon II</label>
       <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon II" type="text" required/>
     </div>
     <div class="form-group">
-      <label>Alias</label>
+      <label>Kode</label>
       <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
-        data-remote="{{ route('view.eselon_dua') }}/{value}" 
+        data-remote="{{ route('eselon_dua.show') }}/{value}" 
         data-parsley-remote-reverse="true" 
-        data-parsley-remote-message="Alias sudah ada" 
+        data-parsley-remote-message="Kode sudah ada" 
       />
     </div>
     <div class="form-group">
@@ -64,7 +64,7 @@
         minimumResultsForSearch: Infinity
     });
 
-    $('#hapusunitkerja form').attr('action', '{{ route("api.eselon_dua.delete", "") }}');
+    $('#hapusunitkerja form').attr('action', '{{ route("eselon_dua.delete", "") }}');
 
     var table = $('#unitkerja').DataTable({
         "jQueryUI"   : true,
@@ -76,42 +76,38 @@
         "serverSide" : true,
         "ajax": {
             "url": $('#unitkerja').data('url'),
-            "type": "POST",
-            "data":
-            {
-                '_token': '{{ csrf_token() }}'
-            }
+            "type": "POST"
         },
         "columns": [
             {
-                className: 'text-center',
-                data: null,
-                defaultContent: '',
-                name: 'nomor',
-                searchable: false,
-                sortable: false
+                className      : 'text-center',
+                data           : null,
+                defaultContent : '',
+                name           : 'nomor',
+                searchable     : false,
+                sortable       : false
             },
             {
                 data: 'name',
                 name: 'name'
             },
             {
-                className: 'text-center',
-                data: 'codename',
-                name: 'codename'
+                className : 'text-center',
+                data      : 'codename',
+                name      : 'codename'
             },
             {
-                className: 'text-center',
-                data: 'parent',
-                name: 'parent'
+                className : 'text-center',
+                data      : 'parent',
+                name      : 'parent'
             },
             {
-                className: 'text-center',
-                data: null,
-                defaultContent: '',
-                name: 'aksi',
-                searchable: false,
-                sortable: false
+                className      : 'text-center',
+                data           : null,
+                defaultContent : '',
+                name           : 'aksi',
+                searchable     : false,
+                sortable       : false
             },
         ],
         "createdRow": function ( row, data, index ) {

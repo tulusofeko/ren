@@ -12,8 +12,14 @@ use Yajra\Datatables\Datatables;
 
 class KegiatanController extends Controller
 {
-    public function manage()
+    public function show($kode = null)
     {
+        if (!empty($kode)) {
+            return response()->json(
+                Kegiatan::where('code', $kode)->firstOrFail()
+            );
+        }
+        
         $eselon_dua = DB::table('eselon_dua') 
             ->join('eselon_satu', 'eselon_dua.parent', '=', 'eselon_satu.codename')
             ->select('eselon_dua.*', 'eselon_satu.name as eselonsatu_name')

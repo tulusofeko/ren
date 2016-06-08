@@ -23,15 +23,22 @@ class EselonTigaController extends UnitKerjaController
     /**
      * Eselon III data dashboard and management
      */
-    public function index()
+    public function show($codename = null)
     {
+        if (!empty($codename)) {
+            return response()->json(
+                EselonTiga::where('codename', $codename)->firstOrFail()
+            );
+        }
+         
         $eselon_dua = DB::table('eselon_dua') 
             ->join('eselon_satu', 'eselon_dua.parent', '=', 'eselon_satu.codename')
             ->select('eselon_dua.*', 'eselon_satu.name as eselonsatu_name')
             ->get();
         $eselon_dua = collect($eselon_dua)->groupBy('eselonsatu_name');
-        
+    
         return view("eselon-tiga", ['eselon_dua' => $eselon_dua]);
+
     }
 
     /**

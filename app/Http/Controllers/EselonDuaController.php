@@ -15,10 +15,17 @@ class EselonDuaController extends UnitKerjaController
     protected $model = "App\EselonDua";
     protected $table = "eselon_dua";
 
-    public function index()
+    public function show($codename = null)
     {
-        $eselon_satu = EselonSatu::all()->sortBy('codename');
+        if (empty($codename)) {
+            $eselon_satu = EselonSatu::all()->sortBy('codename');
+            
+            return view("eselon-dua", ['eselon_satu' => $eselon_satu]);
+        }
+
+        return response()->json(
+            EselonDua::where('codename', $codename)->firstOrFail()
+        );
         
-        return view("eselon-dua", ['eselon_satu' => $eselon_satu]);
     }
 }

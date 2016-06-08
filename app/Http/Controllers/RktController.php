@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests;
 use App\Program;
-use App\Uraian;
+use App\Usulan;
 
 class RktController extends Controller
 {
@@ -39,7 +39,7 @@ class RktController extends Controller
 
     }
 
-    protected function makResolve(Uraian $komponen, $mak)
+    protected function makResolve(Usulan $komponen, $mak)
     {
         if (empty($mak)) {
             return response()->json($komponen->getChilds()->toArray());

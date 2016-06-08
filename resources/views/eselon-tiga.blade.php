@@ -6,38 +6,37 @@
 
 @section('tabel-unitkerja')
   <table id="unitkerja" class="table table-bordered table-hover table-striped" 
-    data-url="{{ route('api.eselon_tiga.datatables') }}"
+    data-url="{{ route('eselon_tiga.datatables') }}"
   >
     <thead>
       <tr>
         <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
         <th>Unit Kerja</th>
-        <th>Alias</th>
+        <th>Kode</th>
         <th>Eselon II</th>
         <th>Eselon I</th>
         <th>Aksi</th>
       </tr>
     </thead>
-    <tbody>
-    </tbody>
+    <tbody> </tbody>
   </table>
 @endsection
 
 
 @section('form-unitkerja')
-  <form id="create-unitkerja" method="post" action="{{ route('api.eselon_tiga.create') }}"
-    data-edit="{{ route('api.eselon_tiga.update', "/") }}/"  
+  <form id="create-unitkerja" method="post" action="{{ route('eselon_tiga.create') }}"
+    data-edit="{{ route('eselon_tiga.update', "/") }}/"  
   >
     <div class="form-group">
       <label>Nama Unit Kerja Eselon III</label>
       <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon III" type="text" required/>
     </div>
     <div class="form-group">
-      <label>Alias</label>
+      <label>Kode</label>
       <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
-        data-remote="{{ route('view.eselon_tiga') }}/{value}" 
+        data-remote="{{ route('eselon_tiga.show') }}/{value}" 
         data-parsley-remote-reverse="true" 
-        data-parsley-remote-message="Alias sudah ada" 
+        data-parsley-remote-message="Kode sudah ada" 
       />
     </div>
     <div class="form-group">
@@ -70,7 +69,7 @@
         placeholder: "Pilih Unit Eselon Dua",
     });
 
-    $('#hapusunitkerja form').attr('action', '{{ route("api.eselon_tiga.delete", "") }}');
+    $('#hapusunitkerja form').attr('action', '{{ route("eselon_tiga.delete", "") }}');
 
     var table = $('#unitkerja').DataTable({
         "jQueryUI"   : true,
@@ -82,11 +81,7 @@
         "serverSide" : true,
         "ajax": {
             "url": $('#unitkerja').data('url'),
-            "type": "POST",
-            "data":
-            {
-                '_token': '{{ csrf_token() }}'
-            }
+            "type": "POST"
         },
         "columns": [
             {

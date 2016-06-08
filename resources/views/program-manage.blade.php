@@ -42,7 +42,7 @@
             </div>
           </div>
           <table id="programs" class="table table-bordered table-hover table-striped" 
-            data-url="{{ route('api.program.datatables') }}"
+            data-url="{{ route('program.datatables') }}"
           >
             <thead>
               <tr>
@@ -67,13 +67,13 @@
         </div>
         <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
-          <form id="create-program" method="post" action="{{ route('api.program.create') }}"
-            data-edit="{{ route('api.program.update', "/") }}/"  
+          <form id="create-program" method="post" action="{{ route('program.create') }}"
+            data-edit="{{ route('program.update', "/") }}/"  
           >
             <div class="form-group">
               <label>Kode Program</label>
               <input class="form-control" name="code" placeholder="Kode Program" type="text" required maxlength="2"
-                data-remote="{{ route('view.program') }}/{value}" 
+                data-remote="{{ route('program.show') }}/{value}" 
                 data-parsley-remote-reverse="true" 
                 data-parsley-remote-message="Kode Program sudah ada" 
               />
@@ -109,7 +109,7 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title"><i class="ion-android-delete"></i> Hapus Data </h4>
         </div>
-        <form method="post" action="{{ route('api.program.delete', '')}}">
+        <form method="post" action="{{ route('program.delete', '/')}}">
           <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
             <p>Data yang dihapus tidak dapat dikembalikan lagi.</p>
