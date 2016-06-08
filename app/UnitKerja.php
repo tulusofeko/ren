@@ -10,4 +10,9 @@ class UnitKerja extends Model
     {
         $this->attributes['name'] = ucwords(strtolower($value));
     }
+
+    public function setCodenameAttribute($value)
+    {
+        $this->attributes['codename'] = strtoupper($value);
+    }
 }
