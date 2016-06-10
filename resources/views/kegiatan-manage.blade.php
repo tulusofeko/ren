@@ -4,11 +4,11 @@
 
 @section('css')
   <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="{{ url('adminlte/plugins/iCheck/square/red.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/iCheck/square/red.css') }}">
   <!-- Select2 -->
-  <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/select2.min.css') }}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
   @parent
   <style type="text/css">
     .radio-label {
@@ -184,12 +184,12 @@
 @section('custom-js')
   @include('includes.parsley')
   <!-- iCheck 1.0.1 -->
-  <script src="{{ url('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
   <!-- Select2 -->
-  <script src="{{ url('vendor/select2/js/select2.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/select2/select2.min.js') }}"></script>
   <!-- DataTables -->
-  <script src="{{ url('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
-  <script src="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -264,11 +264,7 @@
         "serverSide" : true,
         "ajax": {
             "url": $('#kegiatans').data('url'),
-            "type": "POST",
-            "data":
-            {
-                '_token': '{{ csrf_token() }}'
-            }
+            "type": "POST"
         },
         "columns": [
             {

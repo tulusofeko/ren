@@ -4,14 +4,14 @@
 
 @section('css')
   <!-- iCheck for checkboxes and radio inputs -->
-  <link rel="stylesheet" href="{{ url('adminlte/plugins/iCheck/all.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/iCheck/all.css') }}">
   <!-- Select2 -->
-  <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/select2.min.css') }}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
   <!-- JEasyUI -->
-  <link rel="stylesheet" type="text/css" href="{{ url('easyui/themes/default/easyui.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url('easyui/themes/icon.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/default/easyui.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
   @parent
   <style type="text/css">
       .datagrid-wrap.panel-body {
@@ -42,6 +42,14 @@
           <h3 class="box-title">Daftar Usulan RKT</h3>
           <div class="pull-right box-tools  no-print" id="box-action">
               <!-- Header Button -->
+              <button class="btn btn-success btn-social" title="Tambah Output" style="display: none;" 
+                data-toggle="modal" data-target="#formoutput" aria-hidden="true">
+                <i class="fa fa-plus"> </i> Rekam Output 
+              </button>
+              <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
+                data-toggle="modal" data-target="#hapus" aria-hidden="true">
+                <i class="fa fa-trash"> </i> Hapus 
+              </button>
           </div>
         </div><!-- /.box-header -->
         <div class="box-body">
@@ -52,7 +60,7 @@
             </div>
           </div>
           <table id="usulan" class="table table-bordered table-hover table-striped" 
-            data-url="{{ route('api.rkt.getdata') }}"
+            data-url="{{ route('rkt.getdata') }}"
           >
             <thead>
               <tr>
@@ -79,12 +87,13 @@
         </div>
         <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
-          <form id="create-output" method="post" action="{{ route('api.output.create') }}"
-            data-edit="{{ route('api.output.update', "/") }}/"  
+          <form id="create-output" method="post" action="{{ route('output.create') }}"
+            data-edit="{{ route('output.update', "/") }}/"  
           >
             <div class="form-group">
               <label>Kegiatan</label>
-              <input class="form-control" name="kegiatan" type="text" disabled>
+              <input class="form-control" name="kegiatan-kw" type="text" disabled>
+              <input class="form-control" name="kegiatan" type="hidden">
             </div>
             <div class="form-group">
               <label>Kode Output</label>
@@ -112,14 +121,14 @@
       </div><!-- /.modal-content -->
     </div>
   </div>
-  <div class="modal fade" id="hapusprogram">
+  <div class="modal fade" id="hapus">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <h4 class="modal-title"><i class="ion-android-delete"></i> Hapus Data </h4>
         </div>
-        <form method="post" action="{{ route('api.program.delete', '')}}">
+        <form method="post">
           <div class="modal-body overlay-wrapper">
           <!-- Modal body -->
             <p>Data yang dihapus tidak dapat dikembalikan lagi.</p>
@@ -147,32 +156,32 @@
 @section('custom-js')
   @include('includes.parsley')
   <!-- EasyUI -->
-  <script src="{{ url('easyui/jquery.easyui.min.js') }}"></script>
+  <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
   <!-- iCheck 1.0.1 -->
-  <script src="{{ url('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
   <!-- Select2 -->
-  <script src="{{ url('vendor/select2/js/select2.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/select2/select2.min.js') }}"></script>
   <!-- DataTables -->
-  <script src="{{ url('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
-  <script src="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
   
   <!-- Form validation -->
   <script>
-  // $(document).ready(function() {
-  //     $('#create-program').parsley({
-  //         errorClass    : 'has-error',
-  //         errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
-  //         errorTemplate : '<li class="small text-danger"></li>',
-  //         classHandler: function (ParsleyField) {
-  //             var element = ParsleyField.$element;
-  //             return element.parents('.form-group');
-  //         },
-  //         errorsContainer: function (ParsleyField) {
-  //             var element = ParsleyField.$element;
-  //             return element.parents('.form-group');
-  //         },
-  //     });
-  // });
+  $(document).ready(function() {
+      $('.modal form').parsley({
+          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
+          errorTemplate : '<li class="small text-danger"></li>',
+          errorClass    : 'has-error',
+          classHandler: function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+          errorsContainer: function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+      });
+  });
   </script>
 
   <!-- Flash messages -->
@@ -185,13 +194,11 @@
       }
 
       if (error) {
-
           $('#flash-message .alert').addClass('alert-danger');
           $('#flash-message .alert .alert-messages').html(
               "Error " + data.error + ": " + data.message
           );
       } else {
-
           $('#flash-message .alert').addClass('alert-success');
           $('#flash-message .alert .alert-messages').html(data.message);
       }
@@ -212,23 +219,40 @@
   <script>
   function button_switcher(row)
   {
-      var button = '';
-
-      console.log(row);
+      $('#box-action button').hide();
 
       switch(row.level) {
           case 'kegiatan':
-              button += '<button class="btn btn-success btn-social" data-toggle="modal" '; 
-              button += 'title="Tambah Data Program"';
-              button += 'data-target="#formoutput">';
-              button += '<i class="fa fa-plus"> </i> Rekam Output </button>';
+              $('#box-action [data-target="#formoutput"]').data('kegiatan', row);
+              $('#box-action [data-target="#formoutput"]').show();
+              break;
       }
 
-      $('#box-action').empty();
-
-      $('#box-action').html(button);
+      if (row.level !== 'program' && row.level !== 'kegiatan') {
+          $('#box-action [data-target="#hapus"]').data('data', row);
+          $('#box-action [data-target="#hapus"]').show();
+      }
 
   }
+
+  // function treeGridReloader(element, mak)
+  // {
+  //     var step = mak.split("."), id = '', level, result;
+      
+  //     for (var i = 0; i < step.length; i++, id += ".") {
+  //         id += step[i];
+
+  //         console.log(id);
+          
+  //         try {
+  //             element.treegrid('reload', id);
+  //         } catch (e) {
+  //             console.log(e);
+  //         }
+          
+  //     }
+
+  // }
 
   $('#usulan').treegrid({
       url       : $('#usulan').data('url'),
@@ -259,8 +283,17 @@
               width : 120
           }
       ]],
-      onClickRow: button_switcher
+      onClickRow: button_switcher,
+      onLoadSuccess: function (row, data) {
+          console.log(row);
+          if (row !== null) {
+              var parent = $(this).treegrid('getParent', row.mak);
+          }
+          console.log(data);
+          console.log("----------------");
+      }
   });
+
   </script>
 
   <script>
@@ -330,6 +363,124 @@
 
   <!-- Modal related -->
   <script>
+  $('#formoutput').on('show.bs.modal', function (e) {
+      var data     = $(e.relatedTarget).data();
+      var kegiatan = data.kegiatan;
+      var action   = $('#formoutput form').attr('action');
+
+      $(this).find('.modal-body input[name="kegiatan"]').val(kegiatan.code);
+      $(this).find('.modal-body input[name="kegiatan-kw"]').val(kegiatan.code + " - " + kegiatan.name);
+      $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote', 
+          $('#usulan').data('url') + "?id=" + kegiatan.mak + ".{value}"
+      );
+      $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
+      $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
+
+
+      $('#formoutput form').parsley().on('form:submit', function() {
+          $.ajax({
+              type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+              dataType    : 'JSON', // what type of data do we expect back from the server
+              data        : $('#formoutput form').serialize(), // our data object
+              url         : action, // the url where we want to POST
+              encode      : true,
+              beforeSend  : function () {
+                  $('#formoutput').find('.overlay').show();
+              }
+          }).done(function (result) {
+              $('#formoutput').modal('hide');
+              
+              flashMessage(result);
+
+              $('#usulan').treegrid('reload', kegiatan.mak);
+
+          }).fail(function(result) {
+              $('#formoutput').modal('hide');
+              
+              var data = {};
+              
+              if (typeof result.error == "function" ) {
+                  data.error   = result.status;
+                  data.message = result.statusText;
+              } else {
+                  data = result;
+              }
+              
+              flashMessage(data, true);
+          });
+
+          return false;
+      });
+
+  });
+
+  $('#hapus').on('show.bs.modal', function (e) {
+      var modal = $(this), action;
+      var data  = $(e.relatedTarget).data('data');
+
+      switch(data.level) {
+          case 'output':
+              action = "{{ route('output.delete', '') }}";
+              break;
+
+      }
+
+      modal.find('.modal-body input[name="id"]').val(data.id);  
+
+      $('#hapus form').parsley().on('form:submit', function() {
+          var formData = {
+              '_method'  : 'DELETE'
+          },  id = data.id;
+
+          $.ajax({
+              type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+              dataType    : 'JSON', // what type of data do we expect back from the server
+              url         : action + "/" + id, // the url where we want to POST
+              data        : formData, // our data object
+              encode      : true,
+              beforeSend  : function () {
+                  $('#hapus').find('.overlay').show();
+              }
+          }).done(function (result) {
+              $('#hapus').modal('hide');
+              
+              flashMessage(result);    
+
+              // treeGridReloader($('#usulan'), data.parentId);
+                           
+          }).fail(function(result) {
+              $('#hapus').modal('hide');
+              
+              var data = {};
+              
+              if (typeof result.error == "function" ) {
+                  data.error   = result.status;
+                  data.message = result.statusText;
+              } else {
+                  data = result;
+              }
+              
+              flashMessage(data, true);
+          });
+
+          return false;
+      });  
+  });
+
+  // Reset everything on hide
+  $('#formoutput').on('hide.bs.modal', function (e) {
+      $('#formoutput form')[0].reset();
+      $('#formoutput form').parsley().reset(); 
+      $(this).find('.overlay').hide();
+  });
+
+  // Reset everything on hide
+  $('#hapus').on('hide.bs.modal', function (e) {
+      $('#hapus form')[0].reset();
+      $('#hapus form').parsley().reset(); 
+      $(this).find('.overlay').hide();
+  });
+  
   // $('#formprogram').on('show.bs.modal', function (e) {
       
   //     var data   = $(e.relatedTarget).data(), 
@@ -413,52 +564,7 @@
 
   // });
 
-  // $('#hapusprogram').on('show.bs.modal', function (e) {
-  //     var modal = $(this);
-  //     var data  = table.row( $(e.relatedTarget).parents('tr') ).data();
-  //         modal.find('.modal-title').html("Hapus " + data.name);
-  //         modal.find('.modal-body input[name="id"]').val(data.id);  
-
-  //     $('#hapusprogram form').parsley().on('form:submit', function() {
-  //         var formData = {
-  //             '_method'  : 'DELETE',
-  //             '_token'   : $('#hapusprogram form input[name=_token]').val()
-  //         },  id = $('#hapusprogram form input[name=id]').val();
-
-  //         $.ajax({
-  //             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-  //             url         : $('#hapusprogram form').attr('action') + "/" + id, // the url where we want to POST
-  //             data        : formData, // our data object
-  //             dataType    : 'json', // what type of data do we expect back from the server
-  //             encode      : true,
-  //             beforeSend  : function () {
-  //                 $('#hapusprogram').find('.overlay').show();
-  //             }
-  //         }).done(function (result) {
-  //             $('#hapusprogram').modal('hide');
-              
-  //             table.ajax.reload(null, false);
-
-  //             flashMessage(result);    
-                           
-  //         }).fail(function(result) {
-  //             $('#hapusprogram').modal('hide');
-              
-  //             var data = {};
-              
-  //             if (typeof result.error == "function" ) {
-  //                 data.error   = result.status;
-  //                 data.message = result.statusText;
-  //             } else {
-  //                 data = result;
-  //             }
-              
-  //             flashMessage(data, true);
-  //         });
-
-  //         return false;
-  //     });  
-  // });
+  
 
   // // reset form on modal hide
   // $('#formprogram').on('hide.bs.modal', function (e) {

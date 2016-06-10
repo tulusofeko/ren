@@ -1,10 +1,11 @@
 @extends('layouts.adminlte')
 
 @section('css')
-  <link rel="stylesheet" href="{{ asset('vendor/select2/css/select2.min.css') }}">
-  @parent
+  <!-- Select2 -->
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/select2.min.css') }}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+  @parent
 @endsection
 
 @section('content-header')
@@ -99,10 +100,10 @@
 @section('custom-js')
   @include('includes.parsley')
   <!-- Select2 -->
-  <script src="{{ url('vendor/select2/js/select2.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/select2/select2.min.js') }}"></script>
   <!-- DataTables -->
-  <script src="{{ url('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
-  <script src="{{ url('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
+  <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -197,7 +198,6 @@
       $('#formunitkerja [name="codename"]').parsley()
           .on('field:validate', function(field) {
               var lmn = this.$element;
-              var rem = lmn.data('remote');
               
               if (lmn.data('edit') == this.value) {
                   this.removeConstraint('remote');
@@ -206,7 +206,6 @@
                       'remote' : lmn.data('parsleyRemote') 
                   });
               }
-
           });
 
       $('#create-unitkerja').parsley().on('form:submit', function() {
