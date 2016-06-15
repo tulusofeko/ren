@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Output;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,9 @@ class AppServiceProvider extends ServiceProvider
         );
 
         view()->share('menus', $menus);
+
+        Output::creating(function ($output) { $output->setMak(); });
+
     }
 
     /**

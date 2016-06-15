@@ -21,8 +21,6 @@ use Symfony\Component\Yaml\Yaml;
     
 Route::get('/', function () { return view("dashboard-v1"); });
     
-
-    
 // Eselon Satu Controller Route
 Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], function () {
 
@@ -99,7 +97,21 @@ Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
 // RKT Controller
 Route::group(['prefix' => 'rkt', 'as' => 'rkt.'], function () {
     
-    Route::get('/rkt', 'RktController@manage')->name('show');
+    Route::get('/', 'RktController@show')->name('show');
 
-    Route::any('/getdata', 'RktController@get')->name('getdata');
+    Route::any('/data', 'RktController@getData')->name('getdata');
+});
+
+// Output Controller Route
+Route::group(['prefix' => 'output', 'as' => 'output.'], function () {
+
+    Route::get('/{kode?}', 'OutputController@show')->name('show');
+
+    Route::post('/create', 'OutputController@create')->name('create');
+
+    Route::put('/update/{output}', 'OutputController@update')->name('update');
+    
+    Route::delete('/hapus/{output}', 'OutputController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'OutputController@data')->name('datatables');
 });
