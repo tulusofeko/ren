@@ -14,12 +14,13 @@
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
   @parent
   <style type="text/css">
-      .datagrid-wrap.panel-body {
-          padding: 0;
+      .datagrid .panel-body {
+          border-radius : 0;
+          padding       : 0;
       }
 
-      .datagrid-cell {
-          padding: 8px;
+      .datagrid .datagrid-cell {
+          padding : 8px;
       }
 
   </style>
@@ -43,8 +44,12 @@
           <div class="pull-right box-tools  no-print" id="box-action">
               <!-- Header Button -->
               <button class="btn btn-success btn-social" title="Tambah Output" style="display: none;" 
-                data-toggle="modal" data-target="#formoutput" aria-hidden="true">
+                data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam Output 
+              </button>
+              <button class="btn btn-success btn-social" title="Edit Output" style="display: none;" 
+                data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='PUT'>
+                <i class="fa fa-edit"> </i> Edit Output 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
                 data-toggle="modal" data-target="#hapus" aria-hidden="true">
@@ -59,7 +64,7 @@
               <p class="alert-messages"></p>
             </div>
           </div>
-          <table id="usulan" class="table table-bordered table-hover table-striped" 
+          <table id="tree" class="table table-bordered table-hover table-striped" 
             data-url="{{ route('rkt.getdata') }}"
           >
             <thead>
@@ -97,7 +102,7 @@
             </div>
             <div class="form-group">
               <label>Kode Output</label>
-              <input class="form-control" name="code" placeholder="Kode Output" type="text" required maxlength="2">
+              <input class="form-control" name="code" placeholder="Kode Output" data-edit type="text" required maxlength="2">
             </div>
 
             <div class="form-group">
@@ -155,8 +160,6 @@
 
 @section('custom-js')
   @include('includes.parsley')
-  <!-- EasyUI -->
-  <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
   <!-- iCheck 1.0.1 -->
   <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
   <!-- Select2 -->
@@ -164,6 +167,8 @@
   <!-- DataTables -->
   <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <!-- EasyUI -->
+  <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -173,15 +178,14 @@
           errorTemplate : '<li class="small text-danger"></li>',
           errorClass    : 'has-error',
           classHandler: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
+              return ParsleyField.$element.parents('.form-group');
           },
           errorsContainer: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
+              return ParsleyField.$element.parents('.form-group');
           },
       });
   });
+  
   </script>
 
   <!-- Flash messages -->
@@ -189,9 +193,7 @@
   function flashMessage(data, error = false) {
       var error, message;
 
-      if (typeof data.raw != "undefined" ) {
-          console.log(data.raw);
-      }
+      if (typeof data.raw != "undefined" ) { console.log(data.raw); }
 
       if (error) {
           $('#flash-message .alert').addClass('alert-danger');
@@ -217,45 +219,9 @@
 
   <!-- TreeGrid -->
   <script>
-  function button_switcher(row)
-  {
-      $('#box-action button').hide();
 
-      switch(row.level) {
-          case 'kegiatan':
-              $('#box-action [data-target="#formoutput"]').data('kegiatan', row);
-              $('#box-action [data-target="#formoutput"]').show();
-              break;
-      }
-
-      if (row.level !== 'program' && row.level !== 'kegiatan') {
-          $('#box-action [data-target="#hapus"]').data('data', row);
-          $('#box-action [data-target="#hapus"]').show();
-      }
-
-  }
-
-  // function treeGridReloader(element, mak)
-  // {
-  //     var step = mak.split("."), id = '', level, result;
-      
-  //     for (var i = 0; i < step.length; i++, id += ".") {
-  //         id += step[i];
-
-  //         console.log(id);
-          
-  //         try {
-  //             element.treegrid('reload', id);
-  //         } catch (e) {
-  //             console.log(e);
-  //         }
-          
-  //     }
-
-  // }
-
-  $('#usulan').treegrid({
-      url       : $('#usulan').data('url'),
+  $('#tree').treegrid({
+      url       : "{{ route('rkt.getdata') }}",
       idField   : 'mak',
       treeField : 'name',
       method    : 'GET',
@@ -283,14 +249,47 @@
               width : 120
           }
       ]],
-      onClickRow: button_switcher,
-      onLoadSuccess: function (row, data) {
-          console.log(row);
-          if (row !== null) {
-              var parent = $(this).treegrid('getParent', row.mak);
+      onClickRow: function (row)
+      {
+          $('#box-action button').hide();
+
+          switch(row.level) {
+              case 'kegiatan':
+                  $('#box-action [data-target="#formoutput"][data-method="POST"]').data('kegiatan', row);
+                  $('#box-action [data-target="#formoutput"][data-method="POST"]').show();
+                  break;
+              case 'output':
+                  var parent = $(this).treegrid('getParent', row.mak);
+                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').data('kegiatan', parent);
+                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').data('output', row);
+                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').show();
+                  break
           }
-          console.log(data);
-          console.log("----------------");
+
+          if (row.level !== 'program' && row.level !== 'kegiatan') {
+              $('#box-action [data-target="#hapus"]').data('row', row);
+              $('#box-action [data-target="#hapus"]').show();
+          }
+
+          console.log(row);
+
+      },
+      onUnselect: function (row) 
+      {
+          $('#box-action button').hide();
+      },
+      onBeforeLoad: function (row, param) {
+          
+      },
+      onLoadSuccess: function (row, data) {
+          for (var i = 0; i < data.length; i++) {
+              if (data[i].continue) {
+                  $(this).treegrid('reload', {
+                      id   : data[i].mak,
+                      next : data[i].next
+                  });
+              }
+          }
       }
   });
 
@@ -299,83 +298,54 @@
   <script>
     // $('[name=eselondua]').select2({ placeholder: "Pilih Unit Eselon Dua", });
 
-    // var table = $('#programs').DataTable({
-    //     "jQueryUI"   : true,
-    //     "paging"     : true,
-    //     "lengthMenu" : [ 5, 10, 25, 50, 75, 100, "All" ],
-    //     "autoWidth"  : false,
-    //     "stateSave"  : false,
-    //     "order"      : [[ 1, 'asc' ]],
-    //     "serverSide" : true,
-    //     "ajax": {
-    //         "url": $('#programs').data('url'),
-    //         "type": "POST",
-    //         "data":
-    //         {
-    //             '_token': '{{ csrf_token() }}'
-    //         }
-    //     },
-    //     "columns": [
-    //         {
-    //             className: 'text-center',
-    //             data: null,
-    //             defaultContent: '',
-    //             name: 'nomor',
-    //             searchable: false,
-    //             sortable: false
-    //         },
-    //         {
-    //             className: 'text-center',
-    //             data: 'code',
-    //             name: 'code'
-    //         },
-    //         {
-    //             data: 'name',
-    //             name: 'name'
-    //         },
-    //         {
-    //             className: 'text-center',
-    //             data: null,
-    //             defaultContent: '',
-    //             name: 'aksi',
-    //             searchable: false,
-    //             sortable: false
-    //         },
-    //     ],
-    //     "createdRow": function ( row, data, index ) {
-            
-    //         $('td', row).eq(0).html(table.page.info().start + index + 1);
-
-    //         var btn_edit, btn_del;
-
-    //             btn_edit  = "<button class='btn btn-primary' data-toggle='modal'";
-    //             btn_edit += "data-target='#formprogram' data-method='put'>"
-    //             btn_edit += "<i class='fa fa-edit'></i></button> ";
-            
-    //             btn_del  = "<button class='btn btn-danger' data-toggle='modal'";
-    //             btn_del += "data-target='#hapusprogram'>"
-    //             btn_del += "<i class='fa fa-trash'></i></button>";
-            
-    //         $('td', row).eq(-1).html( btn_edit + btn_del );
-    //     }
-    // });
   </script>
 
   <!-- Modal related -->
   <script>
   $('#formoutput').on('show.bs.modal', function (e) {
+      // reset
+      $('#formoutput form')[0].reset();
+      $('#formoutput form').parsley().reset();
+
       var data     = $(e.relatedTarget).data();
-      var kegiatan = data.kegiatan;
       var action   = $('#formoutput form').attr('action');
+      var kegiatan = data.kegiatan;
 
       $(this).find('.modal-body input[name="kegiatan"]').val(kegiatan.code);
       $(this).find('.modal-body input[name="kegiatan-kw"]').val(kegiatan.code + " - " + kegiatan.name);
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote', 
-          $('#usulan').data('url') + "?id=" + kegiatan.mak + ".{value}"
+          $('#tree').data('url') + "?id=" + kegiatan.mak + ".{value}"
       );
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
 
+      if (data.method == "PUT" ) {
+          $(this).find('.modal-body .modal-title').val("Edit Data"); 
+          $(this).find('.modal-body input[name="code"]').data('edit', data.output.code); 
+          $(this).find('.modal-body input[name="code"]').val(data.output.code); 
+          $(this).find('.modal-body input[name="name"]').val(data.output.name); 
+          $(this).find('.modal-body input[name="_method"]').val("PUT"); 
+
+          action =  $('#create-output').data('edit') + data.output.id;
+      } else {
+          $(this).find('.modal-body .modal-title').val("Tambah Data"); 
+          $(this).find('.modal-body input[name="_method"]').val("POST"); 
+
+      }
+
+      $('#formoutput [name="code"]').parsley()
+          .on('field:validate', function(field) {
+              var lmn = this.$element;
+              var pre = this.$element.data('edit');
+              
+              if (pre == this.value) {
+                  this.removeConstraint('remote');
+              } else {
+                  this.addConstraint({
+                      'remote' : lmn.data('parsleyRemote') 
+                  });
+              }
+          });
 
       $('#formoutput form').parsley().on('form:submit', function() {
           $.ajax({
@@ -392,18 +362,21 @@
               
               flashMessage(result);
 
-              $('#usulan').treegrid('reload', kegiatan.mak);
+              var root = $('#tree').treegrid('getRoot', kegiatan.mak);
+              var next = kegiatan.mak.replace(root.mak, '');
+             
+              $('#tree').treegrid('reload', {id: root.mak, next: next});
 
           }).fail(function(result) {
               $('#formoutput').modal('hide');
               
               var data = {};
               
-              if (typeof result.error == "function" ) {
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
               
               flashMessage(data, true);
@@ -415,22 +388,26 @@
   });
 
   $('#hapus').on('show.bs.modal', function (e) {
-      var modal = $(this), action;
-      var data  = $(e.relatedTarget).data('data');
+      // reset
+      $('#hapus form')[0].reset();
+      $('#hapus form').parsley().reset(); 
 
-      switch(data.level) {
+      var modal = $(this), action;
+      var row   = $(e.relatedTarget).data('row');
+
+      switch(row.level) {
           case 'output':
               action = "{{ route('output.delete', '') }}";
               break;
 
       }
 
-      modal.find('.modal-body input[name="id"]').val(data.id);  
+      modal.find('.modal-body input[name="id"]').val(row.id);  
 
       $('#hapus form').parsley().on('form:submit', function() {
           var formData = {
               '_method'  : 'DELETE'
-          },  id = data.id;
+          },  id = row.id;
 
           $.ajax({
               type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
@@ -446,18 +423,21 @@
               
               flashMessage(result);    
 
-              // treeGridReloader($('#usulan'), data.parentId);
+              var root = $('#tree').treegrid('getRoot', row.mak);
+              var next = row.mak.replace(root.mak, '');
+              
+              $('#tree').treegrid('reload', {id: root.mak, next: next});
                            
           }).fail(function(result) {
               $('#hapus').modal('hide');
               
               var data = {};
               
-              if (typeof result.error == "function" ) {
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
               
               flashMessage(data, true);
@@ -469,15 +449,15 @@
 
   // Reset everything on hide
   $('#formoutput').on('hide.bs.modal', function (e) {
-      $('#formoutput form')[0].reset();
-      $('#formoutput form').parsley().reset(); 
+      $('#box-action button').hide();
+      $('#tree').treegrid('unselectAll');
       $(this).find('.overlay').hide();
   });
 
   // Reset everything on hide
   $('#hapus').on('hide.bs.modal', function (e) {
-      $('#hapus form')[0].reset();
-      $('#hapus form').parsley().reset(); 
+      $('#box-action button').hide();
+      $('#tree').treegrid('unselectAll');
       $(this).find('.overlay').hide();
   });
   
