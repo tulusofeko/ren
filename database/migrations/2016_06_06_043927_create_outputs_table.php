@@ -16,10 +16,14 @@ class CreateOutputsTable extends Migration
             $table->increments('id');
             $table->string('kegiatan', 4);
             $table->string('code', 2);
-            $table->string('mak', 17);
             $table->string('name');
-            $table->unique('mak');
             $table->timestamps();
+
+            $table->foreign('kegiatan')
+                ->references('code')
+                ->on('kegiatans')
+                ->onDelete('restrict')
+                ->onUpdate('cascade');
         });
     }
 

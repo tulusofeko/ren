@@ -14,11 +14,18 @@ class CreateEselon2Table extends Migration
     {
         Schema::create('eselon_dua', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('codename', 4);
-            $table->string('eselonsatu', 3);
+            $table->string('codename', 3);
+            $table->string('parent', 2)->nullable();
             $table->string('name');
             $table->timestamps();
+
             $table->unique('codename');
+
+            $table->foreign('parent')
+                ->references('codename')
+                ->on('eselon_satu')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 

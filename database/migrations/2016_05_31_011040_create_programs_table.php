@@ -16,8 +16,9 @@ class CreateProgramsTable extends Migration
             $table->increments('id');
             $table->string('code', 2);
             $table->string('name');
-            $table->unique('code');
             $table->timestamps();
+
+            $table->unique('code');
         });
     }
 

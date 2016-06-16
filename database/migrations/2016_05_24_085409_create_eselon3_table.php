@@ -15,10 +15,17 @@ class CreateEselon3Table extends Migration
         Schema::create('eselon_tiga', function (Blueprint $table) {
             $table->increments('id');
             $table->string('codename',  4);
-            $table->string('eselondua', 3);
+            $table->string('parent', 3)->nullable();
             $table->string('name');
             $table->timestamps();
+
             $table->unique('codename');
+
+            $table->foreign('parent')
+                ->references('codename')
+                ->on('eselon_dua')
+                ->onDelete('set null')
+                ->onUpdate('cascade');
         });
     }
 
