@@ -39,7 +39,7 @@ class Kegiatan extends Usulan
      */
     public function getChilds()
     {
-        return Output::where('kegiatan', $this->code)->get();
+        return Output::where('kegiatan', $this->code)->orderBy('code', 'asc')->get();
     }
 
     /**
@@ -53,13 +53,4 @@ class Kegiatan extends Usulan
             ->firstOrFail();
     }
 
-    /**
-     * MAK Setter, implemented from App\Usulan
-     */
-    public function setMak() 
-    { 
-        $this->mak = "051.01." . $this->program . "." . $this->code;
-
-        return $this; 
-    }
 }

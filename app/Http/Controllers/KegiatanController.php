@@ -22,7 +22,10 @@ class KegiatanController extends Controller
         
         $eselon_dua = DB::table('eselon_dua') 
             ->join('eselon_satu', 'eselon_dua.parent', '=', 'eselon_satu.codename')
-            ->select('eselon_dua.*', 'eselon_satu.name as eselonsatu_name')
+            ->select('eselon_dua.*', 
+                'eselon_satu.name as eselonsatu_name', 
+                'eselon_satu.codename as eselonsatu_code')
+            ->orderBy('eselonsatu_code')
             ->get();
         $eselon_dua = collect($eselon_dua)->groupBy('eselonsatu_name');
 
