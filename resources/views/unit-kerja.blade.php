@@ -97,8 +97,11 @@
 @endsection
 
 
-@section('custom-js')
+@section('javascript')
+  
+  @parent
   @include('includes.parsley')
+  
   <!-- Select2 -->
   <script src="{{ asset('adminlte/plugins/select2/select2.min.js') }}"></script>
   <!-- DataTables -->
@@ -107,12 +110,12 @@
   
   <!-- Form validation -->
   <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
       $('#create-unitkerja').parsley({
-          errorClass    : 'has-error',
           errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
           errorTemplate : '<li class="small text-danger"></li>',
-          classHandler: function (ParsleyField) {
+          errorClass    : 'has-error',
+          classHandler  : function (ParsleyField) {
               var element = ParsleyField.$element;
               return element.parents('.form-group');
           },
@@ -122,13 +125,14 @@
           },
       });
   });
+
   $(function(){
       $("#flash-message .close").on("click", function(){
           $("#flash-message").hide();
       });
   });
   </script>
-  
+
   @yield('ukjs')
 
   <script>
@@ -166,13 +170,17 @@
   <!-- Modal related -->
   <script>
   $('#formunitkerja').on('show.bs.modal', function (e) {
+      $('#create-unitkerja')[0].reset();
+      $('#create-unitkerja').parsley().reset();
+      
       var method = $(e.relatedTarget).data('method'); 
-      var modal  = $(this); 
+      var modal  = $(this), d = new Date(); 
       var remote = $(this).find('.modal-body input[name="codename"]').data('remote');
       var action = $('#create-unitkerja').attr('action');
 
-      modal.find('.modal-body input[name="codename"]').attr('data-parsley-remote', remote);
       modal.find('.modal-body input[name="_method"]').val('POST');
+      modal.find('.modal-body input[name="codename"]')
+          .attr('data-parsley-remote', remote + "?" + d.getTime());
 
       if (method == "put") {
           var unit = table.row( $(e.relatedTarget).parents('tr') ).data();
@@ -203,13 +211,12 @@
                   this.removeConstraint('remote');
               } else {
                   this.addConstraint({
-                      'remote' : lmn.data('parsleyRemote') 
+                      'remote' : lmn.data('parsleyRemote')
                   });
               }
           });
 
       $('#create-unitkerja').parsley().on('form:submit', function() {
-
           $.ajax({
               type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
               dataType    : 'JSON', // what type of data do we expect back from the server
@@ -261,12 +268,12 @@
           },  id = $('#hapusunitkerja form input[name=id]').val();
 
           $.ajax({
-              type        : 'POST',   // define the type of HTTP verb we want to use (POST for our form)
-              dataType    : 'JSON',   // what type of data do we expect back from the server
-              data        : formData, // our data object
-              url         : $('#hapusunitkerja form').attr('action') + "/" + id, // the url where we want to POST
-              encode      : true,
-              beforeSend  : function () {
+              type       : 'POST',   // define the type of HTTP verb we want to use (POST for our form)
+              dataType   : 'JSON',   // what type of data do we expect back from the server
+              data       : formData, // our data object
+              url        : $('#hapusunitkerja form').attr('action') + "/" + id, // the url where we want to POST
+              encode     : true,
+              beforeSend : function () {
                   $('#hapusunitkerja').find('.overlay').show();
               }
           }).done(function (result) {
@@ -297,16 +304,28 @@
 
   // Reset everything on hide
   $('#formunitkerja').on('hide.bs.modal', function (e) {
-      $('#create-unitkerja')[0].reset();
-      $('#create-unitkerja').parsley().reset(); 
-      $("[name='parent']").select2("val", "");
-      $(this).find('.overlay').hide();
+      try {
+          $('#create-unitkerja')[0].reset();
+          $('#create-unitkerja').parsley().reset(); 
+          $("[name='parent']").select2("val", "");
+      } catch (err) {
+          console.log(err);
+      } finally {
+          $(this).find('.overlay').hide();
+      }
+
   });
   
   // Reset everything on hide
   $('#hapusunitkerja').on('hide.bs.modal', function (e) {
-      $('#hapusunitkerja form').parsley().reset(); // reset form on modal hide
-      $(this).find('.overlay').hide();
+      try {
+          $('#hapusunitkerja form').parsley().reset(); // reset form on modal hide
+      } catch (err) {
+          console.log(err);
+      } finally {
+          $(this).find('.overlay').hide();
+      }
+
   });
   </script>
 @endsection
