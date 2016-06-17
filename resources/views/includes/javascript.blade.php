@@ -1,3 +1,4 @@
+@section('javascript')
 <!-- jQuery 2.1.4 -->
 <script src="{{ asset('adminlte/plugins/jQuery/jQuery-2.1.4.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
@@ -23,5 +24,4 @@
         }
   });
 </script>
-
-@yield('custom-js')
+@show

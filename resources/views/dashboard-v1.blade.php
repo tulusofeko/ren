@@ -2,7 +2,7 @@
 
 @section('title', 'Dashboard')
 
-@section('custom-css')
+@section('css')
 <!-- iCheck -->
 <link rel="stylesheet" href="{{ asset('adminlte/plugins/iCheck/flat/blue.css') }}">
 <!-- Morris chart -->
@@ -16,6 +16,7 @@
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet" href="{{ asset('adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css') }}">
 
+@parent
 @endsection
 
 @section('content-header')
@@ -450,7 +451,9 @@
 
 @endsection
 
-@section('custom-js')
+@section('javascript')
+@parent
+
 <!-- Morris.js charts -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
 <script src="{{ asset('adminlte/plugins/morris/morris.min.js') }}"></script>

@@ -1,5 +1,5 @@
 <!-- Parsley validator -->
-<script src="{{ url('vendor/parsley/parsley.min.js') }}"></script>
+<script src="{{ url('plugins/parsley/parsley.min.js') }}"></script>
 <script>
     Parsley.addMessages('id', {
         defaultMessage: "tidak valid",
