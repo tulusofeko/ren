@@ -134,8 +134,10 @@
 @endsection
 
 
-@section('custom-js')
+@section('javascript')
+  @parent
   @include('includes.parsley')
+  
   <!-- iCheck 1.0.1 -->
   <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
   <!-- Select2 -->
@@ -214,11 +216,7 @@
         "serverSide" : true,
         "ajax": {
             "url": $('#programs').data('url'),
-            "type": "POST",
-            "data":
-            {
-                '_token': '{{ csrf_token() }}'
-            }
+            "type": "POST"
         },
         "columns": [
             {
@@ -269,14 +267,18 @@
   <!-- Modal related -->
   <script>
   $('#formprogram').on('show.bs.modal', function (e) {
-      
-      var data   = $(e.relatedTarget).data(), 
+      $('#create-program').parsley().reset(); 
+      $('#create-program')[0].reset();
+
+      var data   = $(e.relatedTarget).data(), d = new Date();
           action = $('#create-program').attr('action'),
           modal  = $(this), base = $('base').attr('href');
           remote = modal.find('.modal-body input[name="code"]').data('remote');
 
       modal.find('.modal-title').html("<i class='fa fa-plus-circle'></i> Tambah Data");
-      modal.find('.modal-body input[name="code"]').attr('data-parsley-remote', remote);
+      modal.find('.modal-body input[name="code"]').attr(
+        'data-parsley-remote', remote + "?" + d.getTime()
+      );
 
       modal.find('.modal-body input[name="_method"]').val('POST');
 
@@ -301,7 +303,7 @@
           .on('field:validate', function(field) {
               var lmn = this.$element;
               var rem = lmn.data('remote');
-              
+
               if (lmn.data('edit') == this.value) {
                   this.removeConstraint('remote');
               } else {
@@ -336,11 +338,11 @@
               
               var data = {};
               
-              if (typeof result.error == "function" ) {
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
               
               flashMessage(data, true);
@@ -384,12 +386,13 @@
               
               var data = {};
               
-              if (typeof result.error == "function" ) {
+              if (typeof result.responseJSON != "undefined" ) {
+                  data = result.responseJSON;
+              } else {
                   data.error   = result.status;
                   data.message = result.statusText;
-              } else {
-                  data = result;
               }
+              
               
               flashMessage(data, true);
           });

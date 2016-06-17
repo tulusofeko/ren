@@ -181,7 +181,8 @@
 @endsection
 
 
-@section('custom-js')
+@section('javascript')
+  @parent
   @include('includes.parsley')
   <!-- iCheck 1.0.1 -->
   <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
@@ -331,14 +332,16 @@
       });
 
 
-      var data   = $(e.relatedTarget).data(), 
+      var data   = $(e.relatedTarget).data(), d = new Date(),
           action = $('#create-kegiatan').attr('action'),
           modal  = $(this);
           remote = modal.find('.modal-body input[name="code"]').data('remote');
 
       modal.find('.modal-title').html("<i class='ion-person-add'></i> Tambah Data");
-      modal.find('.modal-body input[name="code"]').attr('data-parsley-remote', remote);
       modal.find('.modal-body input[name="_method"]').val('POST');
+      modal.find('.modal-body input[name="code"]').
+          attr('data-parsley-remote', remote + "?" + d.getTime()
+      );
 
       if (data.method == "put") {
           var kegiatan = table.row( $(e.relatedTarget).parents('tr') ).data();

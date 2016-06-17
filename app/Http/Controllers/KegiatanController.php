@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
+use Exception, InvalidArgumentException;
+use DB, Yajra\Datatables\Datatables;
 use App\Http\Requests;
 use App\Kegiatan;
 use App\Program;
-use DB;
-use Exception, InvalidArgumentException;
-use Yajra\Datatables\Datatables;
 
 class KegiatanController extends Controller
 {
@@ -132,7 +132,7 @@ class KegiatanController extends Controller
         }  catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
+            $message = "Tidak dapat menghapus. Kegiatan tidak kosong";
         } catch (Exception $e) {
             $error   = $e->getCode();
             $message = $e->getMessage();

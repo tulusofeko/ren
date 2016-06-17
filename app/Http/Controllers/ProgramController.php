@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Database\QueryException;
 use Exception, InvalidArgumentException;
-use Yajra\Datatables\Datatables;
+use DB, Yajra\Datatables\Datatables;
 use App\Http\Requests;
 use App\Program;
 
@@ -105,7 +105,7 @@ class ProgramController extends Controller
         }  catch (QueryException $e) {
             $error   = $e->getCode();
             $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
+            $message = "Tidak dapat menghapus. Terdapat kegiatan pada Program";
         } catch (Exception $e) {
             $error   = $e->getCode();
             $message = $e->getMessage();

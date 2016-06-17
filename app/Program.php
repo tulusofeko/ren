@@ -4,16 +4,7 @@ namespace App;
 
 class Program extends Usulan
 {
-    /**
-     * Konstruktor, Append MAK to query when building a query.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->append('mak');   
-    }
-
+    
     /**
      * Getter for Parent MAK attribute
      * @param  mixed  $value
@@ -27,15 +18,6 @@ class Program extends Usulan
      */
     public function getParent() { return null; }
 
-    /**
-     * Getter for MAK attribute
-     * @param  mixed  $value
-     * @return string MAK
-     */
-    public function getMakAttribute($value)
-    {
-        return $this->parent . '.' . $this->code;
-    }
 
     /**
      * Get Collection of Program's Childs
@@ -56,9 +38,4 @@ class Program extends Usulan
         return Kegiatan::where([['program', $this->code], ['code', $code] ])
             ->firstOrFail();
     }
-
-    /**
-     * MAK Setter, implemented from App\Usulan
-     */
-    public function setMak() { return $this; }
 }

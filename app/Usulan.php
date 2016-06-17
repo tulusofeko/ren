@@ -10,7 +10,6 @@ abstract class Usulan extends Model
     abstract public function getParent();
     abstract public function getChilds();
     abstract public function getChild($code);
-    abstract public function setMak();
 
     protected $appends  = ['parentId', 'level', 'state', 'continue', 'next'];
 
@@ -43,7 +42,7 @@ abstract class Usulan extends Model
         return $this->next;
     }
 
-    public function setNextLoad($next)
+    public function setNextAttribute($next)
     {
         $this->next = $next;
     }
