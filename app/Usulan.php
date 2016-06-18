@@ -8,18 +8,31 @@ abstract class Usulan extends Model
 {
     abstract public function getParentAttribute($value);
     abstract public function getParent();
-    abstract public function getChilds();
     abstract public function getChild($code);
+    abstract public function childs();
 
-    protected $appends  = ['parentId', 'level', 'state', 'continue', 'next'];
+    protected $appends  = [
+        'parentId', 'mak', 'level', 'state', 'continue', 'next'
+    ];
 
     protected $state    = 'closed';
     protected $continue = false;
     protected $next;
 
+    /**
+     * Getter for Parent ID Attribute
+     * @param  mixed  $value
+     * @return string Parent ID
+     */
     public function getParentIdAttribute($value)
     {
         return $this->parent;
+    }
+
+    public function getMakAttribute($value)
+    {
+
+        return $this->parent . "." . $this->code;
     }
 
     public function getStateAttribute($value)
@@ -56,7 +69,7 @@ abstract class Usulan extends Model
     }
     
     /**
-     * Set the Programs's name.
+     * Set the Programs's name. Name Attribute
      *
      * @param  string  $value
      * @return string
@@ -65,4 +78,5 @@ abstract class Usulan extends Model
     {
         $this->attributes['name'] = ucwords(strtolower($value));
     }
+
 }

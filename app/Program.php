@@ -18,14 +18,13 @@ class Program extends Usulan
      */
     public function getParent() { return null; }
 
-
     /**
      * Get Collection of Program's Childs
      * @return Collection Collection of Program's Childs
      */
-    public function getChilds()
+    public function childs()
     {
-        return Kegiatan::where('program', $this->code)->get();
+        return $this->hasMany('App\Kegiatan', 'program', 'code');
     }
 
     /**
@@ -38,4 +37,5 @@ class Program extends Usulan
         return Kegiatan::where([['program', $this->code], ['code', $code] ])
             ->firstOrFail();
     }
+
 }

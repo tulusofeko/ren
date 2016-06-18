@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use App\Http\Requests;
 use App\Program;
+use App\Kegiatan;
+use App\Output;
 use App\Usulan;
 
 class RktController extends Controller
@@ -22,54 +24,54 @@ class RktController extends Controller
         
         $next = trim($request->input('next', ''), '.');
 
-        if (strpos($mak, '051.01') === 0) {
-            @list($program_code, $submak) = explode('.', substr($mak, 7), 2);
-        } else {
-            abort(404);
+        try {
+            $data = $this->makResolve($mak);
+        } catch (Exception $e) {
+            abort(404);            
         }
-
-        if (empty($program_code)) {
-            return response()->json(Program::all()->toArray());
-        } 
-
-        $program = Program::where('code', $program_code)->first();
-
-        if (empty($program)) {
-            abort(404);
-        }
-
-        $data = $this->makResolve($program, $submak);
         
         if (empty($next)) {
-            return response($data->toArray());
+            return response()
+                ->json($data->sortBy('code')->values()->toArray());
         }
-
+        
         foreach ($data as $item) {
             @list($current, $subload) = explode('.', $next, 2);
             if ($item->code == $current) {
                 $item->setContinue();
-                $item->setNextLoad($subload);
+                $item->setNextAttribute($subload);
             }
-            // var_dump($item, $next);
         }
 
-        return response($data->toArray());
+        return response()
+            ->json($data->sortBy('code')->values()->toArray());
     }
 
-    protected function makResolve(Usulan $komponen, $mak)
+    protected function makResolve($mak)
     {
-        if (empty($mak)) {
-            return $komponen->getChilds();
-        } 
-
-        @list($subkomponen_id, $submak) = explode('.', $mak, 2);
+        $maks = explode('.', $mak);
         
-        try {
-            $subkomponen = $komponen->getChild($subkomponen_id);
-            return $this->makResolve($subkomponen, $submak);
-        } catch (ModelNotFoundException $e) {
-            abort(404);
+        switch (sizeof($maks)) {
+            case 2:
+                return Program::all();
+                break;
+            case 3:
+                $program = $maks[2];
+                return Program::where('code', $program)->firstOrFail()->childs;
+                break;
+            case 4:
+                $kegiatan = $maks[3];
+                return Kegiatan::where('code', $kegiatan)->firstOrFail()->childs;
+                break;
+            case 5:
+                $kegiatan = $maks[3];
+                $output   = $maks[4];
+                return Output::where([
+                    ['code', $output], ['kegiatan', $kegiatan]
+                ])->firstOrFail()->childs;
+                break;
+            default:
+                abort(404);
         }
-
     }
 }

@@ -47,7 +47,7 @@
                 data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam Output 
               </button>
-              <button class="btn btn-success btn-social" title="Edit Output" style="display: none;" 
+              <button class="btn btn-primary btn-social" title="Edit Output" style="display: none;" 
                 data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Output 
               </button>
@@ -158,7 +158,8 @@
 @endsection
 
 
-@section('custom-js')
+@section('javascript')
+  @parent
   @include('includes.parsley')
   <!-- iCheck 1.0.1 -->
   <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>

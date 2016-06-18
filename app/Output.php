@@ -7,10 +7,9 @@ class Output extends Usulan
 
     public function getParentAttribute($value)
     {
-        $parent = rtrim($this->mak, $this->code);
-        $parent = rtrim($parent, ".");
+        $parent = $this->getParent();
         
-        return $parent;
+        return $parent->mak;
     }
 
     public function getParent()
@@ -25,10 +24,10 @@ class Output extends Usulan
         }
 
     }
-
-    public function getChilds()
+    
+    public function childs()
     {
-        return collect();
+        // return collect();
         // return Output::where('kegiatan', $this->code)->get();
     }
 
@@ -38,10 +37,4 @@ class Output extends Usulan
             // ->firstOrFail();
     }
 
-    public function setMak()
-    {
-        $parent = $this->getParent();
-
-        $this->mak = $parent->mak . "." . $this->code;
-    }
 }

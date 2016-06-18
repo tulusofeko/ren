@@ -28,6 +28,14 @@ class OutputController extends Controller
                 );
             }
 
+            $collect = Output::where([['code', $code], ['kegiatan', $kegiatan]])->get();
+
+            if (!$collect->isEmpty()) {
+                throw new InvalidArgumentException(
+                    "Kode sudah tersedia", 55
+                );
+            }
+
 
             $output            = new Output;
             $output->name      = $name;
