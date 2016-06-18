@@ -29,7 +29,7 @@ class KegiatanController extends Controller
             ->get();
         $eselon_dua = collect($eselon_dua)->groupBy('eselonsatu_name');
 
-        $programs = Program::all();
+        $programs = Program::all()->sortBy('code');
         
         return view("kegiatan-manage", [
             'eselon_dua' => $eselon_dua,
