@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+use Validator;
 
 use Exception, InvalidArgumentException;
 use DB;
@@ -48,16 +49,32 @@ class UnitKerjaController extends Controller
 
     public function update($id, Request $request)
     {
+        // Compatibility wit 5.6.21
+        $unit = call_user_func_array($this->model ."::findOrFail", [$id]);
 
-        $this->validate($request, [
-            'name'      => 'required',
-            'codename'  => 'required|unique:' . $this->table .',codename|max:4',
-            'parent'    => 'required|max:4'
+        $prev = $request->header('referer');
+
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required',
+            'codename' => 'required|max:4',
+            'parent'   => 'required|max:4'
         ]);
-        
-        try {
-            $unit = $this->model::findOrFail($id);
 
+        $validator->sometimes('codename', 'unique:' . $this->table .',codename', 
+            function($input) use ($unit) {
+                return "$input->codename" != $unit->codename;
+            });
+
+        if ($validator->fails()) {
+
+            if ($request->ajax()) {
+                return response()->json($validator->messages(), 422);
+            } else {
+                return redirect($prev)->withErrors($validator)->withInput();
+            }
+        }
+
+        try {
             $codename       = $request->input("codename");
             $name           = $request->input("name");
             $parent         = $request->input("parent");

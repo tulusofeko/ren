@@ -59,14 +59,30 @@ class EselonSatuController extends UnitKerjaController
 
     public function update($id, Request $request)
     {
-
-        $this->validate($request, [
-            'name'      => 'required',
-            'codename'  => 'required|unique:eselon_satu|max:2',
+        $eselon_satu  = EselonSatu::findOrFail($id);
+        
+        $validator   = Validator::make($request->all(), [
+            'name'     => 'required',
+            'codename' => 'required|max:2'
         ]);
+
+        $validator->sometimes('codename', 'unique:eselon_satu,codename', 
+            function($input) use ($eselon_satu) {
+                return $input->codename != $eselon_satu->codename;
+            });
+
+        if ($validator->fails()) {
+
+            if ($request->ajax()) {
+                return response()->json($validator->messages(), 422);
+            } else {
+                $prev = $request->header('referer');
+
+                return redirect($prev)->withErrors($validator)->withInput();
+            }
+        }
         
         try {
-            $eselon_satu = EselonSatu::findOrFail($id);
             $name        = $request->input("name");
             $codename    = $request->input("codename");
 

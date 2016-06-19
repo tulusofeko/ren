@@ -57,9 +57,9 @@
   </form>
 @endsection
 
-@section('ukjs')
+@section('custom-javascript')
   <script>
-    $('[name=parent]').select2({ 
+    $('#create-unitkerja [name=parent]').select2({ 
         placeholder: "Pilih Unit Eselon Satu",
         minimumResultsForSearch: Infinity
     });

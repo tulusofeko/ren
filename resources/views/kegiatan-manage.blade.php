@@ -193,18 +193,20 @@
   
   <!-- Form validation -->
   <script>
-  $('#create-kegiatan').parsley({
-      errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
-      errorTemplate : '<li class="small text-danger"></li>',
-      errorClass    : 'has-error',
-      classHandler  : function (ParsleyField) {
-          var element = ParsleyField.$element;
-          return element.parents('.form-group');
-      },
-      errorsContainer: function (ParsleyField) {
-          var element = ParsleyField.$element;
-          return element.parents('.form-group');
-      },
+  $(document).ready(function () {
+      $('#create-unitkerja').parsley({
+          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
+          errorTemplate : '<li class="small text-danger"></li>',
+          errorClass    : 'has-error',
+          classHandler  : function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+          errorsContainer: function (ParsleyField) {
+              var element = ParsleyField.$element;
+              return element.parents('.form-group');
+          },
+      });
   });
   $(function(){
       $("#flash-message .close").on("click", function(){

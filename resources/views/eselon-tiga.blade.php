@@ -63,11 +63,9 @@
   </form>
 @endsection
 
-@section('ukjs')
+@section('custom-javascript')
   <script>
-    $('[name=parent]').select2({ 
-        placeholder: "Pilih Unit Eselon Dua",
-    });
+    $('#create-unitkerja [name=parent]').select2({placeholder: "Pilih Unit Eselon Dua"});
 
     $('#hapusunitkerja form').attr('action', '{{ route("eselon_tiga.delete", "") }}');
 
