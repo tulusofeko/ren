@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
+
 use Exception, InvalidArgumentException;
 use DB;
 use Yajra\Datatables\Datatables;
+
 use App\Http\Requests;
 use App\UnitKerja;
 
@@ -14,109 +16,88 @@ class UnitKerjaController extends Controller
 {
     public function create(Request $request)
     {
-        try {
-            $name     = $request->input("name");
-            $codename = $request->input("codename");
-            $parent   = $request->input("parent");
-            
-            if(empty($name) || empty($codename) || empty($parent)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
+        $this->validate($request, [
+            'name'      => 'required',
+            'codename'  => 'required|unique:' . $this->table .',codename|max:4',
+            'parent'    => 'required|max:4'
+        ]);
 
+        try {
+            $name           = $request->input("name");
+            $codename       = $request->input("codename");
+            $parent         = $request->input("parent");
+            
             $unit           = new $this->model;
             $unit->name     = $name;
             $unit->codename = $codename;
             $unit->parent   = $parent;
             $unit->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
+            return response()->json(["message" => "Data berhasil disimpan"]);
 
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
         
     }
 
     public function update($id, Request $request)
     {
-        $unit = $this->model::find($id);
+
+        $this->validate($request, [
+            'name'      => 'required',
+            'codename'  => 'required|unique:' . $this->table .',codename|max:4',
+            'parent'    => 'required|max:4'
+        ]);
         
         try {
-            $codename = $request->input("codename");
-            $name     = $request->input("name");
-            $parent   = $request->input("parent");
-            
-            if(empty($name) || empty($codename) || empty($parent)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
+            $unit = $this->model::findOrFail($id);
 
+            $codename       = $request->input("codename");
+            $name           = $request->input("name");
+            $parent         = $request->input("parent");
+            
             $unit->name     = $name;
             $unit->codename = $codename;
             $unit->parent   = $parent;
             $unit->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
+            return response()->json(["message" => "Data berhasil disimpan"]);
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
         
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
     }
 
     public function delete($id) 
     {
         try {
-            DB::table($this->table)->where('id', '=', $id)->delete();
+            $data = DB::table($this->table)->where('id', '=', $id);
+
+            if ($data->count() === 0) { throw new Exception("Data not found"); }
+
+            $data->delete();
+            
+            return response()->json(["message" => "Data berhasil dihapus"]);
+
+        }  catch (Exception $e) {
+
+            $message = get_class($e) . ": " . $e->getMessage();
 
             return response()->json([
-                "message" => "Data berhasil dihapus"
-            ], 200);
-            
-        }  catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
     }
 
     /**

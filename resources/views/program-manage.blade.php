@@ -135,7 +135,6 @@
 
 
 @section('javascript')
-  @parent
   @include('includes.parsley')
   
   <!-- iCheck 1.0.1 -->
@@ -148,21 +147,20 @@
   
   <!-- Form validation -->
   <script>
-  $(document).ready(function() {
-      $('#create-program').parsley({
-          errorClass    : 'has-error',
-          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
-          errorTemplate : '<li class="small text-danger"></li>',
-          classHandler: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-          errorsContainer: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-      });
+  $('#create-program').parsley({
+      errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
+      errorTemplate : '<li class="small text-danger"></li>',
+      errorClass    : 'has-error',
+      classHandler  : function (ParsleyField) {
+          var element = ParsleyField.$element;
+          return element.parents('.form-group');
+      },
+      errorsContainer: function (ParsleyField) {
+          var element = ParsleyField.$element;
+          return element.parents('.form-group');
+      },
   });
+
   $(function(){
       $("#flash-message .close").on("click", function(){
           $("#flash-message").hide();
@@ -172,24 +170,21 @@
 
   <!-- Flash messages -->
   <script>
-  function flashMessage(data, error = false) {
-      var error, message;
+  var flashMessage = function (data, error = false) {
+      console.log(data);
 
-      if (typeof data.raw != "undefined" ) {
-          console.log(data.raw);
-      }
-
-      if (error) {
-
+      if (error === true) {
           $('#flash-message .alert').addClass('alert-danger');
-          $('#flash-message .alert .alert-messages').html(
-              "Error " + data.error + ": " + data.message
-          );
+          $('#flash-message .alert .alert-messages').html(data.message);
       } else {
 
           $('#flash-message .alert').addClass('alert-success');
           $('#flash-message .alert .alert-messages').html(data.message);
       }
+
+      $('.modal').modal('hide');
+
+      $('#programs').DataTable().ajax.reload(null, false);
 
       $('#flash-message').slideDown(function() {
           setTimeout(function() {
@@ -324,28 +319,17 @@
               beforeSend  : function () {
                   $('#formprogram').find('.overlay').show();
               }
-          }).done(function (result) {
-              $('#formprogram').modal('hide');
+          }).done(flashMessage).fail(function(result) {
+              var errormessages = null;
               
-              table.ajax.reload(null, false);
-
-              flashMessage(result);
-
-          }).fail(function(result) {
-              $('#formprogram').modal('hide');
-              
-              table.ajax.reload(null, false);
-              
-              var data = {};
-              
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              flashMessage(data, true);
+              flashMessage({ 
+                message : "Internal server error. See develpoer tools for error detail",
+                data    : errormessages
+              }, true);
           });
 
           return false;
@@ -374,27 +358,18 @@
               beforeSend  : function () {
                   $('#hapusprogram').find('.overlay').show();
               }
-          }).done(function (result) {
-              $('#hapusprogram').modal('hide');
+          }).done(flashMessage).fail(function(result) {
+              var errormessages = null;
               
-              table.ajax.reload(null, false);
-
-              flashMessage(result);    
-                           
-          }).fail(function(result) {
-              $('#hapusprogram').modal('hide');
-              
-              var data = {};
-              
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              
-              flashMessage(data, true);
+              flashMessage({ 
+                message : "Internal server error. See develpoer tools for error detail",
+                data    : errormessages
+              }, true);
+                  
           });
 
           return false;

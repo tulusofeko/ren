@@ -22,8 +22,13 @@
       @include('includes.footer')
     
     </div><!-- ./wrapper -->
+    
+    @section('core-javascript')
 
-    @include('includes.javascript')
-
+        @include('includes.javascript')
+    
+        @yield('javascript')
+    
+    @show
   </body>
 </html>

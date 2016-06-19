@@ -22,75 +22,56 @@ class ProgramController extends Controller
 
     public function create(Request $request)
     {
+        $this->validate($request, [
+            'name'  => 'required',
+            'code'  => 'required|unique:programs,code|max:2'
+        ]);
+
         try {
             $code      = $request->input("code");
             $name      = $request->input("name");
             
-            if(empty($name) || empty($code)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
             $program            = new Program;
             $program->name      = $name;
             $program->code      = $code;
             $program->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
+            return response()->json(["message" => "Data berhasil disimpan"]);
 
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
-        
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
+        }        
     }
 
     public function Update(Program $program, Request $request)
     {
+        $this->validate($request, [
+            'name'  => 'required',
+            'code'  => 'required|unique:programs,code|max:2'
+        ]);
+
         try {
             $code      = $request->input("code");
             $name      = $request->input("name");
             
-            if(empty($name) || empty($code)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
             $program->name      = $name;
             $program->code      = $code;
             $program->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
+            return response()->json(["message" => "Data berhasil disimpan"]);
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
-        
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
+        }     
     }
 
     public function delete(Program $program) 
@@ -98,25 +79,16 @@ class ProgramController extends Controller
         try {
             $program->delete();
 
-            return response()->json([
-                "message" => "Data berhasil dihapus"
-            ], 200);
+            return response()->json(["message" => "Data berhasil dihapus"]);
             
-        }  catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Tidak dapat menghapus. Terdapat kegiatan pada Program";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
+        }  catch (Exception $e) {
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
+        }   
     }
 
     public function data()

@@ -43,10 +43,20 @@
   </form>
 @endsection
 
-@section('ukjs')
+@section('custom-javascript')
   <!-- Datatable related -->
   <script>
     $('#hapusunitkerja form').attr('action', '{{ route("eselon_satu.delete", "") }}');
+
+    var btn_edit, btn_del;
+
+        btn_edit  = "<buton class='btn btn-primary' data-toggle='modal'";
+        btn_edit += "data-target='#formunitkerja' data-method='put'>"
+        btn_edit += "<i class='fa fa-edit'></i></buton> ";
+     
+        btn_del   = "<buton class='btn btn-danger' data-toggle='modal'";
+        btn_del  += "data-target='#hapusunitkerja'>"
+        btn_del  += "<i class='fa fa-trash'></i></buton>";
 
     var table = $('#unitkerja').DataTable({
         "jQueryUI"   : true,
@@ -80,7 +90,7 @@
             {
                 className: 'text-center',
                 data: null,
-                defaultContent: '',
+                defaultContent: btn_edit + btn_del,
                 name: 'aksi',
                 searchable: false,
                 sortable: false
@@ -89,18 +99,6 @@
         "createdRow": function ( row, data, index ) {
             
             $('td', row).eq(0).html(table.page.info().start + index + 1);
-
-            var btn_edit, btn_del;
-
-                btn_edit  = "<buton class='btn btn-primary' data-toggle='modal'";
-                btn_edit += "data-target='#formunitkerja' data-method='put'>"
-                btn_edit += "<i class='fa fa-edit'></i></buton> ";
-             
-                btn_del   = "<buton class='btn btn-danger' data-toggle='modal'";
-                btn_del  += "data-target='#hapusunitkerja'>"
-                btn_del  += "<i class='fa fa-trash'></i></buton>";
-            
-            $('td', row).eq(-1).html( btn_edit + btn_del );
         }
     });
   </script>

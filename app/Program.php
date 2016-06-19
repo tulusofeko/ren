@@ -34,8 +34,7 @@ class Program extends Usulan
      */
     public function getChild($code)
     {
-        return Kegiatan::where([['program', $this->code], ['code', $code] ])
-            ->firstOrFail();
+        return Kegiatan::where([['program', $this->code], ['code', $code] ])->firstOrFail();
     }
 
 }

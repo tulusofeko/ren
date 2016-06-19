@@ -40,6 +40,16 @@
               <p class="alert-messages"></p>
             </div>
           </div>
+          @if (count($errors) > 0)
+            <div class="alert alert-danger">
+              <button type="button" class="close" aria-hidden="true" data-dismiss="alert">×</button>
+              <ul>
+                  @foreach ($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                  @endforeach
+              </ul>
+            </div>
+          @endif
           @yield('tabel-unitkerja')
         </div>
       </div>
@@ -98,8 +108,6 @@
 
 
 @section('javascript')
-  
-  @parent
   @include('includes.parsley')
   
   <!-- Select2 -->
@@ -110,20 +118,18 @@
   
   <!-- Form validation -->
   <script>
-  $(document).ready(function () {
-      $('#create-unitkerja').parsley({
-          errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
-          errorTemplate : '<li class="small text-danger"></li>',
-          errorClass    : 'has-error',
-          classHandler  : function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-          errorsContainer: function (ParsleyField) {
-              var element = ParsleyField.$element;
-              return element.parents('.form-group');
-          },
-      });
+  $('#create-unitkerja').parsley({
+      errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
+      errorTemplate : '<li class="small text-danger"></li>',
+      errorClass    : 'has-error',
+      classHandler  : function (ParsleyField) {
+          var element = ParsleyField.$element;
+          return element.parents('.form-group');
+      },
+      errorsContainer: function (ParsleyField) {
+          var element = ParsleyField.$element;
+          return element.parents('.form-group');
+      },
   });
 
   $(function(){
@@ -131,29 +137,27 @@
           $("#flash-message").hide();
       });
   });
+
   </script>
 
-  @yield('ukjs')
+  @yield('custom-javascript')
 
   <script>
-  function flashMessage(data, error = false) {
-      var error, message;
+  var flashMessage = function (data, error = false) {
+      console.log(data);
 
-      if (typeof data.raw != "undefined" ) {
-          console.log(data.raw);
-      }
-
-      if (error) {
-
+      if (error === true) {
           $('#flash-message .alert').addClass('alert-danger');
-          $('#flash-message .alert .alert-messages').html(
-              "Error " + data.error + ": " + data.message
-          );
+          $('#flash-message .alert .alert-messages').html(data.message);
       } else {
 
           $('#flash-message .alert').addClass('alert-success');
           $('#flash-message .alert .alert-messages').html(data.message);
       }
+
+      $('.modal').modal('hide');
+
+      $('#unitkerja').DataTable().ajax.reload(null, false);
 
       $('#flash-message').slideDown(function() {
           setTimeout(function() {
@@ -165,14 +169,15 @@
           }, 4000);
       }); 
   }
+
   </script>
   
   <!-- Modal related -->
   <script>
   $('#formunitkerja').on('show.bs.modal', function (e) {
-      $('#create-unitkerja')[0].reset();
       $('#create-unitkerja').parsley().reset();
-      
+      $('#create-unitkerja')[0].reset();
+
       var method = $(e.relatedTarget).data('method'); 
       var modal  = $(this), d = new Date(); 
       var remote = $(this).find('.modal-body input[name="codename"]').data('remote');
@@ -210,9 +215,7 @@
               if (lmn.data('edit') == this.value) {
                   this.removeConstraint('remote');
               } else {
-                  this.addConstraint({
-                      'remote' : lmn.data('parsleyRemote')
-                  });
+                  this.addConstraint({'remote' : lmn.data('parsleyRemote')});
               }
           });
 
@@ -226,28 +229,18 @@
               beforeSend  : function () {
                   $('#formunitkerja').find('.overlay').show();
               }
-          }).done(function (result) {
-              $('#formunitkerja').modal('hide');
+          }).done(flashMessage).fail(function(result) {
+              var errormessages = null;
               
-              flashMessage(result);
-
-              table.ajax.reload(null, false);
-
-          }).fail(function(result) {
-              $('#formunitkerja').modal('hide');
-
-              var data = {};
-              
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              flashMessage(data, true);
-
-              table.ajax.reload(null, false);
+              flashMessage({ 
+                message : "Internal server error. See develpoer tools for error detail",
+                data    : errormessages
+              }, true);
+                  
           });
 
           return false;
@@ -276,26 +269,18 @@
               beforeSend : function () {
                   $('#hapusunitkerja').find('.overlay').show();
               }
-          }).done(function (result) {
-              $('#hapusunitkerja').modal('hide');
+          }).done(flashMessage).fail(function(result) {
+              var errormessages = null;
               
-              flashMessage(result);
-
-              table.ajax.reload(null, false);
-                           
-          }).fail(function(result) {
-              $('#hapusunitkerja').modal('hide');
-              
-              var data = {};
-
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              flashMessage(data, true);
+              flashMessage({ 
+                message : "Internal server error. See develpoer tools for error detail",
+                data    : errormessages
+              }, true);
+                  
           });
 
           return false;
@@ -309,7 +294,7 @@
           $('#create-unitkerja').parsley().reset(); 
           $("[name='parent']").select2("val", "");
       } catch (err) {
-          console.log(err);
+          // console.log(err);
       } finally {
           $(this).find('.overlay').hide();
       }
@@ -321,7 +306,7 @@
       try {
           $('#hapusunitkerja form').parsley().reset(); // reset form on modal hide
       } catch (err) {
-          console.log(err);
+          // console.log(err);
       } finally {
           $(this).find('.overlay').hide();
       }

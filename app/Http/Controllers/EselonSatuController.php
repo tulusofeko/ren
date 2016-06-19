@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Exception, InvalidArgumentException;
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
-use Exception, InvalidArgumentException;
 use App\EselonSatu;
 
 /**
@@ -31,79 +31,59 @@ class EselonSatuController extends UnitKerjaController
 
     public function create(Request $request)
     {
+        $this->validate($request, [
+            'name'      => 'required',
+            'codename'  => 'required|unique:eselon_satu|max:2',
+        ]);
+
         try {
             $name     = $request->input("name");
             $codename = $request->input("codename");
             
-            if(empty($name) || empty($codename)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
-
             $eselon_satu           = new EselonSatu;
             $eselon_satu->name     = $name;
             $eselon_satu->codename = $codename;
             $eselon_satu->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
+            return response()->json(["message" => "Data berhasil disimpan"]);
 
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
     }
 
     public function update($id, Request $request)
     {
-        $eselon_satu = EselonSatu::find($id);
+
+        $this->validate($request, [
+            'name'      => 'required',
+            'codename'  => 'required|unique:eselon_satu|max:2',
+        ]);
         
         try {
-            $name     = $request->input("name");
-            $codename = $request->input("codename");
-            
-            if(empty($name) || empty($codename)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
+            $eselon_satu = EselonSatu::findOrFail($id);
+            $name        = $request->input("name");
+            $codename    = $request->input("codename");
 
             $eselon_satu->name     = $name;
             $eselon_satu->codename = $codename;
 
             $eselon_satu->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
+            return response()->json(["message" => "Data berhasil disimpan"]);
 
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
         } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
     }
 }

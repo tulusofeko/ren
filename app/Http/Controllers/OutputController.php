@@ -10,23 +10,20 @@ use App\Output;
 
 class OutputController extends Controller
 {
-    public function show($kode = null)
-    {
-
-    }
+    public function show($kode = null) { }
 
     public function create(Request $request)
     {
+        $this->validate($request, [
+            'name'     => 'required',
+            'code'     => 'required|max:2',
+            'kegiatan' => 'required|max:4'
+        ]);
+
         try {
             $kegiatan  = $request->input("kegiatan");
             $code      = $request->input("code");
             $name      = $request->input("name");
-            
-            if(empty($name) || empty($code) || empty($kegiatan)) {
-                throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
-                );
-            }
 
             $collect = Output::where([['code', $code], ['kegiatan', $kegiatan]])->get();
 
@@ -36,43 +33,45 @@ class OutputController extends Controller
                 );
             }
 
-
             $output            = new Output;
             $output->name      = $name;
             $output->kegiatan  = $kegiatan;
             $output->code      = $code;
             $output->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
+            return response()->json(["message" => "Data berhasil disimpan"]);
+
+        } catch (InvalidArgumentException $e) {
+
+            return response()->json(["code" => [$e->getMessage()]], 422);
         
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
+        } catch (Exception $e) {
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
+        }  
     }
 
     public function update(Output $output, Request $request)
     {
+        $this->validate($request, [
+            'name'     => 'required',
+            'code'     => 'required|max:2',
+            'kegiatan' => 'required|max:4'
+        ]);
+
         try {
             $kegiatan  = $request->input("kegiatan");
             $code      = $request->input("code");
             $name      = $request->input("name");
             
-            if(empty($name) || empty($code) || empty($kegiatan)) {
+            $collect = Output::where([['code', $code], ['kegiatan', $kegiatan]])->get();
+
+            if (!$collect->isEmpty()) {
                 throw new InvalidArgumentException(
-                    "Data yang dimasukkan kosong", 44
+                    "Kode sudah tersedia", 55
                 );
             }
 
@@ -81,24 +80,19 @@ class OutputController extends Controller
             $output->code      = $code;
             $output->save();
 
-            return response()->json([
-                "message" => "Data berhasil disimpan"
-            ], 200);
-        } catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-        }
+            return response()->json(["message" => "Data berhasil disimpan"]);
+
+        } catch (InvalidArgumentException $e) {
+
+            return response()->json(["code" => [$e->getMessage()]], 422);
         
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
+        } catch (Exception $e) {
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
+        }
     }
 
     public function delete(Output $output) 
@@ -106,24 +100,14 @@ class OutputController extends Controller
         try {
             $output->delete();
 
-            return response()->json([
-                "message" => "Data berhasil dihapus"
-            ], 200);
+            return response()->json(["message" => "Data berhasil dihapus"]);
             
-        }  catch (QueryException $e) {
-            $error   = $e->getCode();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
-            $message = "Terjadi kesalahan pada database";
-        } catch (Exception $e) {
-            $error   = $e->getCode();
-            $message = $e->getMessage();
-            $msg_raw = get_class($e) . ": " . $e->getMessage();
+        }  catch (Exception $e) {
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            return response()->json([
+                "error" => $e->getCode(), "message" => $message 
+            ], 500);
         }
-        
-        return response()->json([
-            "error"   => $error, 
-            "message" => $message,
-            "raw"     => $msg_raw
-        ], 500);
     }
 }
