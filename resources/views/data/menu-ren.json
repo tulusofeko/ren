@@ -6,23 +6,9 @@
     {
         "title" : "Dashboard",
         "icon"  : "fa-dashboard",
-        "childs": 
-        [
-            {
-                "url"   : "/",
-                "title" : "Dashboard v1"
-            },
-            {
-                "url"   : "/index2.html",
-                "title" : "Dashboard v2"
-            }
-        ]
+        "url"   : "/"
     },
-    {
-        "title" : "Data Usulan RKT",
-        "url"   : "/rkt",
-        "icon"  : "fa-table"
-    },
+    
     {
         "title" : "KELOLA DATA",
         "type"  : "header"

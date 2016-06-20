@@ -100,6 +100,7 @@ Route::group(['prefix' => 'rkt', 'as' => 'rkt.'], function () {
     Route::get('/', 'RktController@show')->name('show');
 
     Route::any('/data', 'RktController@getData')->name('getdata');
+    Route::any('/dx', 'RktController@dx')->name('dx');
 });
 
 // Output Controller Route

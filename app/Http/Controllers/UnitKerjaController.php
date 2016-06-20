@@ -38,11 +38,9 @@ class UnitKerjaController extends Controller
 
         } catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }
         
     }
@@ -50,7 +48,7 @@ class UnitKerjaController extends Controller
     public function update($id, Request $request)
     {
         // Compatibility wit 5.6.21
-        $unit = call_user_func_array($this->model ."::findOrFail", [$id]);
+        $unit = call_user_func($this->model ."::findOrFail", $id);
 
         $prev = $request->header('referer');
 
@@ -69,9 +67,9 @@ class UnitKerjaController extends Controller
 
             if ($request->ajax()) {
                 return response()->json($validator->messages(), 422);
-            } else {
-                return redirect($prev)->withErrors($validator)->withInput();
-            }
+            } 
+                
+            return redirect($prev)->withErrors($validator)->withInput();
         }
 
         try {
@@ -87,11 +85,9 @@ class UnitKerjaController extends Controller
             return response()->json(["message" => "Data berhasil disimpan"]);
         } catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }
         
     }
@@ -109,11 +105,9 @@ class UnitKerjaController extends Controller
 
         }  catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }
     }
 

@@ -12,6 +12,13 @@
   <!-- JEasyUI -->
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/default/easyui.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
+  <!-- dxhtml -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('dhtmlxSuite/codebase/fonts/font_roboto/roboto.css')}}"/>
+  <link rel="stylesheet" type="text/css" href="{{ asset('dhtmlxSuite/codebase/dhtmlx.css') }}"/>
+
+  <!-- Jqwidgets -->
+  <link rel="stylesheet" href="{{ asset('jqwidgets/styles/jqx.base.css') }}" type="text/css" />
+  
   @parent
   <style type="text/css">
       .datagrid .panel-body {
@@ -19,8 +26,17 @@
           padding       : 0;
       }
 
-      .datagrid .datagrid-cell {
+      .datagrid .datagrid-cell,
+      .jqx-cell {
           padding : 8px;
+      }
+
+      .jqx-grid-column-header span {
+          padding-left: 4px;
+      }
+
+      .jqx-grid { 
+          border-radius : 0;
       }
 
   </style>
@@ -79,6 +95,7 @@
             </thead>
             <tbody> </tbody>
           </table>
+          <div id="dtbl" style="height: 300px;"></div>
         </div>
       </div>
     </div>
@@ -170,6 +187,17 @@
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
   <!-- EasyUI -->
   <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
+  <script src="{{ asset('dhtmlxSuite/codebase/dhtmlx.js') }}"></script>
+
+  <!-- Jqwidgets -->
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxcore.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdata.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxbuttons.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxscrollbar.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxlistbox.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdropdownlist.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdatatable.js') }}"></script>
+  <script type="text/javascript" src="{{ asset('jqwidgets/jqxtreegrid.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -185,8 +213,46 @@
               return ParsleyField.$element.parents('.form-group');
           },
       });
+
+      var source = {
+          datatype: "json",
+          datafields: [
+              { name: 'code', type: "string" },
+              { name: 'name' }
+          ],
+          url: "{{ route('rkt.dx') }}"
+      };
+
+      var dataAdapter = new $.jqx.dataAdapter(source);
+      
+      $('#dtbl').jqxTreeGrid(
+      {
+          source: dataAdapter,
+          columns: [
+              { text: 'Kode', dataField: 'code', width: 100 },
+              { text: 'Uraian', dataField: 'name', width: 500 },
+              { text: 'Product', dataField: 'Product', width: 180 },
+              { text: 'Unit Price', dataField: 'Price', width: 90, align: 'right', cellsAlign: 'right', cellsFormat: 'c2' },
+              { text: 'Quantity', dataField: 'Quantity', width: 80, align: 'right', cellsAlign: 'right' }
+          ]
+      });
+      
+      $("#dtbl").on('rowSelect', function (event) {
+          // event arguments
+          var args = event.args;
+          // row data
+          var rowData = args.row;
+          // row key
+          var rowKey = args.key;
+          
+          // dataAdapter.dataBind();   
+      });
+
+
+
   });
-  
+
+ 
   </script>
 
   <!-- Flash messages -->
@@ -297,7 +363,7 @@
   </script>
 
   <script>
-    // $('[name=eselondua]').select2({ placeholder: "Pilih Unit Eselon Dua", });
+    $('[name=eselondua]').select2({ placeholder: "Pilih Unit Eselon Dua", });
 
   </script>
 

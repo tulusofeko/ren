@@ -74,4 +74,12 @@ class RktController extends Controller
                 abort(404);
         }
     }
+
+    public function dx()
+    {
+        $programs = Program::all();
+        $databel  = $programs->toArray();
+        
+        return response()->json($databel);
+    }
 }

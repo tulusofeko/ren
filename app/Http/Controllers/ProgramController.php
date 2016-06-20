@@ -40,20 +40,34 @@ class ProgramController extends Controller
 
         } catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }        
     }
 
     public function Update(Program $program, Request $request)
     {
-        $this->validate($request, [
-            'name'  => 'required',
-            'code'  => 'required|unique:programs,code|max:2'
+        $referer   = $request->header('referer');
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required', 
+            'code' => 'required|max:2',
         ]);
+
+        $validator->sometimes('code', 'unique:programs,codename', 
+            function($input) use ($unit) {
+                return $input->code != $unit->code;
+            });
+
+        if ($validator->fails()) {
+
+            if ($request->ajax()) {
+                return response()->json($validator->messages(), 422);
+            }
+                
+            return redirect($referer)->withErrors($validator)->withInput();
+        }
 
         try {
             $code      = $request->input("code");
@@ -66,11 +80,9 @@ class ProgramController extends Controller
             return response()->json(["message" => "Data berhasil disimpan"]);
         } catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }     
     }
 
@@ -83,11 +95,9 @@ class ProgramController extends Controller
             
         }  catch (Exception $e) {
 
-            $message = get_class($e) . ": " . $e->getMessage();
-
             return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+                "error" => $e->getCode(), "message" => $e->getMessage()], 500
+            );
         }   
     }
 
