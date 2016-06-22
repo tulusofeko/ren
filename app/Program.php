@@ -10,7 +10,9 @@ class Program extends Usulan
      * @param  mixed  $value
      * @return string Parent MAK
      */
-    public function getParentAttribute($value) { return '051.01'; }
+    public function getParentAttribute($value)   { return '051.01'; }
+
+    public function getParentIdAttribute($value) { return $this->parent; }
 
     /**
      * Get Parent
@@ -24,7 +26,7 @@ class Program extends Usulan
      */
     public function childs()
     {
-        return $this->hasMany('App\Kegiatan', 'program', 'code');
+        return $this->hasMany('App\Kegiatan', 'parent', 'code');
     }
 
     /**
@@ -34,7 +36,7 @@ class Program extends Usulan
      */
     public function getChild($code)
     {
-        return Kegiatan::where([['program', $this->code], ['code', $code] ])->firstOrFail();
+        return Kegiatan::where([['parent', $this->code], ['code', $code] ])->firstOrFail();
     }
 
 }

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Exception;
+use LogicException;
 
 use App\Http\Requests;
 use App\Program;
@@ -24,8 +26,10 @@ class RktController extends Controller
         
         try {
             $data = $this->makResolve($mak);
-        } catch (Exception $e) {
+        } catch (ModelNotFoundException $e) {
             abort(404);            
+        } catch (LogicException $e) {
+            $data = collect();            
         }
         
         $result = $data->sortBy('code')->values()->toArray();
@@ -53,7 +57,7 @@ class RktController extends Controller
                 $kegiatan = $maks[3];
                 $output   = $maks[4];
                 return Output::where([
-                    ['code', $output], ['kegiatan', $kegiatan]
+                    ['code', $output], ['parent', $kegiatan]
                 ])->firstOrFail()->childs;
                 break;
             default:

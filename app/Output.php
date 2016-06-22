@@ -5,24 +5,21 @@ namespace App;
 class Output extends Usulan
 {
 
-    public function getParentAttribute($value)
+    public function getParentIdAttribute($value)
     {
-        $parent = $this->getParent();
-        
-        return $parent->mak;
+        return $this->getParent()->mak;
     }
 
     public function getParent()
     {
         try {
-            $parent = Kegiatan::where('code', $this->kegiatan)->firstOrFail();
+            $parent = Kegiatan::where('code', $this->parent)->firstOrFail();
             
             return $parent;
         } catch (Exception $e) {
 
             return null;
         }
-
     }
     
     public function childs()

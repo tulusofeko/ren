@@ -10,9 +10,9 @@ class Kegiatan extends Usulan
      * @param  mixed  $value
      * @return string Parent MAK
      */
-    public function getParentAttribute($value)
+    public function getParentIdAttribute($value)
     {
-        return "051.01." . $this->program;
+        return "051.01." . $this->parent;
     }
 
     /**
@@ -22,15 +22,14 @@ class Kegiatan extends Usulan
     public function getParent()
     {
         try {
-            
-            $parent = Program::where('code', $this->program)->firstOrFail();
+            $parent = Program::where('code', $this->parent)->firstOrFail();
+        
+            return $parent;
 
         } catch (Exception $e) {
 
             return null;
         }
-
-        return $parent;
     }
 
     /**
@@ -39,7 +38,7 @@ class Kegiatan extends Usulan
      */
     public function childs()
     {
-        return $this->hasMany('App\Output', 'kegiatan', 'code');
+        return $this->hasMany('App\Output', 'parent', 'code');
     }
     
     /**
@@ -49,7 +48,6 @@ class Kegiatan extends Usulan
      */
     public function getChild($code)
     {
-        return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            ->firstOrFail();
+        return Output::where([['parent', $this->code], ['code', $code] ])->firstOrFail();
     }
 }

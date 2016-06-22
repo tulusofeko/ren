@@ -33,10 +33,10 @@ class OutputController extends Controller
                 );
             }
 
-            $output            = new Output;
-            $output->name      = $name;
-            $output->kegiatan  = $kegiatan;
-            $output->code      = $code;
+            $output         = new Output;
+            $output->name   = $name;
+            $output->parent = $kegiatan;
+            $output->code   = $code;
             $output->save();
 
             return response()->json(["message" => "Data berhasil disimpan"]);
@@ -48,9 +48,9 @@ class OutputController extends Controller
         } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }  
     }
 
@@ -67,7 +67,7 @@ class OutputController extends Controller
             $code      = $request->input("code");
             $name      = $request->input("name");
             
-            $collect = Output::where([['code', $code], ['kegiatan', $kegiatan]])->get();
+            $collect = Output::where([['code', $code], ['parent', $kegiatan]])->get();
 
             if (!$collect->isEmpty()) {
                 throw new InvalidArgumentException(
@@ -76,7 +76,7 @@ class OutputController extends Controller
             }
 
             $output->name      = $name;
-            $output->kegiatan  = $kegiatan;
+            $output->parent    = $kegiatan;
             $output->code      = $code;
             $output->save();
 
@@ -89,9 +89,9 @@ class OutputController extends Controller
         } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }
     }
 
@@ -105,9 +105,9 @@ class OutputController extends Controller
         }  catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }
     }
 }

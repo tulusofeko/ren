@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
-use Exception, InvalidArgumentException;
+
+use Exception;
+use InvalidArgumentException;
+
 use DB, Yajra\Datatables\Datatables;
+
 use App\Http\Requests;
 use App\Kegiatan;
 use App\Program;
@@ -20,19 +24,23 @@ class KegiatanController extends Controller
             );
         }
         
-        $eselon_dua = DB::table('eselon_dua') 
-            ->join('eselon_satu', 'eselon_dua.parent', '=', 'eselon_satu.codename')
-            ->select('eselon_dua.*', 
-                'eselon_satu.name as eselonsatu_name', 
+        $eselon_dua = DB::table('eselon_dua')->join('eselon_satu', 
+            // where
+            'eselon_dua.parent', '=', 'eselon_satu.codename')
+            // select
+            ->select(
+                'eselon_dua.*', 
+                'eselon_satu.name as eselonsatu_name',
                 'eselon_satu.codename as eselonsatu_code')
+            // order & get
             ->orderBy('eselonsatu_code')->get();
-        $eselon_dua = collect($eselon_dua)->groupBy('eselonsatu_name');
 
-        $programs = Program::all()->sortBy('code');
-        
-        return view("kegiatan-manage", [
-            'eselon_dua' => $eselon_dua, 'programs'   => $programs
-        ]);
+        $dataset = [
+            'eselon_dua' => collect($eselon_dua)->groupBy('eselonsatu_name'),
+            'programs'   => Program::all()->sortBy('code')
+        ];
+
+        return view("kegiatan-manage", $dataset);
     }
 
     public function create(Request $request)
@@ -52,7 +60,7 @@ class KegiatanController extends Controller
             $kegiatan            = new Kegiatan;
             $kegiatan->name      = $name;
             $kegiatan->code      = $code;
-            $kegiatan->program   = $program;
+            $kegiatan->parent    = $program;
             $kegiatan->eselondua = $eselondua;
             $kegiatan->save();
 
@@ -61,9 +69,9 @@ class KegiatanController extends Controller
 
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }
     }
 
@@ -83,7 +91,7 @@ class KegiatanController extends Controller
             
             $kegiatan->name      = $name;
             $kegiatan->code      = $code;
-            $kegiatan->program   = $program;
+            $kegiatan->parent    = $program;
             $kegiatan->eselondua = $eselondua;
             $kegiatan->save();
 
@@ -92,9 +100,9 @@ class KegiatanController extends Controller
 
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }
     }
 
@@ -109,9 +117,9 @@ class KegiatanController extends Controller
 
             $message = get_class($e) . ": " . $e->getMessage();
 
-            return response()->json([
-                "error" => $e->getCode(), "message" => $message 
-            ], 500);
+            $jsonres = ["error" => $e->getCode(), "message" => $message];
+            
+            return response()->json($jsonres, 500);
         }
     }
 
