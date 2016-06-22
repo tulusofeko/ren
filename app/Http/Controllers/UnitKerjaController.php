@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Validator;
 
 use Exception, InvalidArgumentException;
-use DB;
 use Yajra\Datatables\Datatables;
 
 use App\Http\Requests;

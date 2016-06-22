@@ -10,7 +10,7 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
   <!-- JEasyUI -->
-  <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/default/easyui.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/metro-gray/easyui.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
   <!-- dxhtml -->
   <link rel="stylesheet" type="text/css" href="{{ asset('dhtmlxSuite/codebase/fonts/font_roboto/roboto.css')}}"/>
@@ -35,8 +35,12 @@
           padding-left: 4px;
       }
 
-      .jqx-grid { 
+      .jqx-grid, .panel.datagrid {
           border-radius : 0;
+      }
+
+      .datagrid-cell {
+          white-space: normal !important;
       }
 
   </style>
@@ -95,7 +99,6 @@
             </thead>
             <tbody> </tbody>
           </table>
-          <div id="dtbl" style="height: 300px;"></div>
         </div>
       </div>
     </div>
@@ -187,17 +190,6 @@
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
   <!-- EasyUI -->
   <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
-  <script src="{{ asset('dhtmlxSuite/codebase/dhtmlx.js') }}"></script>
-
-  <!-- Jqwidgets -->
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxcore.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdata.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxbuttons.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxscrollbar.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxlistbox.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdropdownlist.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxdatatable.js') }}"></script>
-  <script type="text/javascript" src="{{ asset('jqwidgets/jqxtreegrid.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -213,43 +205,6 @@
               return ParsleyField.$element.parents('.form-group');
           },
       });
-
-      var source = {
-          datatype: "json",
-          datafields: [
-              { name: 'code', type: "string" },
-              { name: 'name' }
-          ],
-          url: "{{ route('rkt.dx') }}"
-      };
-
-      var dataAdapter = new $.jqx.dataAdapter(source);
-      
-      $('#dtbl').jqxTreeGrid(
-      {
-          source: dataAdapter,
-          columns: [
-              { text: 'Kode', dataField: 'code', width: 100 },
-              { text: 'Uraian', dataField: 'name', width: 500 },
-              { text: 'Product', dataField: 'Product', width: 180 },
-              { text: 'Unit Price', dataField: 'Price', width: 90, align: 'right', cellsAlign: 'right', cellsFormat: 'c2' },
-              { text: 'Quantity', dataField: 'Quantity', width: 80, align: 'right', cellsAlign: 'right' }
-          ]
-      });
-      
-      $("#dtbl").on('rowSelect', function (event) {
-          // event arguments
-          var args = event.args;
-          // row data
-          var rowData = args.row;
-          // row key
-          var rowKey = args.key;
-          
-          // dataAdapter.dataBind();   
-      });
-
-
-
   });
 
  
@@ -257,20 +212,19 @@
 
   <!-- Flash messages -->
   <script>
-  function flashMessage(data, error = false) {
-      var error, message;
+  var flashMessage = function (data, error = false) {
+      console.log(data);
 
-      if (typeof data.raw != "undefined" ) { console.log(data.raw); }
-
-      if (error) {
+      if (error === true) {
           $('#flash-message .alert').addClass('alert-danger');
-          $('#flash-message .alert .alert-messages').html(
-              "Error " + data.error + ": " + data.message
-          );
+          $('#flash-message .alert .alert-messages').html(data.message);
       } else {
+
           $('#flash-message .alert').addClass('alert-success');
           $('#flash-message .alert .alert-messages').html(data.message);
       }
+
+      $('.modal').modal('hide');
 
       $('#flash-message').slideDown(function() {
           setTimeout(function() {
@@ -287,18 +241,20 @@
   <!-- TreeGrid -->
   <script>
 
+  var nexttoload = new Array;
+
   $('#tree').treegrid({
       url       : "{{ route('rkt.getdata') }}",
       idField   : 'mak',
-      treeField : 'name',
+      treeField : 'code',
       method    : 'GET',
       lines     : true,
       columns   :[[
           {
               title : 'Kode',
               field : 'code',
-              width : 60,
-              align : 'center'
+              width : 120,
+              align : 'left'
           },
           {
               title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
@@ -338,23 +294,36 @@
               $('#box-action [data-target="#hapus"]').show();
           }
 
+          console.log("selected:");
           console.log(row);
-
       },
       onUnselect: function (row) 
       {
           $('#box-action button').hide();
       },
       onBeforeLoad: function (row, param) {
-          
+          if (typeof param.next !== 'undefined') {
+              var next = param.id + "." + param.next;
+              var step = param.next.split(".");
+              var temp = param.id;
+              
+              for (var i = 0; i < step.length; i++) {
+                  temp += "." + step[i];
+
+                  nexttoload.push(temp);
+              }
+          }
       },
       onLoadSuccess: function (row, data) {
-          for (var i = 0; i < data.length; i++) {
-              if (data[i].continue) {
-                  $(this).treegrid('reload', {
-                      id   : data[i].mak,
-                      next : data[i].next
-                  });
+          if (nexttoload.length > 0) {
+              var toload = nexttoload.shift();
+
+              var node   = $(this).treegrid('find', toload);
+              
+              if (node !== null) {
+                  console.log("Loading " + toload);
+                  
+                  $(this).treegrid('reload', {id   : toload });
               }
           }
       }

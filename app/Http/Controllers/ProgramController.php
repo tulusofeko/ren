@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use DB, Yajra\Datatables\Datatables;
+
 use Illuminate\Http\Request;
 use Illuminate\Database\QueryException;
 use Exception, InvalidArgumentException;
-use DB, Yajra\Datatables\Datatables;
+use Validator;
+
 use App\Http\Requests;
 use App\Program;
 
@@ -55,9 +58,9 @@ class ProgramController extends Controller
             'code' => 'required|max:2',
         ]);
 
-        $validator->sometimes('code', 'unique:programs,codename', 
-            function($input) use ($unit) {
-                return $input->code != $unit->code;
+        $validator->sometimes('code', 'unique:programs,code', 
+            function($input) use ($program) {
+                return $input->code != $program->code;
             });
 
         if ($validator->fails()) {

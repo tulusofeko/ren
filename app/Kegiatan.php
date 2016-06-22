@@ -34,6 +34,15 @@ class Kegiatan extends Usulan
     }
 
     /**
+     * Get Collection of Kegiatan's Childs
+     * @return Collection Collection of Kegiatan's Childs
+     */
+    public function childs()
+    {
+        return $this->hasMany('App\Output', 'kegiatan', 'code');
+    }
+    
+    /**
      * Get Kegiatan's Child by it's code
      * @param  string $code Output's Code
      * @return App\Output
@@ -43,14 +52,4 @@ class Kegiatan extends Usulan
         return Output::where([['kegiatan', $this->code], ['code', $code] ])
             ->firstOrFail();
     }
-
-    /**
-     * Get Collection of Kegiatan's Childs
-     * @return Collection Collection of Kegiatan's Childs
-     */
-    public function childs()
-    {
-        return $this->hasMany('App\Output', 'kegiatan', 'code');
-    }
-
 }

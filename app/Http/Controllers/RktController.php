@@ -22,29 +22,15 @@ class RktController extends Controller
     {
         $mak  = $request->input('id', '051.01');
         
-        $next = trim($request->input('next', ''), '.');
-
         try {
             $data = $this->makResolve($mak);
         } catch (Exception $e) {
             abort(404);            
         }
         
-        if (empty($next)) {
-            return response()
-                ->json($data->sortBy('code')->values()->toArray());
-        }
-        
-        foreach ($data as $item) {
-            @list($current, $subload) = explode('.', $next, 2);
-            if ($item->code == $current) {
-                $item->setContinue();
-                $item->setNextAttribute($subload);
-            }
-        }
-
-        return response()
-            ->json($data->sortBy('code')->values()->toArray());
+        $result = $data->sortBy('code')->values()->toArray();
+            
+        return response()->json($result);
     }
 
     protected function makResolve($mak)
@@ -73,13 +59,5 @@ class RktController extends Controller
             default:
                 abort(404);
         }
-    }
-
-    public function dx()
-    {
-        $programs = Program::all();
-        $databel  = $programs->toArray();
-        
-        return response()->json($databel);
     }
 }

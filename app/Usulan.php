@@ -11,9 +11,7 @@ abstract class Usulan extends Model
     abstract public function getChild($code);
     abstract public function childs();
 
-    protected $appends  = [
-        'parentId', 'mak', 'level', 'state', 'continue', 'next'
-    ];
+    protected $appends  = ['parentId', 'mak', 'level', 'state', 'continue', 'next'];
 
     protected $state    = 'closed';
     protected $continue = false;
