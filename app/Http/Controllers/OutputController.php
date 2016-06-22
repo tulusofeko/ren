@@ -69,7 +69,7 @@ class OutputController extends Controller
             
             $collect = Output::where([['code', $code], ['parent', $kegiatan]])->get();
 
-            if (!$collect->isEmpty()) {
+            if (!$collect->isEmpty() && $output->code !== $code) {
                 throw new InvalidArgumentException(
                     "Kode sudah tersedia", 55
                 );
