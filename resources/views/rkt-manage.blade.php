@@ -213,8 +213,6 @@
   <!-- Flash messages -->
   <script>
   var flashMessage = function (data, error = false) {
-      console.log(data);
-
       if (error === true) {
           $('#flash-message .alert').addClass('alert-danger');
           $('#flash-message .alert .alert-messages').html(data.message);
@@ -272,7 +270,7 @@
               width : 120
           }
       ]],
-      onClickRow: function (row)
+      onSelect: function (row)
       {
           $('#box-action button').hide();
 
@@ -303,28 +301,35 @@
       },
       onBeforeLoad: function (row, param) {
           if (typeof param.next !== 'undefined') {
-              var next = param.id + "." + param.next;
               var step = param.next.split(".");
-              var temp = param.id;
+              var next = '';
               
               for (var i = 0; i < step.length; i++) {
-                  temp += "." + step[i];
+                  if (i == 0) {
+                      next += step[i];
+                      continue;
+                  } 
+                      
+                  next += "." + step[i];
+                  
+                  if (i == 1) { continue; }
 
-                  nexttoload.push(temp);
+                  nexttoload.push(next);
               }
           }
       },
       onLoadSuccess: function (row, data) {
-          if (nexttoload.length > 0) {
-              var toload = nexttoload.shift();
+          if (nexttoload.length === 0) { return; }
 
-              var node   = $(this).treegrid('find', toload);
+          var toload = nexttoload.shift();
+          var node   = $(this).treegrid('find', toload);
+          
+          if (node !== null) {
+              console.log("Loading data from row " + toload);
               
-              if (node !== null) {
-                  console.log("Loading " + toload);
-                  
-                  $(this).treegrid('reload', {id   : toload });
-              }
+              $(this).treegrid('reload', {id   : toload });
+              
+              $(this).treegrid('select', toload);
           }
       }
   });
@@ -343,14 +348,15 @@
       $('#formoutput form')[0].reset();
       $('#formoutput form').parsley().reset();
 
-      var data     = $(e.relatedTarget).data();
+      var data     = $(e.relatedTarget).data(), d = new Date;
       var action   = $('#formoutput form').attr('action');
       var kegiatan = data.kegiatan;
+      var editee;
 
       $(this).find('.modal-body input[name="kegiatan"]').val(kegiatan.code);
       $(this).find('.modal-body input[name="kegiatan-kw"]').val(kegiatan.code + " - " + kegiatan.name);
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote', 
-          $('#tree').data('url') + "?id=" + kegiatan.mak + ".{value}"
+          $('#tree').data('url') + "?id=" + kegiatan.mak + ".{value}&_t=" +d.getTime()
       );
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
@@ -363,11 +369,14 @@
           $(this).find('.modal-body input[name="_method"]').val("PUT"); 
 
           action =  $('#create-output').data('edit') + data.output.id;
+          editee = data.output;
       } else {
           $(this).find('.modal-body .modal-title').val("Tambah Data"); 
           $(this).find('.modal-body input[name="_method"]').val("POST"); 
-
+          editee = data.kegiatan;
       }
+
+      $('#tree').treegrid('beginEdit', editee.mak);
 
       $('#formoutput [name="code"]').parsley()
           .on('field:validate', function(field) {
@@ -394,28 +403,24 @@
                   $('#formoutput').find('.overlay').show();
               }
           }).done(function (result) {
-              $('#formoutput').modal('hide');
               
               flashMessage(result);
 
-              var root = $('#tree').treegrid('getRoot', kegiatan.mak);
-              var next = kegiatan.mak.replace(root.mak, '');
-             
-              $('#tree').treegrid('reload', {id: root.mak, next: next});
+              $('#tree').treegrid('endEdit', editee.mak);
+              $('#tree').treegrid('reload', { next: kegiatan.mak });
 
           }).fail(function(result) {
-              $('#formoutput').modal('hide');
               
-              var data = {};
+              var errormessages = null;
               
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              flashMessage(data, true);
+              flashMessage({ 
+                  message : "Internal server error. See develpoer tools for error detail",
+                  data    : errormessages
+              }, true);
           });
 
           return false;
@@ -435,7 +440,6 @@
           case 'output':
               action = "{{ route('output.delete', '') }}";
               break;
-
       }
 
       modal.find('.modal-body input[name="id"]').val(row.id);  
@@ -455,28 +459,23 @@
                   $('#hapus').find('.overlay').show();
               }
           }).done(function (result) {
-              $('#hapus').modal('hide');
               
               flashMessage(result);    
-
-              var root = $('#tree').treegrid('getRoot', row.mak);
-              var next = row.mak.replace(root.mak, '');
               
-              $('#tree').treegrid('reload', {id: root.mak, next: next});
+              $('#tree').treegrid('reload', { next: row.mak });
                            
           }).fail(function(result) {
-              $('#hapus').modal('hide');
               
-              var data = {};
+              var errormessages = null;
               
-              if (typeof result.responseJSON != "undefined" ) {
-                  data = result.responseJSON;
-              } else {
-                  data.error   = result.status;
-                  data.message = result.statusText;
+              if (result.status == 422) {
+                  var errormessages = result.responseJSON;
               }
               
-              flashMessage(data, true);
+              flashMessage({ 
+                message : "Internal server error. See develpoer tools for error detail",
+                data    : errormessages
+              }, true);
           });
 
           return false;
