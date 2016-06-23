@@ -68,11 +68,15 @@
           <div class="pull-right box-tools  no-print" id="box-action">
               <!-- Header Button -->
               <button class="btn btn-success btn-social" title="Tambah Output" style="display: none;" 
-                data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='POST'>
+                data-toggle="modal" data-target="#outputmodal" aria-hidden="true" data-method='POST'>
+                <i class="fa fa-plus"> </i> Rekam Output 
+              </button>
+              <button class="btn btn-success btn-social" title="Tambah SubOutput" style="display: none;" 
+                data-toggle="modal" data-target="#formsuboutput" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam Output 
               </button>
               <button class="btn btn-primary btn-social" title="Edit Output" style="display: none;" 
-                data-toggle="modal" data-target="#formoutput" aria-hidden="true" data-method='PUT'>
+                data-toggle="modal" data-target="#outputmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Output 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
@@ -107,7 +111,7 @@
       </div>
     </div>
   </div>
-  <div class="modal fade" id="formoutput">
+  <div class="modal fade" id="outputmodal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -121,7 +125,7 @@
           >
             <div class="form-group">
               <label>Kegiatan</label>
-              <select id="kegiatan-selector" name="parent" data-url="{{ route('kegiatan.getall') }}">
+              <select id="kegiatan-selector" name="parent">
                 @foreach ($kegiatans as $program => $kegiatans)
                     <optgroup label="{{ $program }}">
                       @foreach ($kegiatans as $kegiatan)
@@ -290,14 +294,14 @@
 
           switch(row.level) {
               case 'kegiatan':
-                  $('#box-action [data-target="#formoutput"][data-method="POST"]').data('kegiatan', row);
-                  $('#box-action [data-target="#formoutput"][data-method="POST"]').show();
+                  $('#box-action [data-target="#outputmodal"][data-method="POST"]').data('kegiatan', row);
+                  $('#box-action [data-target="#outputmodal"][data-method="POST"]').show();
                   break;
               case 'output':
                   var parent = $(this).treegrid('getParent', row.mak);
-                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').data('kegiatan', parent);
-                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').data('output', row);
-                  $('#box-action [data-target="#formoutput"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('kegiatan', parent);
+                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('output', row);
+                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').show();
                   break
           }
 
@@ -352,14 +356,14 @@
 
   <!-- Output related -->
   <script>
-  $('#formoutput').on('show.bs.modal', function (e) {
+  $('#outputmodal').on('show.bs.modal', function (e) {
       // $('#kegiatan-selector').select2();
       // reset
-      $('#formoutput form')[0].reset();
-      $('#formoutput form').parsley().reset();
+      $('#outputmodal form')[0].reset();
+      $('#outputmodal form').parsley().reset();
 
       var data     = $(e.relatedTarget).data(), d = new Date;
-      var action   = $('#formoutput form').attr('action');
+      var action   = $('#outputmodal form').attr('action');
       var kegiatan = data.kegiatan;
       var editee;
 
@@ -389,7 +393,7 @@
 
       $('#tree').treegrid('beginEdit', editee.mak);
 
-      $('#formoutput [name="code"]').parsley()
+      $('#outputmodal [name="code"]').parsley()
           .on('field:validate', function(field) {
               var lmn  = this.$element;
               var pre  = this.$element.data('edit');
@@ -405,15 +409,15 @@
               }
           });
 
-      $('#formoutput form').parsley().on('form:submit', function() {
+      $('#outputmodal form').parsley().on('form:submit', function() {
           $.ajax({
               type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
               dataType    : 'JSON', // what type of data do we expect back from the server
-              data        : $('#formoutput form').serialize(), // our data object
+              data        : $('#outputmodal form').serialize(), // our data object
               url         : action, // the url where we want to POST
               encode      : true,
               beforeSend  : function () {
-                  $('#formoutput').find('.overlay').show();
+                  $('#outputmodal').find('.overlay').show();
               }
           }).done(function (result) {
               
@@ -500,7 +504,7 @@
   });
 
   // Reset everything on hide
-  $('#formoutput').on('hide.bs.modal', function (e) {
+  $('#outputmodal').on('hide.bs.modal', function (e) {
       $('#box-action button').hide();
       $('#tree').treegrid('unselectAll');
       $(this).find('.overlay').hide();
