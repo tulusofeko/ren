@@ -83,7 +83,8 @@ Route::group(['prefix' => 'program', 'as' => 'program.'], function () {
 // Kegiatan Controller Route
 Route::group(['prefix' => 'kegiatan', 'as' => 'kegiatan.'], function () {
 
-    Route::get('/{kode?}', 'KegiatanController@show')->name('show');
+    Route::get('/{kode?}', 'KegiatanController@show')->name('show')
+        ->where('kode', '[0-9]+');
 
     Route::post('/create', 'KegiatanController@create')->name('create');
 
