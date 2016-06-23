@@ -42,6 +42,10 @@
       .datagrid-cell {
           white-space: normal !important;
       }
+      
+      #kegiatan-selector, .select2-container {
+          width: 100% !important;
+      }
 
   </style>
 @endsection
@@ -117,8 +121,18 @@
           >
             <div class="form-group">
               <label>Kegiatan</label>
-              <input class="form-control" name="kegiatan-kw" type="text" disabled>
-              <input class="form-control" name="kegiatan" type="hidden">
+              <select id="kegiatan-selector" name="parent" data-url="{{ route('kegiatan.getall') }}">
+                @foreach ($kegiatans as $program => $kegiatans)
+                    <optgroup label="{{ $program }}">
+                      @foreach ($kegiatans as $kegiatan)
+                        <option value="{{ $kegiatan->code }}" 
+                          data-mak="051.01.{{ $kegiatan->parent }}.{{ $kegiatan->code }}"> 
+                          {{ $kegiatan->code }} - {{ $kegiatan->name }}
+                        </option>
+                      @endforeach
+                    </optgroup>
+                @endforeach
+              </select>
             </div>
             <div class="form-group">
               <label>Kode Output</label>
@@ -193,6 +207,8 @@
   
   <!-- Form validation -->
   <script>
+  $('#kegiatan-selector').select2();
+
   $(document).ready(function() {
       $('.modal form').parsley({
           errorsWrapper : '<ul class="parsley-errors-list list-unstyled"></ul>',
@@ -206,8 +222,6 @@
           },
       });
   });
-
- 
   </script>
 
   <!-- Flash messages -->
@@ -336,14 +350,10 @@
 
   </script>
 
-  <script>
-    $('[name=eselondua]').select2({ placeholder: "Pilih Unit Eselon Dua", });
-
-  </script>
-
-  <!-- Modal related -->
+  <!-- Output related -->
   <script>
   $('#formoutput').on('show.bs.modal', function (e) {
+      // $('#kegiatan-selector').select2();
       // reset
       $('#formoutput form')[0].reset();
       $('#formoutput form').parsley().reset();
@@ -353,13 +363,14 @@
       var kegiatan = data.kegiatan;
       var editee;
 
-      $(this).find('.modal-body input[name="kegiatan"]').val(kegiatan.code);
-      $(this).find('.modal-body input[name="kegiatan-kw"]').val(kegiatan.code + " - " + kegiatan.name);
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote', 
           $('#tree').data('url') + "?id=" + kegiatan.mak + ".{value}&_t=" +d.getTime()
       );
+
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
       $(this).find('.modal-body input[name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
+
+      $('#kegiatan-selector').val(kegiatan.code).trigger('change');
 
       if (data.method == "PUT" ) {
           $(this).find('.modal-body .modal-title').val("Edit Data"); 
@@ -380,14 +391,16 @@
 
       $('#formoutput [name="code"]').parsley()
           .on('field:validate', function(field) {
-              var lmn = this.$element;
-              var pre = this.$element.data('edit');
+              var lmn  = this.$element;
+              var pre  = this.$element.data('edit');
+              var sel  = $('#kegiatan-selector');
+              var mak  = sel.find('[value="'+ sel.val() +'"]').data('mak');
               
-              if (pre == this.value) {
+              if (pre == this.value && sel.val() == kegiatan.code) {
                   this.removeConstraint('remote');
               } else {
                   this.addConstraint({
-                      'remote' : lmn.data('parsleyRemote') 
+                      'remote' : $('#tree').data('url') + "?id=" + mak + ".{value}&_t=" +d.getTime() 
                   });
               }
           });
@@ -428,6 +441,10 @@
 
   });
 
+  </script>
+
+  <!-- Hapus node -->
+  <script>
   $('#hapus').on('show.bs.modal', function (e) {
       // reset
       $('#hapus form')[0].reset();

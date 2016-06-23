@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Exception;
 use LogicException;
+use DB;
 
 use App\Http\Requests;
 use App\Program;
@@ -17,7 +18,21 @@ class RktController extends Controller
 {
     public function show()
     {
-        return view('rkt-manage');
+        $kegiatans = DB::table('kegiatans')->join('programs', 
+            // where
+            'kegiatans.parent', '=', 'programs.code')
+            // select
+            ->select(
+                'kegiatans.*', 
+                'programs.name as program_name',
+                'programs.code as program_code')
+            // order & get
+            ->orderBy('program_code')->get();
+
+        $dataset = [
+            'kegiatans' => collect($kegiatans)->groupBy('program_name')->toArray()
+        ];
+        return view('rkt-manage', $dataset);
     }
 
     public function getData(Request $request)
