@@ -80,7 +80,7 @@
                 <i class="fa fa-edit"> </i> Edit Output 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
-                data-toggle="modal" data-target="#hapus" aria-hidden="true">
+                data-toggle="modal" data-target="#hapusmodal" aria-hidden="true">
                 <i class="fa fa-trash"> </i> Hapus 
               </button>
           </div>
@@ -164,7 +164,7 @@
       </div><!-- /.modal-content -->
     </div>
   </div>
-  <div class="modal fade" id="hapus">
+  <div class="modal fade" id="hapusmodal">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -306,8 +306,8 @@
           }
 
           if (row.level !== 'program' && row.level !== 'kegiatan') {
-              $('#box-action [data-target="#hapus"]').data('row', row);
-              $('#box-action [data-target="#hapus"]').show();
+              $('#box-action [data-target="#hapusmodal"]').data('row', row);
+              $('#box-action [data-target="#hapusmodal"]').show();
           }
 
           console.log("selected:");
@@ -449,10 +449,10 @@
 
   <!-- Hapus node -->
   <script>
-  $('#hapus').on('show.bs.modal', function (e) {
+  $('#hapusmodal').on('show.bs.modal', function (e) {
       // reset
-      $('#hapus form')[0].reset();
-      $('#hapus form').parsley().reset(); 
+      $('#hapusmodal form')[0].reset();
+      $('#hapusmodal form').parsley().reset(); 
 
       var modal = $(this), action;
       var row   = $(e.relatedTarget).data('row');
@@ -465,7 +465,7 @@
 
       modal.find('.modal-body input[name="id"]').val(row.id);  
 
-      $('#hapus form').parsley().on('form:submit', function() {
+      $('#hapusmodal form').parsley().on('form:submit', function() {
           var formData = {
               '_method'  : 'DELETE'
           },  id = row.id;
@@ -477,7 +477,7 @@
               data        : formData, // our data object
               encode      : true,
               beforeSend  : function () {
-                  $('#hapus').find('.overlay').show();
+                  $('#hapusmodal').find('.overlay').show();
               }
           }).done(function (result) {
               
@@ -511,7 +511,7 @@
   });
 
   // Reset everything on hide
-  $('#hapus').on('hide.bs.modal', function (e) {
+  $('#hapusmodal').on('hide.bs.modal', function (e) {
       $('#box-action button').hide();
       $('#tree').treegrid('unselectAll');
       $(this).find('.overlay').hide();
