@@ -15,17 +15,17 @@ class OutputController extends Controller
     public function create(Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required',
-            'code'     => 'required|max:2',
-            'kegiatan' => 'required|max:4'
+            'name'   => 'required',
+            'code'   => 'required|max:2',
+            'parent' => 'required|max:4'
         ]);
 
         try {
-            $kegiatan  = $request->input("kegiatan");
+            $parent  = $request->input("parent");
             $code      = $request->input("code");
             $name      = $request->input("name");
 
-            $collect = Output::where([['code', $code], ['kegiatan', $kegiatan]])->get();
+            $collect = Output::where([['code', $code], ['parent', $parent]])->get();
 
             if (!$collect->isEmpty()) {
                 throw new InvalidArgumentException(
@@ -35,7 +35,7 @@ class OutputController extends Controller
 
             $output         = new Output;
             $output->name   = $name;
-            $output->parent = $kegiatan;
+            $output->parent = $parent;
             $output->code   = $code;
             $output->save();
 
@@ -57,26 +57,26 @@ class OutputController extends Controller
     public function update(Output $output, Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required',
-            'code'     => 'required|max:2',
-            'kegiatan' => 'required|max:4'
+            'name'   => 'required',
+            'code'   => 'required|max:2',
+            'parent' => 'required|max:4'
         ]);
 
         try {
-            $kegiatan  = $request->input("kegiatan");
-            $code      = $request->input("code");
-            $name      = $request->input("name");
+            $parent = $request->input("parent");
+            $code   = $request->input("code");
+            $name   = $request->input("name");
             
-            $collect = Output::where([['code', $code], ['parent', $kegiatan]])->get();
+            $collect = Output::where([['code', $code], ['parent', $parent]])->get();
 
-            if (!$collect->isEmpty() && $output->code !== $code) {
-                throw new InvalidArgumentException(
-                    "Kode sudah tersedia", 55
-                );
+            if (!$collect->isEmpty()) {
+                if ($output->code !== $code || $output->parent !== $parent) {
+                    throw new InvalidArgumentException("Kode sudah tersedia", 55);
+                }
             }
 
             $output->name      = $name;
-            $output->parent    = $kegiatan;
+            $output->parent    = $parent;
             $output->code      = $code;
             $output->save();
 
