@@ -294,7 +294,7 @@
       try {
           $('#create-unitkerja')[0].reset();
           $('#create-unitkerja').parsley().reset(); 
-          // $("[name='parent']").select2("val", "");
+          $("[name='parent']").select2("val", "");
       } catch (err) {
           // console.log(err);
       } finally {
