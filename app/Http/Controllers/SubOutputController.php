@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\SubOutput as Output;
+use App\SubOutput;
 
-class SubOutputController extends OutputController
+class SubOutputController extends NodeController
 {
     protected $model = 'App\SubOutput';
 }
