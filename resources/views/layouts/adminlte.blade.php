@@ -21,14 +21,11 @@
 
       @include('includes.footer')
     
+      @section('core-javascript')
+          @include('includes.javascript')
+      
+          @yield('javascript')
+      @show
     </div><!-- ./wrapper -->
-    
-    @section('core-javascript')
-
-        @include('includes.javascript')
-    
-        @yield('javascript')
-    
-    @show
   </body>
 </html>
