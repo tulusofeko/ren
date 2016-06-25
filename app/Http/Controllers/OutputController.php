@@ -31,9 +31,7 @@ class OutputController extends Controller
             $collect = call_user_func([$this->model, 'where'], $params);
 
             if (!$collect->get()->isEmpty()) {
-                throw new InvalidArgumentException(
-                    "Kode sudah tersedia", 55
-                );
+                throw new InvalidArgumentException("Kode sudah tersedia", 422);
             }
 
             $output         = new $this->model;
@@ -46,7 +44,7 @@ class OutputController extends Controller
 
         } catch (InvalidArgumentException $e) {
 
-            return response()->json(["code" => [$e->getMessage()]], 422);
+            return response()->json(["message" => $e->getMessage()], 422);
         
         } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
@@ -77,7 +75,7 @@ class OutputController extends Controller
             $collect = call_user_func([$this->model, 'where'], $params);
             if (!$collect->get()->isEmpty()) {
                 if ($output->code != $code || $output->parent != $parent) {
-                    throw new InvalidArgumentException("Kode sudah tersedia", 55);
+                    throw new InvalidArgumentException("Kode sudah tersedia", 422);
                 }
             }
 
@@ -90,7 +88,7 @@ class OutputController extends Controller
 
         } catch (InvalidArgumentException $e) {
 
-            return response()->json(["code" => [$e->getMessage()]], 422);
+            return response()->json(["message" => $e->getMessage()], 422);
         
         } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();

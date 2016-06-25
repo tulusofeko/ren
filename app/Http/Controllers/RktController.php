@@ -33,7 +33,7 @@ class RktController extends Controller
         $dataset = [
             'kegiatans' => collect($kegiatans)->groupBy('program_name')->toArray()
         ];
-        return view('rkt-manage', $dataset);
+        return view('rkt.manage', $dataset);
     }
 
     public function getData(Request $request)
