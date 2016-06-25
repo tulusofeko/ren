@@ -111,9 +111,23 @@ Route::group(['prefix' => 'output', 'as' => 'output.'], function () {
 
     Route::post('/create', 'OutputController@create')->name('create');
 
-    Route::put('/update/{output}', 'OutputController@update')->name('update');
+    Route::put('/update/{id}', 'OutputController@update')->name('update');
     
-    Route::delete('/hapus/{output}', 'OutputController@delete')->name('delete');
+    Route::delete('/hapus/{id}', 'OutputController@delete')->name('delete');
     
     Route::any('/datatbl', 'OutputController@data')->name('datatables');
+});
+
+// SubOutput Controller Route
+Route::group(['prefix' => 'suboutput', 'as' => 'suboutput.'], function () {
+
+    Route::get('/{kode?}', 'SubOutputController@show')->name('show');
+
+    Route::post('/create', 'SubOutputController@create')->name('create');
+
+    Route::put('/update/{id}', 'SubOutputController@update')->name('update');
+    
+    Route::delete('/hapus/{id}', 'SubOutputController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'SubOutputController@data')->name('datatables');
 });

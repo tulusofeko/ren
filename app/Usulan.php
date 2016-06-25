@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class Usulan extends Model 
 {
-    abstract public function getParentIdAttribute($value);
     abstract public function getParent();
     abstract public function getChild($code);
     abstract public function childs();
@@ -14,6 +13,11 @@ abstract class Usulan extends Model
     protected $appends  = ['parentId', 'mak', 'level', 'state'];
 
     protected $state    = 'closed';
+
+    public function getParentIdAttribute($value)
+    {
+        return $this->getParent()->mak;
+    }
 
     public function getMakAttribute($value)
     {

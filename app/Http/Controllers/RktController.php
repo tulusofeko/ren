@@ -12,6 +12,7 @@ use App\Http\Requests;
 use App\Program;
 use App\Kegiatan;
 use App\Output;
+use App\SubOutput;
 use App\Usulan;
 
 class RktController extends Controller
@@ -73,6 +74,18 @@ class RktController extends Controller
                 $output   = $maks[4];
                 return Output::where([
                     ['code', $output], ['parent', $kegiatan]
+                ])->firstOrFail()->childs;
+                break;
+            case 6:
+                $kegiatan    = $maks[3];
+                $output_code = $maks[4];
+                $suboutput   = $maks[5];
+                $output      = Output::where([
+                    ['code', $output_code], ['parent', $kegiatan]
+                ])->firstOrFail();
+
+                return SubOutput::where([
+                    ['code', $suboutput], ['parent', $output->id]
                 ])->firstOrFail()->childs;
                 break;
             default:

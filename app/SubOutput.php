@@ -2,18 +2,18 @@
 
 namespace App;
 
-class Output extends Usulan
+use Illuminate\Database\Eloquent\Model;
+
+use App\Output;
+
+class SubOutput extends Usulan
 {
-
-    public function getParentIdAttribute($value)
-    {
-        return $this->getParent()->mak;
-    }
-
+    protected $table = 'suboutputs';
+    
     public function getParent()
     {
         try {
-            $parent = Kegiatan::where('code', $this->parent)->firstOrFail();
+            $parent = Output::find($this->parent)->firstOrFail();
             
             return $parent;
         } catch (Exception $e) {
@@ -24,7 +24,8 @@ class Output extends Usulan
     
     public function childs()
     {
-        return $this->hasMany('App\SubOutput', 'parent', 'id');
+        // return null;
+        // return $this->hasMany('App\SubOutput', 'parent', 'id');
     }
 
     public function getChild($code)
@@ -32,5 +33,4 @@ class Output extends Usulan
         // return Output::where([['kegiatan', $this->code], ['code', $code] ])
             // ->firstOrFail();
     }
-
 }

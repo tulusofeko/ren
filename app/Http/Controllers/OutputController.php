@@ -10,6 +10,8 @@ use App\Output;
 
 class OutputController extends Controller
 {
+    protected $model = 'App\Output';
+
     public function show($kode = null) { }
 
     public function create(Request $request)
@@ -22,18 +24,19 @@ class OutputController extends Controller
 
         try {
             $parent  = $request->input("parent");
-            $code      = $request->input("code");
-            $name      = $request->input("name");
+            $code    = $request->input("code");
+            $name    = $request->input("name");
+            $params  = [['code', $code], ['parent', $parent]];
 
-            $collect = Output::where([['code', $code], ['parent', $parent]])->get();
+            $collect = call_user_func([$this->model, 'where'], $params);
 
-            if (!$collect->isEmpty()) {
+            if (!$collect->get()->isEmpty()) {
                 throw new InvalidArgumentException(
                     "Kode sudah tersedia", 55
                 );
             }
 
-            $output         = new Output;
+            $output         = new $this->model;
             $output->name   = $name;
             $output->parent = $parent;
             $output->code   = $code;
@@ -54,8 +57,10 @@ class OutputController extends Controller
         }  
     }
 
-    public function update(Output $output, Request $request)
+    public function update($id, Request $request)
     {
+        $output = call_user_func([$this->model, 'find'], $id);
+
         $this->validate($request, [
             'name'   => 'required',
             'code'   => 'required|max:2',
@@ -67,10 +72,11 @@ class OutputController extends Controller
             $code   = $request->input("code");
             $name   = $request->input("name");
             
-            $collect = Output::where([['code', $code], ['parent', $parent]])->get();
+            $params = [['code', $code], ['parent', $parent]];
 
-            if (!$collect->isEmpty()) {
-                if ($output->code !== $code || $output->parent !== $parent) {
+            $collect = call_user_func([$this->model, 'where'], $params);
+            if (!$collect->get()->isEmpty()) {
+                if ($output->code != $code || $output->parent != $parent) {
                     throw new InvalidArgumentException("Kode sudah tersedia", 55);
                 }
             }
@@ -95,8 +101,10 @@ class OutputController extends Controller
         }
     }
 
-    public function delete(Output $output) 
+    public function delete($id) 
     {
+        $output = call_user_func([$this->model, 'find'], $id);
+
         try {
             $output->delete();
 
