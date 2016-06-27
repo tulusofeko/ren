@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Output;
+use App\Komponen;
 
 class SubOutput extends Usulan
 {
@@ -24,13 +25,12 @@ class SubOutput extends Usulan
     
     public function childs()
     {
-        // return null;
-        // return $this->hasMany('App\SubOutput', 'parent', 'id');
+        return $this->hasMany('App\Komponen', 'parent', 'id');
     }
 
     public function getChild($code)
     {
-        // return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            // ->firstOrFail();
+        return Komponen::where([['kegiatan', $this->code], ['code', $code] ])
+            ->firstOrFail();
     }
 }

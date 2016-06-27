@@ -68,6 +68,10 @@
                 data-toggle="modal" data-target="#suboutputmodal" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam SubOutput 
               </button>
+              <button class="btn btn-success btn-social" title="Tambah Komponen" style="display: none;" 
+                data-toggle="modal" data-target="#komponenmodal" aria-hidden="true" data-method='POST'>
+                <i class="fa fa-plus"> </i> Rekam Komponen 
+              </button>
               <button class="btn btn-primary btn-social" title="Edit Output" style="display: none;" 
                 data-toggle="modal" data-target="#outputmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Output 
@@ -75,6 +79,10 @@
               <button class="btn btn-primary btn-social" title="Edit SubOutput" style="display: none;" 
                 data-toggle="modal" data-target="#suboutputmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit SubOutput 
+              </button>
+              <button class="btn btn-primary btn-social" title="Edit Komponen" style="display: none;" 
+                data-toggle="modal" data-target="#komponenmodal" aria-hidden="true" data-method='PUT'>
+                <i class="fa fa-edit"> </i> Edit Komponen 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
                 data-toggle="modal" data-target="#hapusmodal" aria-hidden="true">
@@ -109,7 +117,6 @@
     </div>
   </div>
 @endsection
-
 
 @section('javascript')
   @include('includes.parsley')
@@ -188,13 +195,13 @@
           {
               title : 'Kode',
               field : 'code',
-              width : 120,
+              width : 180,
               align : 'left'
           },
           {
               title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
               field : 'name',
-              width : 580,
+              width : 500,
           },
           {
               title : 'Jumlah Pelaksana',
@@ -213,25 +220,31 @@
 
           console.log(row);
 
+          var parent = $(this).treegrid('getParent', row.mak);
           switch(row.level) {
               case 'kegiatan':
                   $('#box-action [data-target="#outputmodal"][data-method="POST"]').data('kegiatan', row);
                   $('#box-action [data-target="#outputmodal"][data-method="POST"]').show();
                   break;
               case 'output':
-                  var parent = $(this).treegrid('getParent', row.mak);
                   $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('kegiatan', parent);
                   $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('output', row);
                   $('#box-action [data-target="#outputmodal"][data-method="PUT"]').show();
                   $('#box-action [data-target="#suboutputmodal"][data-method="POST"]').data('output', row);
                   $('#box-action [data-target="#suboutputmodal"][data-method="POST"]').show();
-                  break
+                  break;
               case 'suboutput':
-                  var parent = $(this).treegrid('getParent', row.mak);
                   $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').data('output', parent);
                   $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').data('suboutput', row);
                   $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').show();
-                  break
+                  $('#box-action [data-target="#komponenmodal"][data-method="POST"]').data('parent', row);
+                  $('#box-action [data-target="#komponenmodal"][data-method="POST"]').show();
+                  break;
+              case 'komponen' :
+                  $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').data('parent', parent);
+                  $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').data('node', row);
+                  $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').show();
+                  break;
           }
 
           if (row.level !== 'program' && row.level !== 'kegiatan') {
@@ -283,6 +296,8 @@
   @include('rkt.modals.output')
 
   @include('rkt.modals.suboutput')
+
+  @include('rkt.modals.komponen')
 
   @include('rkt.modals.hapus')
 

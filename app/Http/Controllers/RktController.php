@@ -13,6 +13,7 @@ use App\Program;
 use App\Kegiatan;
 use App\Output;
 use App\SubOutput;
+use App\Komponen;
 use App\Usulan;
 
 class RktController extends Controller
@@ -80,12 +81,31 @@ class RktController extends Controller
                 $kegiatan    = $maks[3];
                 $output_code = $maks[4];
                 $suboutput   = $maks[5];
+                
                 $output      = Output::where([
                     ['code', $output_code], ['parent', $kegiatan]
                 ])->firstOrFail();
 
                 return SubOutput::where([
                     ['code', $suboutput], ['parent', $output->id]
+                ])->firstOrFail()->childs;
+                break;
+            case 7:
+                $kegiatan       = $maks[3];
+                $output_code    = $maks[4];
+                $suboutput_code = $maks[5];
+                $komponen_code  = $maks[6];
+
+                $output         = Output::where([
+                    ['code', $output_code], ['parent', $kegiatan]
+                ])->firstOrFail();
+                
+                $suboutput      = SubOutput::where([
+                    ['code', $suboutput_code], ['parent', $output->id]
+                ])->firstOrFail();
+
+                return Komponen::where([
+                    ['code', $komponen_code], ['parent', $suboutput->id]
                 ])->firstOrFail()->childs;
                 break;
             default:

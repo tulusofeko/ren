@@ -10,6 +10,7 @@ use App\Http\Requests;
 
 class NodeController extends Controller
 {
+    protected $code_length = '2';
 
     public function show($kode = null) { }
 
@@ -17,7 +18,7 @@ class NodeController extends Controller
     {
         $this->validate($request, [
             'name'   => 'required',
-            'code'   => 'required|max:2',
+            'code'   => 'required|max:' . $this->code_length,
             'parent' => 'required|max:4'
         ]);
 
@@ -60,7 +61,7 @@ class NodeController extends Controller
 
         $this->validate($request, [
             'name'   => 'required',
-            'code'   => 'required|max:2',
+            'code'   => 'required|max:' . $this->code_length,
             'parent' => 'required|max:4'
         ]);
 
