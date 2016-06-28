@@ -15,7 +15,7 @@ class CreateOutputsTable extends Migration
         Schema::create('outputs', function (Blueprint $table) {
             $table->increments('id');
             $table->string('kegiatan', 4);
-            $table->string('code', 2);
+            $table->string('code', 3);
             $table->string('name');
             $table->timestamps();
 

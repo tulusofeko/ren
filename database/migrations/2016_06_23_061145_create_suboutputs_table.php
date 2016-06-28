@@ -15,7 +15,7 @@ class CreateSuboutputsTable extends Migration
         Schema::create('suboutputs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent')->unsigned();
-            $table->string('code', 2)->index();
+            $table->string('code', 3)->index();
             $table->string('name');
             $table->timestamps();
 
