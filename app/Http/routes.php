@@ -145,3 +145,17 @@ Route::group(['prefix' => 'komponen', 'as' => 'komponen.'], function () {
     
     Route::any('/datatbl', 'KomponenController@data')->name('datatables');
 });
+
+// Komponen Controller Route
+Route::group(['prefix' => 'subkomponen', 'as' => 'subkomponen.'], function () {
+
+    Route::get('/{kode?}', 'SubKomponenController@show')->name('show');
+
+    Route::post('/create', 'SubKomponenController@create')->name('create');
+
+    Route::put('/update/{id}', 'SubKomponenController@update')->name('update');
+    
+    Route::delete('/hapus/{id}', 'SubKomponenController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'SubKomponenController@data')->name('datatables');
+});

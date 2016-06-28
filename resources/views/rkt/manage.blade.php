@@ -12,6 +12,9 @@
   <!-- JEasyUI -->
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/metro-gray/easyui.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
+
+  <!-- File selector -->
+  <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap-fileinput/css/fileinput.min.css') }}">
   
   @parent
   <style type="text/css">
@@ -72,6 +75,10 @@
                 data-toggle="modal" data-target="#komponenmodal" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam Komponen 
               </button>
+              <button class="btn btn-success btn-social" title="Tambah SubKomponen" style="display: none;" 
+                data-toggle="modal" data-target="#subkomponenmodal" aria-hidden="true" data-method='POST'>
+                <i class="fa fa-plus"> </i> Rekam SubKomponen 
+              </button>
               <button class="btn btn-primary btn-social" title="Edit Output" style="display: none;" 
                 data-toggle="modal" data-target="#outputmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Output 
@@ -83,6 +90,10 @@
               <button class="btn btn-primary btn-social" title="Edit Komponen" style="display: none;" 
                 data-toggle="modal" data-target="#komponenmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Komponen 
+              </button>
+              <button class="btn btn-primary btn-social" title="Edit Komponen" style="display: none;" 
+                data-toggle="modal" data-target="#subkomponenmodal" aria-hidden="true" data-method='PUT'>
+                <i class="fa fa-edit"> </i> Edit SubKomponen 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
                 data-toggle="modal" data-target="#hapusmodal" aria-hidden="true">
@@ -98,7 +109,7 @@
             </div>
           </div>
           <table id="tree" class="table table-bordered table-hover table-striped" 
-            data-url="{{ route('rkt.getdata') }}"
+            data-url="{{ route('rkt.getdata') }}" style="height: 300px;" 
           >
             <thead>
               <tr>
@@ -127,6 +138,8 @@
   <!-- DataTables -->
   <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <!-- Input Mask -->
+  <script src="{{ asset('plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
   <!-- EasyUI -->
   <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
   
@@ -218,8 +231,6 @@
       {
           $('#box-action button').hide();
 
-          console.log(row);
-
           var parent = $(this).treegrid('getParent', row.mak);
           switch(row.level) {
               case 'kegiatan':
@@ -244,6 +255,13 @@
                   $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').data('parent', parent);
                   $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').data('node', row);
                   $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="POST"]').data('parent', row);
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="POST"]').show();
+                  break;
+              case 'subkomponen' :
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').data('parent', parent);
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').data('node', row);
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').show();
                   break;
           }
 
@@ -298,6 +316,8 @@
   @include('rkt.modals.suboutput')
 
   @include('rkt.modals.komponen')
+
+  @include('rkt.modals.subkomponen')
 
   @include('rkt.modals.hapus')
 

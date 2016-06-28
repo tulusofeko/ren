@@ -14,6 +14,7 @@ use App\Kegiatan;
 use App\Output;
 use App\SubOutput;
 use App\Komponen;
+use App\SubKomponen;
 use App\Usulan;
 
 class RktController extends Controller
@@ -96,16 +97,47 @@ class RktController extends Controller
                 $suboutput_code = $maks[5];
                 $komponen_code  = $maks[6];
 
-                $output         = Output::where([
-                    ['code', $output_code], ['parent', $kegiatan]
-                ])->firstOrFail();
-                
-                $suboutput      = SubOutput::where([
-                    ['code', $suboutput_code], ['parent', $output->id]
-                ])->firstOrFail();
+                $suboutput = DB::table('suboutputs')
+                    ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+                    ->select('suboutputs.*')
+                    ->where([
+                        ['outputs.parent', $kegiatan], 
+                        ['outputs.code', $output_code], 
+                        ['suboutputs.code', $suboutput_code] 
+                    ])->first();
+
+                if (is_null($suboutput)) {
+                    throw new ModelNotFoundException;
+                }
 
                 return Komponen::where([
                     ['code', $komponen_code], ['parent', $suboutput->id]
+                ])->firstOrFail()->childs;
+                break;
+            case 8:
+                $kegiatan         = $maks[3];
+                $output_code      = $maks[4];
+                $suboutput_code   = $maks[5];
+                $komponen_code    = $maks[6];
+                $subkomponen_code = $maks[7];
+
+                $komponen = DB::table('komponens')
+                    ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+                    ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+                    ->select('komponens.*')
+                    ->where([
+                        ['outputs.parent', $kegiatan], 
+                        ['outputs.code', $output_code], 
+                        ['suboutputs.code', $suboutput_code], 
+                        ['komponens.code', $komponen_code] 
+                    ])->first();
+
+                if (is_null($komponen)) {
+                    throw new ModelNotFoundException;
+                }
+
+                return SubKomponen::where([
+                    ['code', $subkomponen_code], ['parent', $komponen->id]
                 ])->firstOrFail()->childs;
                 break;
             default:
