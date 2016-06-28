@@ -8,5 +8,4 @@ use App\Komponen;
 class KomponenController extends NodeController
 {
     protected $model       = 'App\Komponen';
-    protected $code_length = '3';
 }

@@ -10,7 +10,7 @@ use App\Http\Requests;
 
 class NodeController extends Controller
 {
-    protected $code_length = '2';
+    protected $code_length = '3';
 
     public function show($kode = null) { }
 
