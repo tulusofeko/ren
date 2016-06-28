@@ -29,4 +29,9 @@ class Komponen extends Usulan
         // return Output::where([['kegiatan', $this->code], ['code', $code] ])
             // ->firstOrFail();
     }
+
+    public function setCodeAttribute($value)
+    {
+        $this->attributes['code'] = str_pad($value, 3, "0", STR_PAD_LEFT);
+    }
 }
