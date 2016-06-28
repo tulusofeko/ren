@@ -29,8 +29,8 @@ class Output extends Usulan
 
     public function getChild($code)
     {
-        // return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            // ->firstOrFail();
+        return Output::where([['parent', $this->code], ['code', $code] ])
+            ->firstOrFail();
     }
 
     public function setCodeAttribute($value)

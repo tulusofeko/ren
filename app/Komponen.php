@@ -20,14 +20,13 @@ class Komponen extends Usulan
     
     public function childs()
     {
-        // return null;
-        // return $this->hasMany('App\SubOutput', 'parent', 'id');
+        return $this->hasMany('App\SubKomponen', 'parent', 'id');
     }
 
     public function getChild($code)
     {
-        // return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            // ->firstOrFail();
+        return SubKomponen::where([['parent', $this->code], ['code', $code] ])
+            ->firstOrFail();
     }
 
     public function setCodeAttribute($value)

@@ -30,7 +30,7 @@ class SubOutput extends Usulan
 
     public function getChild($code)
     {
-        return Komponen::where([['kegiatan', $this->code], ['code', $code] ])
+        return Komponen::where([['parent', $this->code], ['code', $code] ])
             ->firstOrFail();
     }
 
