@@ -13,10 +13,11 @@ class SubKomponen extends Usulan
     public function getParent()
     {
         try {
-            $parent = Komponen::find($this->parent)->firstOrFail();
-            
+            $parent = Komponen::where('id', $this->parent)->firstOrFail();
             return $parent;
-        } catch (Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
     }
     
     /**
