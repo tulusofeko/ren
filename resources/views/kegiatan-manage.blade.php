@@ -273,7 +273,7 @@
             },
             {
                 className: 'text-center',
-                data: 'program',
+                data: 'parent',
                 name: 'program'
             },
             {

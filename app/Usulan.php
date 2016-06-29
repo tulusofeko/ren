@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-abstract class Usulan extends Model 
+abstract class Usulan extends Model
 {
     abstract public function getPaguAttribute($value);
     abstract public function getParent();
@@ -50,7 +50,7 @@ abstract class Usulan extends Model
      * @param  mixed  $value
      * @return string node level
      */
-    public function getlevelAttribute($value) 
+    public function getlevelAttribute($value)
     {
         $namespace = get_called_class();
         $class     = substr($namespace, strrpos($namespace, '\\')+1);
@@ -60,7 +60,7 @@ abstract class Usulan extends Model
     
     /**
      * Set the Programs's name. Name Attribute
-     * Untuk memastikan data yang masuk dengan huruf kapital di awal 
+     * Untuk memastikan data yang masuk dengan huruf kapital di awal
      * @param  string  $value
      * @return string
      */
@@ -68,5 +68,4 @@ abstract class Usulan extends Model
     {
         $this->attributes['name'] = ucwords(strtolower($value));
     }
-
 }
