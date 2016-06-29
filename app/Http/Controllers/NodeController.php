@@ -12,8 +12,6 @@ class NodeController extends Controller
 {
     protected $code_length = '3';
 
-    public function show($kode = null) { }
-
     public function create(Request $request)
     {
         $this->validate($request, [
@@ -52,7 +50,7 @@ class NodeController extends Controller
             $jsonres = ["error" => $e->getCode(), "message" => $message];
             
             return response()->json($jsonres, 500);
-        }  
+        }
     }
 
     public function update($id, Request $request)
@@ -99,16 +97,16 @@ class NodeController extends Controller
         }
     }
 
-    public function delete($id) 
+    public function delete($id)
     {
-        $output = call_user_func([$this->model, 'find'], $id);
+        $output = call_user_func([$this->model, 'where'], ['id', $id]);
 
         try {
             $output->delete();
 
             return response()->json(["message" => "Data berhasil dihapus"]);
             
-        }  catch (Exception $e) {
+        } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
 
             $jsonres = ["error" => $e->getCode(), "message" => $message];
