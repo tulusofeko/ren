@@ -18,7 +18,7 @@
           </div>
           <div class="form-group">
             <label>Kode SubOutput</label>
-            <input class="form-control" name="code" placeholder="Kode SubOutput" data-edit type="text" required maxlength="2">
+            <input class="form-control" name="code" placeholder="Kode SubOutput" data-edit type="text" required maxlength="3">
           </div>
           <div class="form-group">
             <label>Nama SubOutput</label>
@@ -66,13 +66,14 @@ $('#suboutputmodal').on('show.bs.modal', function (e) {
     if (data.method == "PUT" ) {
         $(this).find('.modal-body .modal-title').val("Edit Data"); 
         $(this).find('.modal-body input[name="code"]').data('edit', data.suboutput.code); 
-        $(this).find('.modal-body input[name="code"]').val(data.suboutput.code); 
+        $(this).find('.modal-body input[name="code"]').val(data.suboutput.code).inputmask('9[99]');; 
         $(this).find('.modal-body input[name="name"]').val(data.suboutput.name); 
         $(this).find('.modal-body input[name="_method"]').val("PUT"); 
 
         action =  $('#create-suboutput').data('edit') + data.suboutput.id;
         editee = data.suboutput;
     } else {
+        $(this).find('.modal-body input[name="code"]').val('').inputmask('9[99]');; 
         $(this).find('.modal-body .modal-title').val("Tambah Data");
         $(this).find('.modal-body input[name="_method"]').val("POST"); 
         editee = data.output;

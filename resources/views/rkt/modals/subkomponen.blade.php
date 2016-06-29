@@ -129,26 +129,29 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
     );
     modal.find('.modal-body [name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
     modal.find('.modal-body [name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
-    modal.find('.modal-body [name="code"]').val('').inputmask('A[AA]'); 
-    modal.find('.modal-body [name="anggaran"]').val('').inputmask("rupiah");  //static mask
     modal.find('.modal-body [name="parent-kw"]').val(parent.code + " - " + parent.name); 
     modal.find('.modal-body [name="parent"]').val(parent.id); 
 
     if (data.method == "PUT" ) {
         modal.find('.modal-body .modal-title').val("Edit Data"); 
         modal.find('.modal-body [name="code"]').data('edit', data.node.code); 
-        modal.find('.modal-body [name="code"]').val(data.node.code); 
+        modal.find('.modal-body [name="code"]').val(data.node.code).inputmask('A[AA]');; 
         modal.find('.modal-body [name="name"]').val(data.node.name); 
+        modal.find('.modal-body [name="anggaran"]').val(data.node.anggaran).inputmask("rupiah");  //static mask
         modal.find('.modal-body [name="_method"]').val("PUT"); 
 
         action =  $('#create-subkomponen').data('edit') + data.node.id;
         editee = data.node;
     } else {
+        modal.find('.modal-body [name="code"]').val('').inputmask('A[AA]'); 
+        modal.find('.modal-body [name="anggaran"]').val('').inputmask("rupiah");  //static mask
         modal.find('.modal-body .modal-title').val("Tambah Data");
         modal.find('.modal-body [name="_method"]').val("POST"); 
         editee = data.parent;
     }
+    
     $('#tree').treegrid('beginEdit', editee.mak);
+
     $('#subkomponenmodal [name="code"]').parsley()
         .on('field:validate', function(field) {
             var lmn  = this.$element;
@@ -164,49 +167,49 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
             }
         });
 
-    $('#subkomponenmodal form').parsley().on('form:submit', function() {
-        var formData = new FormData($('#create-subkomponen')[0]);
-        $.ajax({
-            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-            dataType    : 'JSON', // what type of data do we expect back from the server
-            data        : formData, // our data object
-            url         : action, // the url where we want to POST
-            encode      : true,
-            processData : false,
-            contentType : false,
-            beforeSend  : function () {
-                modal.find('.overlay').show();
-                modal.find('.progress').show();
-            },
-            xhr: function() {
-                myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){
-                    myXhr.upload.addEventListener('progress',progressHandlerFunction, false);
-                }
-                return myXhr;
-            },
-        }).done(function (result) {
+    // $('#subkomponenmodal form').parsley().on('form:submit', function() {
+    //     var formData = new FormData($('#create-subkomponen')[0]);
+    //     $.ajax({
+    //         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+    //         dataType    : 'JSON', // what type of data do we expect back from the server
+    //         data        : formData, // our data object
+    //         url         : action, // the url where we want to POST
+    //         encode      : true,
+    //         processData : false,
+    //         contentType : false,
+    //         beforeSend  : function () {
+    //             modal.find('.overlay').show();
+    //             modal.find('.progress').show();
+    //         },
+    //         xhr: function() {
+    //             myXhr = $.ajaxSettings.xhr();
+    //             if(myXhr.upload){
+    //                 myXhr.upload.addEventListener('progress',progressHandlerFunction, false);
+    //             }
+    //             return myXhr;
+    //         },
+    //     }).done(function (result) {
             
-            flashMessage(result);
+    //         flashMessage(result);
 
-            $('#tree').treegrid('endEdit', editee.mak);
-            $('#tree').treegrid('reload', { next: parent.mak });
+    //         $('#tree').treegrid('endEdit', editee.mak);
+    //         $('#tree').treegrid('reload', { next: parent.mak });
 
-        }).fail(function(result) {
-            var message;
+    //     }).fail(function(result) {
+    //         var message;
 
-            if ( typeof result.responseJSON != 'undefined' 
-              && typeof result.responseJSON.message != 'undefined'
-            ) {
-                message = result.responseJSON.message;
-            } else {
-                message = "Internal server error. See develpoer tools for error detail";
-            }
+    //         if ( typeof result.responseJSON != 'undefined' 
+    //           && typeof result.responseJSON.message != 'undefined'
+    //         ) {
+    //             message = result.responseJSON.message;
+    //         } else {
+    //             message = "Internal server error. See develpoer tools for error detail";
+    //         }
 
-            flashMessage({message : message, data : result}, true);
-        });
-        return false;
-    });
+    //         flashMessage({message : message, data : result}, true);
+    //     });
+    //     return false;
+    // });
 });
 
 $('#datduk').fileinput({

@@ -65,14 +65,15 @@ $('#komponenmodal').on('show.bs.modal', function (e) {
 
     if (data.method == "PUT" ) {
         $(this).find('.modal-body .modal-title').val("Edit Data"); 
-        $(this).find('.modal-body input[name="code"]').data('edit', data.node.code); 
-        $(this).find('.modal-body input[name="code"]').val(data.node.code); 
-        $(this).find('.modal-body input[name="name"]').val(data.node.name); 
-        $(this).find('.modal-body input[name="_method"]').val("PUT"); 
+        $(this).find('.modal-body [name="code"]').data('edit', data.node.code); 
+        $(this).find('.modal-body [name="code"]').val(data.node.code).inputmask('9[99]');
+        $(this).find('.modal-body [name="name"]').val(data.node.name); 
+        $(this).find('.modal-body [name="_method"]').val("PUT"); 
 
         action =  $('#create-komponen').data('edit') + data.node.id;
         editee = data.node;
     } else {
+        $(this).find('.modal-body [name="code"]').val('').inputmask('9[99]');
         $(this).find('.modal-body .modal-title').val("Tambah Data");
         $(this).find('.modal-body input[name="_method"]').val("POST"); 
         editee = data.parent;

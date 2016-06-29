@@ -2,40 +2,65 @@
 
 namespace App;
 
+use DB;
+
 class Output extends Usulan
 {
-
-    public function getParentIdAttribute($value)
-    {
-        return $this->getParent()->mak;
-    }
-
+    /**
+     * Getter for Parent's instance
+     * @return App\Kegiatan
+     */
     public function getParent()
     {
         try {
             $parent = Kegiatan::where('code', $this->parent)->firstOrFail();
             
             return $parent;
-        } catch (Exception $e) {
-
-            return null;
-        }
+        } catch (Exception $e) { return null; }
     }
     
+    /**
+     * Get Collection of Kegiatan's Childs
+     * @return Collection of App\SubOutput
+     */
     public function childs()
     {
         return $this->hasMany('App\SubOutput', 'parent', 'id');
     }
 
+    /**
+     * Get Kegiatan's Child by it's code
+     * @param  string $code SubOutput's Id
+     * @return App\Output
+     */
     public function getChild($code)
     {
-        return Output::where([['parent', $this->code], ['code', $code] ])
-            ->firstOrFail();
+        return SubOutput::where([['parent', $this->id], ['code', $code] ])->firstOrFail();
     }
 
+    /**
+     * Get Output's Pagu
+     * @return mixed
+     */
+    public function getPaguAttribute($value)
+    {
+        $subkomponen = DB::table('sub_komponens')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->select('sub_komponens.*')
+            ->where([
+                ['outputs.id', $this->id] 
+            ])->sum('anggaran');
+        return number_format($subkomponen, "0", ",", ".");
+    }
+
+    /**
+     * Setter Output's Code
+     * Untuk memastikan kode yang masuk sejumlah 3 huruf dengan menambahkan pad
+     */
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = str_pad($value, 3, "0", STR_PAD_LEFT);
     }
-
 }

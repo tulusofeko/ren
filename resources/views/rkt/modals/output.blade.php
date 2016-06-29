@@ -26,7 +26,7 @@
           </div>
           <div class="form-group">
             <label>Kode Output</label>
-            <input class="form-control" name="code" placeholder="Kode Output" data-edit type="text" required maxlength="2">
+            <input class="form-control" name="code" placeholder="Kode Output" data-edit type="text" required maxlength="3">
           </div>
           <div class="form-group">
             <label>Nama Output</label>
@@ -72,13 +72,14 @@ $('#outputmodal').on('show.bs.modal', function (e) {
     if (data.method == "PUT" ) {
         $(this).find('.modal-body .modal-title').val("Edit Data"); 
         $(this).find('.modal-body input[name="code"]').data('edit', data.output.code); 
-        $(this).find('.modal-body input[name="code"]').val(data.output.code); 
+        $(this).find('.modal-body input[name="code"]').val(data.output.code).inputmask('9[99]');; 
         $(this).find('.modal-body input[name="name"]').val(data.output.name); 
         $(this).find('.modal-body input[name="_method"]').val("PUT"); 
 
         action =  $('#create-output').data('edit') + data.output.id;
         editee = data.output;
     } else {
+        $(this).find('.modal-body input[name="code"]').val('').inputmask('9[99]');; 
         $(this).find('.modal-body .modal-title').val("Tambah Data"); 
         $(this).find('.modal-body input[name="_method"]').val("POST"); 
         editee = data.kegiatan;

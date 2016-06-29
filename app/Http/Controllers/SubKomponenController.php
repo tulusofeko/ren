@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use InvalidArgumentException;
 use App\Http\Requests;
 use App\SubKomponen;
 use App\Datduk;
@@ -15,7 +15,7 @@ class SubKomponenController extends NodeController
         $this->validate($request, [
             'name'     => 'required',
             'anggaran' => 'required',
-            'code'     => 'required|max:3',
+            'code'     => 'required|max:3|alpha',
             'parent'   => 'required|max:4'
         ]);
 
@@ -36,8 +36,21 @@ class SubKomponenController extends NodeController
             $sub_komponen->name     = $name;
             $sub_komponen->parent   = $parent;
             $sub_komponen->anggaran = $anggaran;
-            $sub_komponen->save();
+            // $sub_komponen->save();
 
+            return response(
+                var_dump(
+                    $request->hasFile('datduks'),
+                    $request->file('datduks'),
+                    $request->all(),
+                    $_FILES
+                )
+            );
+
+            if ($request->hasFile('datduks')) {
+                # code...
+            }
+            
             return response()->json(["message" => "Data berhasil disimpan"]);
 
         } catch (InvalidArgumentException $e) {
@@ -52,13 +65,6 @@ class SubKomponenController extends NodeController
             return response()->json($jsonres, 500);
         }  
 
-        // return response(
-        //     var_dump(
-        //         $request->hasFile('datduks'),
-        //         $request->file('datduks'),
-        //         $request->all(),
-        //         $_FILES
-        //     )
-        // );
+        
     }
 }

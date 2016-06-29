@@ -2,9 +2,10 @@
 
 namespace App;
 
+use DB;
+
 class Kegiatan extends Usulan
 {
-    
     /**
      * Getter for Parent MAK attribute
      * @param  mixed  $value
@@ -16,7 +17,8 @@ class Kegiatan extends Usulan
     }
 
     /**
-     * Get Parent Program
+     * Getter for Parent's instance
+     * @param  mixed  $value
      * @return App\Program
      */
     public function getParent()
@@ -34,7 +36,7 @@ class Kegiatan extends Usulan
 
     /**
      * Get Collection of Kegiatan's Childs
-     * @return Collection Collection of Kegiatan's Childs
+     * @return Collection of App\Output
      */
     public function childs()
     {
@@ -49,5 +51,23 @@ class Kegiatan extends Usulan
     public function getChild($code)
     {
         return Output::where([['parent', $this->code], ['code', $code] ])->firstOrFail();
+    }
+
+    /**
+     * Get Kegiatan's Pagu
+     * @return mixed
+     */
+    public function getPaguAttribute($value)
+    {
+        $subkomponen = DB::table('sub_komponens')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->select('sub_komponens.*')
+            ->where([
+                ['kegiatans.code', $this->code] 
+            ])->sum('anggaran');
+        return number_format($subkomponen, "0", ",", ".");
     }
 }

@@ -225,6 +225,15 @@
               title : 'Durasi Pelaksanaan',
               field : 'waktu',
               width : 120
+          },
+          {
+              title : 'Anggaran',
+              field : 'pagu',
+              width : 120,
+              align : 'right',
+              formatter: function(value,row,index) {
+                  return value;
+              }
           }
       ]],
       onSelect: function (row)
