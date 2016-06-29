@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSubkomponensTable extends Migration
+class CreateDatduksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,19 +12,18 @@ class CreateSubkomponensTable extends Migration
      */
     public function up()
     {
-        Schema::create('sub_komponens', function (Blueprint $table) {
+        Schema::create('datduks', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('parent')->unsigned();
-            $table->string('code', 3)->index();
-            $table->string('name');
-            $table->integer('anggaran');
-            $table->text('keterangan')->nullable();
+            $table->string('filename');
+            $table->string('mime_type');
+            $table->string('hash');
             $table->timestamps();
 
             $table->foreign('parent')
                 ->references('id')
-                ->on('komponens')
-                ->onDelete('restrict')
+                ->on('sub_komponens')
+                ->onDelete('cascade')
                 ->onUpdate('cascade');
         });
     }
@@ -36,6 +35,6 @@ class CreateSubkomponensTable extends Migration
      */
     public function down()
     {
-        Schema::drop('sub_komponens');
+        Schema::drop('datduks');
     }
 }

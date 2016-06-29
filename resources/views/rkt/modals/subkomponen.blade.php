@@ -39,6 +39,7 @@
           </div>
           <div class="form-group">
             <label for="datduk">Data Dukung</label>
+            <div id="datduks"></div>
             <input id="datduk" type="file" name="datduks[]" multiple data-parsley-max-file-size="10000">
           </div>
           <div class="form-group">
@@ -142,6 +143,39 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
 
         action =  $('#create-subkomponen').data('edit') + data.node.id;
         editee = data.node;
+
+        $.ajax({
+            type        : 'GET', // define the type of HTTP verb we want to use (POST for our form)
+            dataType    : 'JSON', // what type of data do we expect back from the server
+            url         : '{{ route('datduk.get', '/') }}/' + data.node.mak, // the url where we want to POST
+            beforeSend  : function () {
+                modal.find('.overlay').show();
+
+                $('#datduks').html('');
+            },
+            xhr: function() {
+                myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){
+                    myXhr.upload.addEventListener('progress',progressHandlerFunction, false);
+                }
+                return myXhr;
+            },
+        }).done(function (result) {
+            var wrapper = $('#datduks');
+            for (var i = 0; i < result.length; i++) {
+                var btn  = "<div class='btn-group'>";
+                    btn += "<a class='btn btn-sm btn-flat btn-default' target='_blank'";
+                    btn += " href='{{ route('datduk.show', '') }}/" + result[i].id +"'>";
+                    btn += result[i].filename;
+                    btn += "</a><a class='btn btn-sm btn-flat btn-default' ";
+                    btn += "data-datduk-id='"+ result[i].id + "' ";
+                    btn += "data-toggle='modal' data-target='#datdukhapusmodal' aria-hidden='true'>"
+                    btn += "<i class='fa fa-fw fa-trash'></i></a></div>";
+                $(btn).appendTo(wrapper);
+            }
+            modal.find('.overlay').hide();
+        });
+
     } else {
         modal.find('.modal-body [name="code"]').val('').inputmask('A[AA]'); 
         modal.find('.modal-body [name="anggaran"]').val('').inputmask("rupiah");  //static mask
@@ -167,49 +201,49 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
             }
         });
 
-    // $('#subkomponenmodal form').parsley().on('form:submit', function() {
-    //     var formData = new FormData($('#create-subkomponen')[0]);
-    //     $.ajax({
-    //         type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
-    //         dataType    : 'JSON', // what type of data do we expect back from the server
-    //         data        : formData, // our data object
-    //         url         : action, // the url where we want to POST
-    //         encode      : true,
-    //         processData : false,
-    //         contentType : false,
-    //         beforeSend  : function () {
-    //             modal.find('.overlay').show();
-    //             modal.find('.progress').show();
-    //         },
-    //         xhr: function() {
-    //             myXhr = $.ajaxSettings.xhr();
-    //             if(myXhr.upload){
-    //                 myXhr.upload.addEventListener('progress',progressHandlerFunction, false);
-    //             }
-    //             return myXhr;
-    //         },
-    //     }).done(function (result) {
+    $('#subkomponenmodal form').parsley().on('form:submit', function() {
+        var formData = new FormData($('#create-subkomponen')[0]);
+        $.ajax({
+            type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
+            dataType    : 'JSON', // what type of data do we expect back from the server
+            data        : formData, // our data object
+            url         : action, // the url where we want to POST
+            encode      : true,
+            processData : false,
+            contentType : false,
+            beforeSend  : function () {
+                modal.find('.overlay').show();
+                modal.find('.progress').show();
+            },
+            xhr: function() {
+                myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){
+                    myXhr.upload.addEventListener('progress',progressHandlerFunction, false);
+                }
+                return myXhr;
+            },
+        }).done(function (result) {
             
-    //         flashMessage(result);
+            flashMessage(result);
 
-    //         $('#tree').treegrid('endEdit', editee.mak);
-    //         $('#tree').treegrid('reload', { next: parent.mak });
+            $('#tree').treegrid('endEdit', editee.mak);
+            $('#tree').treegrid('reload', { next: parent.mak });
 
-    //     }).fail(function(result) {
-    //         var message;
+        }).fail(function(result) {
+            var message;
 
-    //         if ( typeof result.responseJSON != 'undefined' 
-    //           && typeof result.responseJSON.message != 'undefined'
-    //         ) {
-    //             message = result.responseJSON.message;
-    //         } else {
-    //             message = "Internal server error. See develpoer tools for error detail";
-    //         }
+            if ( typeof result.responseJSON != 'undefined' 
+              && typeof result.responseJSON.message != 'undefined'
+            ) {
+                message = result.responseJSON.message;
+            } else {
+                message = "Internal server error. See develpoer tools for error detail";
+            }
 
-    //         flashMessage({message : message, data : result}, true);
-    //     });
-    //     return false;
-    // });
+            flashMessage({message : message, data : result}, true);
+        });
+        return false;
+    });
 });
 
 $('#datduk').fileinput({

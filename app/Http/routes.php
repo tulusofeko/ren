@@ -19,7 +19,9 @@ use Symfony\Component\Yaml\Yaml;
  * -----------------------------------------------------------------------------
  */
     
-Route::get('/', function () { return view("dashboard-v1"); });
+Route::get('/', function () {
+    return view("dashboard-v1");
+});
     
 // Eselon Satu Controller Route
 Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], function () {
@@ -146,7 +148,7 @@ Route::group(['prefix' => 'komponen', 'as' => 'komponen.'], function () {
     Route::any('/datatbl', 'KomponenController@data')->name('datatables');
 });
 
-// Komponen Controller Route
+// SubKomponen Controller Route
 Route::group(['prefix' => 'subkomponen', 'as' => 'subkomponen.'], function () {
 
     Route::get('/{kode?}', 'SubKomponenController@show')->name('show');
@@ -158,4 +160,16 @@ Route::group(['prefix' => 'subkomponen', 'as' => 'subkomponen.'], function () {
     Route::delete('/hapus/{id}', 'SubKomponenController@delete')->name('delete');
     
     Route::any('/datatbl', 'SubKomponenController@data')->name('datatables');
+});
+
+// Data Dukung Controller Route
+Route::group(['prefix' => 'datduk', 'as' => 'datduk.'], function () {
+
+    Route::get('/{datduk}', 'DatdukController@get')->name('show');
+
+    Route::get('/bysk/{mak}', 'DatdukController@getBySubKomponen')->name('get');
+    
+    Route::delete('/hapus/{datduk}', 'DatdukController@delete')->name('delete');
+    
+    // Route::any('/datatbl', 'DatdukController@data')->name('datatables');
 });

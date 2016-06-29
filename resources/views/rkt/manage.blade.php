@@ -43,6 +43,13 @@
       #kegiatan-selector, .select2-container {
           width: 100% !important;
       }
+
+      #datduks {
+          margin-bottom: 10px;
+      }
+      #datduks .btn-group {
+          margin-right: 5px;
+      }
   </style>
 @endsection
 
@@ -240,6 +247,8 @@
       {
           $('#box-action button').hide();
 
+          console.log(row);
+
           var parent = $(this).treegrid('getParent', row.mak);
           switch(row.level) {
               case 'kegiatan':
@@ -328,6 +337,8 @@
 
   @include('rkt.modals.subkomponen')
 
+  @include('rkt.modals.hapusdatduk')
+  
   @include('rkt.modals.hapus')
 
 @endsection
