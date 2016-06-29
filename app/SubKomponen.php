@@ -26,7 +26,7 @@ class SubKomponen extends Usulan
      */
     public function childs()
     {
-        // return $this->hasMany('App\SubOutput', 'parent', 'id');
+        return $this->hasMany('App\Aktivitas', 'parent', 'id');
     }
 
     /**
@@ -34,10 +34,9 @@ class SubKomponen extends Usulan
      * @param  string $code Aktivitas's Id
      * @return App\Aktivitas
      */
-    public function getChild($code)
+    public function getChild($id)
     {
-        // return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            // ->firstOrFail();
+        return Aktivitas::where([['parent', $this->id], ['id', $id] ])->firstOrFail();
     }
 
     /**

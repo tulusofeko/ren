@@ -173,3 +173,17 @@ Route::group(['prefix' => 'datduk', 'as' => 'datduk.'], function () {
     
     // Route::any('/datatbl', 'DatdukController@data')->name('datatables');
 });
+
+// Aktivitas Controller Route
+Route::group(['prefix' => 'aktivitas', 'as' => 'aktivitas.'], function () {
+    
+    Route::get('/{kode?}', 'AktivitasController@show')->name('show');
+
+    Route::post('/create', 'AktivitasController@create')->name('create');
+
+    Route::put('/update/{id}', 'AktivitasController@update')->name('update');
+    
+    Route::delete('/hapus/{id}', 'AktivitasController@delete')->name('delete');
+    
+    Route::any('/datatbl', 'AktivitasController@data')->name('datatables');
+});

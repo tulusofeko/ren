@@ -86,6 +86,10 @@
                 data-toggle="modal" data-target="#subkomponenmodal" aria-hidden="true" data-method='POST'>
                 <i class="fa fa-plus"> </i> Rekam SubKomponen 
               </button>
+              <button class="btn btn-success btn-social" title="Tambah Aktivitas" style="display: none;" 
+                data-toggle="modal" data-target="#aktivitasmodal" aria-hidden="true" data-method='POST'>
+                <i class="fa fa-plus"> </i> Rekam Aktivitas 
+              </button>
               <button class="btn btn-primary btn-social" title="Edit Output" style="display: none;" 
                 data-toggle="modal" data-target="#outputmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Output 
@@ -98,9 +102,13 @@
                 data-toggle="modal" data-target="#komponenmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit Komponen 
               </button>
-              <button class="btn btn-primary btn-social" title="Edit Komponen" style="display: none;" 
+              <button class="btn btn-primary btn-social" title="Edit Sub Komponen" style="display: none;" 
                 data-toggle="modal" data-target="#subkomponenmodal" aria-hidden="true" data-method='PUT'>
                 <i class="fa fa-edit"> </i> Edit SubKomponen 
+              </button>
+              <button class="btn btn-primary btn-social" title="Edit Aktivitas" style="display: none;" 
+                data-toggle="modal" data-target="#aktivitasmodal" aria-hidden="true" data-method='PUT'>
+                <i class="fa fa-edit"> </i> Edit Aktivitas 
               </button>
               <button class="btn btn-danger btn-social" title="Hapus" style="display: none;" 
                 data-toggle="modal" data-target="#hapusmodal" aria-hidden="true">
@@ -221,22 +229,27 @@
           {
               title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
               field : 'name',
-              width : 500,
+              width : 470,
           },
           {
-              title : 'Jumlah Pelaksana',
-              field : 'pegawai',
-              width : 120
+              title : 'Jumlah Personil',
+              field : 'personil',
+              width : 100
           },
           {
-              title : 'Durasi Pelaksanaan',
-              field : 'waktu',
-              width : 120
+              title : 'Durasi (Hari)',
+              field : 'durasi',
+              width : 100
+          },
+          {
+              title : 'Waktu (Menit)',
+              field : 'durasi_sum',
+              width : 100
           },
           {
               title : 'Anggaran',
               field : 'pagu',
-              width : 120,
+              width : 100,
               align : 'right',
               formatter: function(value,row,index) {
                   return value;
@@ -280,6 +293,13 @@
                   $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').data('parent', parent);
                   $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').data('node', row);
                   $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="POST"]').data('parent', row);
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="POST"]').show();
+                  break;
+              case 'aktivitas' :
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="PUT"]').data('parent', parent);
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="PUT"]').data('node', row);
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="PUT"]').show();
                   break;
           }
 
@@ -312,9 +332,13 @@
           }
       },
       onLoadSuccess: function (row, data) {
-          if (nexttoload.length === 0) { return; }
+          if (nexttoload.length === 0) { 
+              $(this).treegrid('expand', '051.01.01');
+              $(this).treegrid('expand', '051.01.06');
+          }
 
           var toload = nexttoload.shift();
+
           var node   = $(this).treegrid('find', toload);
           
           if (node !== null) {
@@ -336,6 +360,8 @@
   @include('rkt.modals.komponen')
 
   @include('rkt.modals.subkomponen')
+
+  @include('rkt.modals.aktivitas')
 
   @include('rkt.modals.hapusdatduk')
   

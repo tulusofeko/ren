@@ -136,7 +136,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
     if (data.method == "PUT" ) {
         modal.find('.modal-body .modal-title').val("Edit Data"); 
         modal.find('.modal-body [name="code"]').data('edit', data.node.code); 
-        modal.find('.modal-body [name="code"]').val(data.node.code).inputmask('A[AA]');; 
+        modal.find('.modal-body [name="code"]').val(data.node.code).inputmask('A[AA]'); 
         modal.find('.modal-body [name="name"]').val(data.node.name); 
         modal.find('.modal-body [name="anggaran"]').val(data.node.anggaran).inputmask("rupiah");  //static mask
         modal.find('.modal-body [name="_method"]').val("PUT"); 

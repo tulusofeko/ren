@@ -73,8 +73,6 @@ class SubKomponenController extends NodeController
             
             return response()->json($jsonres, 500);
         }
-
-        
     }
 
     public function update($id, Request $request)

@@ -21,16 +21,15 @@ class RktController extends Controller
 {
     public function show()
     {
-        $kegiatans = DB::table('kegiatans')->join('programs', 
+        $kegiatans = DB::table('kegiatans')->join(
+            'programs',
             // where
-            'kegiatans.parent', '=', 'programs.code')
-            // select
-            ->select(
-                'kegiatans.*', 
-                'programs.name as program_name',
-                'programs.code as program_code')
-            // order & get
-            ->orderBy('program_code')->get();
+            'kegiatans.parent', '=', 'programs.code'
+        )->select(
+            'kegiatans.*',
+            'programs.name as program_name',
+            'programs.code as program_code'
+        )->orderBy('program_code')->get();
 
         $dataset = [
             'kegiatans' => collect($kegiatans)->groupBy('program_name')->toArray()
@@ -45,9 +44,9 @@ class RktController extends Controller
         try {
             $data = $this->makResolve($mak);
         } catch (ModelNotFoundException $e) {
-            abort(404);            
+            abort(404);
         } catch (LogicException $e) {
-            $data = collect();            
+            $data = collect();
         }
         
         $result = $data->sortBy('code')->values()->toArray();
@@ -101,9 +100,9 @@ class RktController extends Controller
                     ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
                     ->select('suboutputs.*')
                     ->where([
-                        ['outputs.parent', $kegiatan], 
-                        ['outputs.code', $output_code], 
-                        ['suboutputs.code', $suboutput_code] 
+                        ['outputs.parent', $kegiatan],
+                        ['outputs.code', $output_code],
+                        ['suboutputs.code', $suboutput_code]
                     ])->first();
 
                 if (is_null($suboutput)) {
@@ -126,16 +125,15 @@ class RktController extends Controller
                     ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
                     ->select('komponens.*')
                     ->where([
-                        ['outputs.parent', $kegiatan], 
-                        ['outputs.code', $output_code], 
-                        ['suboutputs.code', $suboutput_code], 
-                        ['komponens.code', $komponen_code] 
+                        ['outputs.parent', $kegiatan],
+                        ['outputs.code', $output_code],
+                        ['suboutputs.code', $suboutput_code],
+                        ['komponens.code', $komponen_code]
                     ])->first();
 
                 if (is_null($komponen)) {
                     throw new ModelNotFoundException;
                 }
-
                 return SubKomponen::where([
                     ['code', $subkomponen_code], ['parent', $komponen->id]
                 ])->firstOrFail()->childs;
