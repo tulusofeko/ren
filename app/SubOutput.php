@@ -17,10 +17,11 @@ class SubOutput extends Usulan
     public function getParent()
     {
         try {
-            $parent = Output::find($this->parent)->firstOrFail();
-            
+            $parent = Output::where('id', $this->parent)->firstOrFail();
             return $parent;
-        } catch (Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
     }
     
     /**
@@ -40,22 +41,6 @@ class SubOutput extends Usulan
     public function getChild($code)
     {
         return Komponen::where([['parent', $this->code], ['code', $code] ])->firstOrFail();
-    }
-
-    /**
-     * Get SubOutput's Pagu
-     * @return mixed
-     */
-    public function getPaguAttribute($value)
-    {
-        $subkomponen = DB::table('sub_komponens')
-            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
-            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
-            ->select('sub_komponens.*')
-            ->where([
-                ['suboutputs.id', $this->id] 
-            ])->sum('anggaran');
-        return number_format($subkomponen, "0", ",", ".");
     }
 
     /**

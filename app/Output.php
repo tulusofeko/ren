@@ -16,7 +16,9 @@ class Output extends Usulan
             $parent = Kegiatan::where('code', $this->parent)->firstOrFail();
             
             return $parent;
-        } catch (Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
     }
     
     /**
@@ -36,23 +38,6 @@ class Output extends Usulan
     public function getChild($code)
     {
         return SubOutput::where([['parent', $this->id], ['code', $code] ])->firstOrFail();
-    }
-
-    /**
-     * Get Output's Pagu
-     * @return mixed
-     */
-    public function getPaguAttribute($value)
-    {
-        $subkomponen = DB::table('sub_komponens')
-            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
-            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
-            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
-            ->select('sub_komponens.*')
-            ->where([
-                ['outputs.id', $this->id] 
-            ])->sum('anggaran');
-        return number_format($subkomponen, "0", ",", ".");
     }
 
     /**

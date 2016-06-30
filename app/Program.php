@@ -6,7 +6,6 @@ use DB;
 
 class Program extends Usulan
 {
-    
     /**
      * Getter for Parent MAK attribute
      * @param  mixed  $value
@@ -47,20 +46,11 @@ class Program extends Usulan
     }
 
     /**
-     * Get Program's Pagu
+     * Get Program's Personil
      * @return mixed
      */
-    public function getPaguAttribute($value)
+    public function getPersonilAttribute($value)
     {
-        $subkomponen = DB::table('sub_komponens')
-            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
-            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
-            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
-            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
-            ->select('sub_komponens.*')
-            ->where([
-                ['kegiatans.parent', $this->code] 
-            ])->sum('anggaran');
-        return number_format($subkomponen, "0", ",", ".");
+        return '-';
     }
 }

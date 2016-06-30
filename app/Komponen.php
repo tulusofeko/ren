@@ -15,10 +15,11 @@ class Komponen extends Usulan
     public function getParent()
     {
         try {
-            $parent = SubOutput::find($this->parent)->firstOrFail();
-            
+            $parent = SubOutput::where('id', $this->parent)->firstOrFail();
             return $parent;
-        } catch (Exception $e) { return null; }
+        } catch (Exception $e) {
+            return null;
+        }
     }
     
     /**
@@ -39,21 +40,6 @@ class Komponen extends Usulan
     {
         return SubKomponen::where([['parent', $this->code], ['code', $code] ])
             ->firstOrFail();
-    }
-
-    /**
-     * Get Komponen's Pagu
-     * @return mixed
-     */
-    public function getPaguAttribute($value)
-    {
-        $subkomponen = DB::table('sub_komponens')
-            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
-            ->select('sub_komponens.*')
-            ->where([
-                ['komponens.id', $this->id] 
-            ])->sum('anggaran');
-        return number_format($subkomponen, "0", ",", ".");
     }
 
     /**

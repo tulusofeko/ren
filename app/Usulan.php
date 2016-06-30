@@ -3,15 +3,24 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 abstract class Usulan extends Model
 {
-    abstract public function getPaguAttribute($value);
     abstract public function getParent();
     abstract public function getChild($code);
     abstract public function childs();
 
-    protected $appends  = ['parentId', 'mak', 'level', 'state', 'pagu'];
+    protected $appends  = [
+        'parentId',
+        'mak',
+        'level',
+        'state',
+        'pagu',
+        'personil',
+        'durasi',
+        'durasi_sum',
+    ];
 
     protected $state    = 'closed';
 
@@ -57,7 +66,86 @@ abstract class Usulan extends Model
 
         return strtolower($class);
     }
-    
+
+    /**
+     * Get Usulan's Pagu
+     * @return mixed
+     */
+    public function getPaguAttribute($value)
+    {
+        $subkomponen = DB::table('sub_komponens')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->join('programs', 'kegiatans.parent', '=', 'programs.code')
+            ->select('sub_komponens.*')
+            ->where([
+                [$this->getTable() . '.id', $this->id]
+            ])->sum('anggaran');
+        return number_format($subkomponen, "0", ",", ".");
+    }
+
+    /**
+     * Get Usulan's Personil
+     * @return mixed
+     */
+    public function getPersonilAttribute($value)
+    {
+        $personil = DB::table('aktivitas')
+            ->join('sub_komponens', 'aktivitas.parent', '=', 'sub_komponens.id')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->join('programs', 'kegiatans.parent', '=', 'programs.code')
+            ->select('aktivitas.*')
+            ->where([
+                [   $this->getTable() . '.id', $this->id]
+            ])->sum('personil');
+        return $personil;
+    }
+
+    /**
+     * Get Usulan's Durasi
+     * @return mixed
+     */
+    public function getDurasiAttribute($value)
+    {
+        $durasi = DB::table('aktivitas')
+            ->join('sub_komponens', 'aktivitas.parent', '=', 'sub_komponens.id')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->join('programs', 'kegiatans.parent', '=', 'programs.code')
+            ->select('aktivitas.*')
+            ->where([
+                [   $this->getTable() . '.id', $this->id]
+            ])->sum('durasi');
+        return $durasi;
+    }
+
+    /**
+     * Get Usulan's Durasi
+     * @return mixed
+     */
+    public function getDurasiSumAttribute($value)
+    {
+        $durasi = DB::table('aktivitas')
+            ->join('sub_komponens', 'aktivitas.parent', '=', 'sub_komponens.id')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->join('programs', 'kegiatans.parent', '=', 'programs.code')
+            ->select('aktivitas.*')
+            ->where([
+                [   $this->getTable() . '.id', $this->id]
+            ])->sum('durasi_sum');
+        return $durasi;
+    }
+
     /**
      * Set the Programs's name. Name Attribute
      * Untuk memastikan data yang masuk dengan huruf kapital di awal
