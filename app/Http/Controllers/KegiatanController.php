@@ -7,7 +7,7 @@ use Illuminate\Database\QueryException;
 
 use Exception;
 use InvalidArgumentException;
-
+use Validator;
 use DB, Yajra\Datatables\Datatables;
 
 use App\Http\Requests;
@@ -77,11 +77,27 @@ class KegiatanController extends Controller
 
     public function update(Kegiatan $kegiatan, Request $request)
     {
-        $this->validate($request, [
+        $prev = $request->header('referer');
+
+        $validator = Validator::make($request->all(), [
             'name'      => 'required',
-            'code'      => 'required|unique:kegiatans,code|max:4',
+            'code'      => 'required|max:4',
             'eselondua' => 'required|max:4'
         ]);
+
+        $validator->sometimes('code', 'unique:kegiatans,code',
+            function($input) use ($kegiatan) {
+                return $input->code != $kegiatan->code;
+            });
+
+        if ($validator->fails()) {
+
+            if ($request->ajax()) {
+                return response()->json($validator->messages(), 422);
+            } 
+                
+            return redirect($prev)->withErrors($validator)->withInput();
+        }
 
         try {
             $program   = $request->input("program");
