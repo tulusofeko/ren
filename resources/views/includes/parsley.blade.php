@@ -7,7 +7,7 @@
               email:        "email tidak valid",
               url:          "url tidak valid",
               number:       "nomor tidak valid",
-              integer:      "integer tidak valid",
+              integer:      "harus berupa angka",
               digits:       "harus berupa digit",
               alphanum:     "harus berupa alphanumeric"
         },

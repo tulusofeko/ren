@@ -90,10 +90,9 @@ class UnitKerjaController extends Controller
                 "error" => $e->getCode(), "message" => $e->getMessage()], 500
             );
         }
-        
     }
 
-    public function delete($id) 
+    public function delete($id)
     {
         try {
             $data = DB::table($this->table)->where('id', '=', $id);

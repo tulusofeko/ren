@@ -192,9 +192,13 @@
       if (method == "put") {
           var unit = table.row( $(e.relatedTarget).parents('tr') ).data();
 
+          console.log(unit);
+          
           modal.find('.modal-title').html("<i class='fa fa-edit'></i> Edit Data");
           
           action =  $('#create-unitkerja').data('edit') + unit.id;
+
+          @yield('additionalform')
 
           $('#formunitkerja [name="codename"]').val(unit.codename);
           $('#formunitkerja [name="codename"]').data('edit', unit.codename);

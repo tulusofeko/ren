@@ -14,6 +14,7 @@
         <th>Unit Kerja</th>
         <th>Kode</th>
         <th>Eselon I</th>
+        <th>Pegawai Aktif</th>
         <th>Aksi</th>
       </tr>
     </thead>
@@ -29,13 +30,22 @@
       <label>Nama Unit Kerja Eselon II</label>
       <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon II" type="text" required/>
     </div>
-    <div class="form-group">
-      <label>Kode</label>
-      <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
-        data-remote="{{ route('eselon_dua.show') }}/{value}" 
-        data-parsley-remote-reverse="true" 
-        data-parsley-remote-message="Kode sudah ada" 
-      />
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label>Kode</label>
+        <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
+          data-remote="{{ route('eselon_dua.show') }}/{value}" 
+          data-parsley-remote-reverse="true" 
+          data-parsley-remote-message="Kode sudah ada" 
+        />
+      </div>
+      <div class="form-group col-md-6">
+        <label>Pegawai Aktif</label>
+        <input name="pegawai" class="form-control" 
+          required placeholder="Pegawai Aktif"
+          data-parsley-type="integer"
+        >
+      </div>
     </div>
     <div class="form-group">
       <label>Eselon I</label>
@@ -102,6 +112,11 @@
                 name      : 'parent'
             },
             {
+                className : 'text-right',
+                data      : 'pegawai',
+                name      : 'pegawai'
+            },
+            {
                 className      : 'text-center',
                 data           : null,
                 defaultContent : '',
@@ -129,4 +144,8 @@
     });
   </script>
 
+@endsection
+
+@section('additionalform')
+  $('#formunitkerja [name="pegawai"]').val(unit.pegawai);
 @endsection
