@@ -350,6 +350,7 @@
           $('#formkegiatan [name="code"]').val(kegiatan.code);
           $('#formkegiatan [name="code"]').data('edit', kegiatan.code);
           $('#formkegiatan [name="name"]').val(kegiatan.name);
+          $('#formkegiatan [name="program"][value="'+ kegiatan.parent +'"]').iCheck('check');
           $('#formkegiatan [value="' + kegiatan.program +'"]').iCheck('check');
           $('#formkegiatan [name="eselondua"]').val(kegiatan.eselondua).trigger("change");
           $('#formkegiatan [name="_method"]').val('PUT');
