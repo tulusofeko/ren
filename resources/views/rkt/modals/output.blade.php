@@ -72,7 +72,7 @@ $('#outputmodal').on('show.bs.modal', function (e) {
     if (data.method == "PUT" ) {
         $(this).find('.modal-body .modal-title').val("Edit Data"); 
         $(this).find('.modal-body input[name="code"]').data('edit', data.output.code); 
-        $(this).find('.modal-body input[name="code"]').val(data.output.code).inputmask('9[99]');; 
+        $(this).find('.modal-body input[name="code"]').val(data.output.code).inputmask('9[99]');
         $(this).find('.modal-body input[name="name"]').val(data.output.name); 
         $(this).find('.modal-body input[name="_method"]').val("PUT"); 
 

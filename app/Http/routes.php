@@ -19,9 +19,7 @@ use Symfony\Component\Yaml\Yaml;
  * -----------------------------------------------------------------------------
  */
     
-Route::get('/', function () {
-    return view("dashboard-v1");
-});
+Route::get('/', 'DashboardController@v1');
     
 // Eselon Satu Controller Route
 Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.'], function () {

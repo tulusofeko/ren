@@ -6,6 +6,7 @@ use DB;
 
 class Kegiatan extends Usulan
 {
+    
     /**
      * Getter for Parent MAK attribute
      * @param  mixed  $value
@@ -35,6 +36,24 @@ class Kegiatan extends Usulan
     }
 
     /**
+     * Getter for Unit Kerja's instance
+     * @param  mixed  $value
+     * @return App\EselonDua
+     */
+    public function getUnitKerja()
+    {
+        try {
+            $parent = EselonDua::where('codename', $this->eselondua)->firstOrFail();
+        
+            return $parent;
+
+        } catch (Exception $e) {
+
+            return null;
+        }
+    }
+
+    /**
      * Get Collection of Kegiatan's Childs
      * @return Collection of App\Output
      */
@@ -54,20 +73,36 @@ class Kegiatan extends Usulan
     }
 
     /**
-     * Get Kegiatan's Pagu
+     * Get Usulan's SubKomponen
      * @return mixed
      */
-    public function getPaguAttribute($value)
+    public function getTotalSkAttribute($value)
     {
-        $subkomponen = DB::table('sub_komponens')
+        $total = DB::table('sub_komponens')
             ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
             ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
             ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
             ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->join('programs', 'kegiatans.parent', '=', 'programs.code')
             ->select('sub_komponens.*')
             ->where([
-                ['kegiatans.code', $this->code] 
-            ])->sum('anggaran');
-        return number_format($subkomponen, "0", ",", ".");
+                [   'kegiatans.id', $this->id]
+            ])->count();
+        return $total;
+    }
+
+    public function getDatduksAttribute($value)
+    {
+        $total = DB::select(
+            "SELECT datduks.* FROM `datduks`
+                JOIN sub_komponens ON datduks.parent = sub_komponens.id
+                JOIN komponens ON sub_komponens.parent = komponens.id
+                JOIN suboutputs ON komponens.parent = suboutputs.id
+                JOIN outputs ON suboutputs.parent = outputs.id
+                JOIN kegiatans ON outputs.parent = kegiatans.code
+            WHERE kegiatans.code = $this->code"
+        );
+
+        return collect($total);
     }
 }

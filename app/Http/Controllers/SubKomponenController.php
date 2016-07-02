@@ -10,6 +10,8 @@ use App\Datduk;
 
 class SubKomponenController extends NodeController
 {
+    protected $model = 'App\SubKomponen';
+    
     public function create(Request $request)
     {
         $this->validate($request, [

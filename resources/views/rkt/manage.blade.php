@@ -234,16 +234,19 @@
           {
               title : 'Jumlah Personil',
               field : 'personil',
+              align : 'right',
               width : 100
           },
           {
               title : 'Durasi (Hari)',
               field : 'durasi',
+              align : 'right',
               width : 100
           },
           {
               title : 'Waktu (Menit)',
               field : 'durasi_sum',
+              align : 'right',
               width : 100
           },
           {

@@ -55,7 +55,7 @@ class Aktivitas extends Usulan
      */
     public function childs()
     {
-        // return $this->hasMany('App\SubOutput', 'parent', 'id');
+        return collect([]);
     }
 
     /**
@@ -65,8 +65,7 @@ class Aktivitas extends Usulan
      */
     public function getChild($code)
     {
-        // return Output::where([['kegiatan', $this->code], ['code', $code] ])
-            // ->firstOrFail();
+        return null;
     }
 
     /**

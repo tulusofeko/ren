@@ -99,13 +99,25 @@ class NodeController extends Controller
 
     public function delete($id)
     {
-        $output = call_user_func([$this->model, 'where'], ['id', $id]);
+        $output = call_user_func([$this->model, 'where'], ['id' => $id]);
 
         try {
             $output->delete();
 
             return response()->json(["message" => "Data berhasil dihapus"]);
             
+        } catch (QueryException $e) {
+            $message = get_class($e) . ": " . $e->getMessage();
+
+            $class = class_basename($this->model);
+
+            $jsonres = [
+                "error"       => $e->getCode(),
+                "message"     => "Tidak dapat menghapus $class yang tidak kosong",
+                "message_raw" => $message
+            ];
+            
+            return response()->json($jsonres, 500);
         } catch (Exception $e) {
             $message = get_class($e) . ": " . $e->getMessage();
 
