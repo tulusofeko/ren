@@ -16,23 +16,27 @@ use App\UnitKerja;
 
 class UnitKerjaController extends Controller
 {
+        
     public function create(Request $request)
     {
         $this->validate($request, [
             'name'      => 'required',
             'codename'  => 'required|unique:' . $this->table .',codename|max:4',
-            'parent'    => 'required|max:4'
+            'parent'    => 'required|max:4',
+            'pegawai'   => 'required|numeric'
         ]);
 
         try {
             $name           = $request->input("name");
             $codename       = $request->input("codename");
             $parent         = $request->input("parent");
+            $pegawai        = $request->input("pegawai");
             
             $unit           = new $this->model;
             $unit->name     = $name;
             $unit->codename = $codename;
             $unit->parent   = $parent;
+            $unit->pegawai  = $pegawai;
             $unit->save();
 
             return response()->json(["message" => "Data berhasil disimpan"]);
@@ -56,7 +60,8 @@ class UnitKerjaController extends Controller
         $validator = Validator::make($request->all(), [
             'name'     => 'required',
             'codename' => 'required|max:4',
-            'parent'   => 'required|max:4'
+            'parent'    => 'required|max:4',
+            'pegawai'   => 'required|numeric'
         ]);
 
         $validator->sometimes('codename', 'unique:' . $this->table .',codename', 
@@ -81,6 +86,7 @@ class UnitKerjaController extends Controller
             $unit->name     = $name;
             $unit->codename = $codename;
             $unit->parent   = $parent;
+            $unit->pegawai  = $pegawai;
             $unit->save();
 
             return response()->json(["message" => "Data berhasil disimpan"]);

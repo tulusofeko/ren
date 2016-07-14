@@ -13,8 +13,9 @@
         <th style="width: 18px;padding-right: 8px" class="text-center">No.</th>
         <th>Unit Kerja</th>
         <th>Kode</th>
-        <th>Eselon II</th>
-        <th>Eselon I</th>
+        <th style="width: 80;">Eselon II</th>
+        <th style="width: 80;">Eselon I</th>
+        <th>Pegawai</th>
         <th>Aksi</th>
       </tr>
     </thead>
@@ -31,13 +32,21 @@
       <label>Nama Unit Kerja Eselon III</label>
       <input class="form-control" name="name" placeholder="Nama Unit Kerja Eselon III" type="text" required/>
     </div>
-    <div class="form-group">
-      <label>Kode</label>
-      <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="3"
-        data-remote="{{ route('eselon_tiga.show') }}/{value}" 
-        data-parsley-remote-reverse="true" 
-        data-parsley-remote-message="Kode sudah ada" 
-      />
+    <div class="row">
+      <div class="form-group col-md-6">
+        <label>Kode</label>
+        <input class="form-control" name="codename" placeholder="Kode" type="text" required maxlength="4"
+          data-remote="{{ route('eselon_tiga.show') }}/{value}" 
+          data-parsley-remote-reverse="true" 
+          data-parsley-remote-message="Kode sudah ada" 
+        />
+      </div>
+      <div class="form-group col-md-6">
+        <label>Pegawai Aktif</label>
+        <input name="pegawai" class="form-control" required placeholder="Pegawai Aktif"
+          data-parsley-type="integer"
+        >
+      </div>
     </div>
     <div class="form-group">
       <label>Eselon II</label>
@@ -108,6 +117,11 @@
                 className: 'text-center',
                 data: 'eselonsatu',
                 name: 'eselonsatu'
+            },
+            {
+                className: 'text-center',
+                data: 'pegawai',
+                name: 'pegawai'
             },
             {
                 className: 'text-center',
