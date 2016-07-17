@@ -84,7 +84,7 @@
         "lengthMenu" : [ 5, 10, 25, 50, 75, 100, "All" ],
         "autoWidth"  : false,
         "stateSave"  : false,
-        "order"      : [[ 2, 'asc' ]],
+        "order"      : [[ 4, 'asc' ], [ 3, 'asc' ], [ 2, 'asc' ]],
         "serverSide" : true,
         "ajax": {
             "url": $('#unitkerja').data('url'),
@@ -111,7 +111,7 @@
             {
                 className: 'text-center',
                 data: 'parent',
-                name: 'eselondua'
+                name: 'parent'
             },
             {
                 className: 'text-center',
@@ -150,4 +150,8 @@
         }
     });
   </script> 
+@endsection
+
+@section('additionalform')
+  $('#formunitkerja [name="pegawai"]').val(unit.pegawai);
 @endsection

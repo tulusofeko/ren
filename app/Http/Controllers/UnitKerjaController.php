@@ -82,6 +82,7 @@ class UnitKerjaController extends Controller
             $codename       = $request->input("codename");
             $name           = $request->input("name");
             $parent         = $request->input("parent");
+            $pegawai        = $request->input("pegawai");
             
             $unit->name     = $name;
             $unit->codename = $codename;
