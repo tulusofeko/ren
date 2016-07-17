@@ -6,7 +6,7 @@
       <img src="{{ url('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
     </div>
     <div class="pull-left info">
-      <p>Alexander Pierce</p>
+      <p>{{ auth()->user()->name }}</p>
       <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
     </div>
   </div>
@@ -29,6 +29,14 @@
         @if (isset($menu->type) AND $menu->type === "header")
           <li class='header'>{{ $menu->title }} </li>
           @continue
+        @endif
+
+        @if (property_exists($menu, 'action'))
+          @can($menu->action)
+            {{-- 'user can manage users' --}}
+          @else 
+            @continue
+          @endcan
         @endif
 
         <?php if(!isset($menu->url)) $menu->url = '#' ?>

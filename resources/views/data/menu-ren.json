@@ -46,5 +46,18 @@
         "url"   : "/kegiatan",
         "title" : "Kegiatan",
         "icon"  : "fa-cubes"
+    },
+    {
+        "title"  : "Users",
+        "icon"   : "fa-users",
+        "action" : "user-manage",
+        "childs" : 
+        [
+            {
+                "url"   : "/user/manage",
+                "title" : "User Manage"
+            }
+        ]
+
     }
 ]
