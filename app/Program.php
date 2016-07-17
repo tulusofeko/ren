@@ -53,4 +53,9 @@ class Program extends Usulan
     {
         return '-';
     }
+
+    public function getEselonDuaAttribute($value)
+    {
+        return 'null';
+    }
 }

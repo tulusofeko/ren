@@ -19,7 +19,7 @@ abstract class Usulan extends Model
         'pagu',
         'personil',
         'durasi',
-        'durasi_sum',
+        'durasi_sum'
     ];
 
     protected $state    = 'closed';
