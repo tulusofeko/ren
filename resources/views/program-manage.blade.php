@@ -144,7 +144,8 @@
   <!-- DataTables -->
   <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
-  
+  <!-- Input Mask -->
+  <script src="{{ asset('plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
   <!-- Form validation -->
   <script>
   $(document).ready(function () {
@@ -287,12 +288,13 @@
           
           action =  $('#create-program').data('edit') + program.id;
 
-          $('#formprogram [name="code"]').val(program.code);
+          $('#formprogram [name="code"]').val(program.code).inputmask('9[9]');
           $('#formprogram [name="code"]').data('edit', program.code);
           $('#formprogram [name="name"]').val(program.name);
           $('#formprogram [name="_method"]').val('PUT');
           
       } else {
+          $('#formprogram [name="code"]').val("").inputmask('9[9]');
           $('#formprogram [name="code"]').removeData('edit');
       }
       

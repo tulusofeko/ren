@@ -190,6 +190,8 @@
   <!-- DataTables -->
   <script src="{{ asset('adminlte/plugins/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+  <!-- Input Mask -->
+  <script src="{{ asset('plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
   
   <!-- Form validation -->
   <script>
@@ -347,7 +349,7 @@
           
           action =  $('#create-kegiatan').data('edit') + kegiatan.id;
 
-          $('#formkegiatan [name="code"]').val(kegiatan.code);
+          $('#formkegiatan [name="code"]').val(kegiatan.code).inputmask('9999');
           $('#formkegiatan [name="code"]').data('edit', kegiatan.code);
           $('#formkegiatan [name="name"]').val(kegiatan.name);
           $('#formkegiatan [name="program"][value="'+ kegiatan.parent +'"]').iCheck('check');
@@ -356,6 +358,7 @@
           $('#formkegiatan [name="_method"]').val('PUT');
           
       } else {
+          $('#formkegiatan [name="code"]').val('').inputmask('9999');
           $('#formkegiatan [name="code"]').removeData('edit');
       }
       
