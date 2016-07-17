@@ -14,19 +14,26 @@ class SubKomponenController extends NodeController
     
     public function create(Request $request)
     {
+        $replaced         = $request->all();
+        $replaced['code'] = trim($replaced['code'], '_');
+        
+        $request->replace($replaced);
+        
         $this->validate($request, [
-            'name'     => 'required',
-            'anggaran' => 'required',
-            'code'     => 'required|max:3|alpha',
-            'parent'   => 'required|max:4'
+            'name'       => 'required',
+            'anggaran'   => 'required',
+            'code'       => 'required|max:3|alpha',
+            'parent'     => 'required|max:4',
+            'unit_kerja' => 'required|max:4'
         ]);
 
         try {
-            $parent   = $request->input("parent");
-            $code     = $request->input("code");
-            $name     = $request->input("name");
-            $anggaran = $request->input("anggaran");
-            $collect  = SubKomponen::where([['code', $code], ['parent', $parent]]);
+            $parent     = $request->input("parent");
+            $code       = $request->input("code");
+            $name       = $request->input("name");
+            $unit_kerja = $request->input("unit_kerja");
+            $anggaran   = str_replace(',', '', $request->input("anggaran"));
+            $collect    = SubKomponen::where([['code', $code], ['parent', $parent]]);
 
             if (!$collect->get()->isEmpty()) {
                 throw new InvalidArgumentException("Kode sudah tersedia", 422);
@@ -34,10 +41,11 @@ class SubKomponenController extends NodeController
 
             $sub_komponen = new SubKomponen;
 
-            $sub_komponen->code     = $code;
-            $sub_komponen->name     = $name;
-            $sub_komponen->parent   = $parent;
-            $sub_komponen->anggaran = $anggaran;
+            $sub_komponen->code       = $code;
+            $sub_komponen->name       = $name;
+            $sub_komponen->unit_kerja = $unit_kerja;
+            $sub_komponen->parent     = $parent;
+            $sub_komponen->anggaran   = $anggaran;
             $sub_komponen->save();
 
 
@@ -79,20 +87,26 @@ class SubKomponenController extends NodeController
 
     public function update($id, Request $request)
     {
+        $replaced         = $request->all();
+        $replaced['code'] = trim($replaced['code'], '_');
+        
+        $request->replace($replaced);
+        
         $sub_komponen = SubKomponen::findOrFail($id);
 
         $this->validate($request, [
-            'name'     => 'required',
-            'anggaran' => 'required',
-            'code'     => 'required|max:3|alpha',
-            'parent'   => 'required|max:4'
+            'name'       => 'required',
+            'anggaran'   => 'required',
+            'code'       => 'required|max:3|alpha',
+            'unit_kerja' => 'required|max:4'
         ]);
 
         try {
-            $parent   = $request->input("parent");
-            $code     = $request->input("code");
-            $name     = $request->input("name");
-            $anggaran = $request->input("anggaran");
+            $parent     = $request->input("parent");
+            $code       = $request->input("code");
+            $name       = $request->input("name");
+            $unit_kerja = $request->input("unit_kerja");
+            $anggaran   = str_replace(',', '', $request->input("anggaran"));
             
             $collect  = SubKomponen::where([['code', $code], ['parent', $parent]]);
 
@@ -102,10 +116,11 @@ class SubKomponenController extends NodeController
                 }
             }
 
-            $sub_komponen->code     = $code;
-            $sub_komponen->name     = $name;
-            $sub_komponen->parent   = $parent;
-            $sub_komponen->anggaran = $anggaran;
+            $sub_komponen->code       = $code;
+            $sub_komponen->name       = $name;
+            $sub_komponen->unit_kerja = $unit_kerja;
+            $sub_komponen->parent     = $parent;
+            $sub_komponen->anggaran   = $anggaran;
             $sub_komponen->save();
 
 

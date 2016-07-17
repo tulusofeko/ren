@@ -9,6 +9,7 @@ use LogicException;
 use DB;
 
 use App\Http\Requests;
+use App\EselonTiga;
 use App\Program;
 use App\Kegiatan;
 use App\Output;
@@ -32,7 +33,8 @@ class RktController extends Controller
         )->orderBy('program_code')->get();
 
         $dataset = [
-            'kegiatans' => collect($kegiatans)->groupBy('program_name')->toArray()
+            'kegiatans'   => collect($kegiatans)->groupBy('program_name')->toArray(),
+            'eselon_tiga' => EselonTiga::all()
         ];
         return view('rkt.manage', $dataset);
     }

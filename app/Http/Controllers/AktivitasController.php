@@ -9,6 +9,8 @@ use App\Aktivitas;
 
 class AktivitasController extends NodeController
 {
+    protected $model = 'App\Aktivitas';
+
     public function create(Request $request)
     {
         $this->validate($request, [
@@ -50,7 +52,7 @@ class AktivitasController extends NodeController
 
     public function update($id, Request $request)
     {
-        $aktivitas = Aktivitas::find($id)->firstOrFail();
+        $aktivitas = Aktivitas::where('id', $id)->firstOrFail();
         
         $this->validate($request, [
             'name'     => 'required',
