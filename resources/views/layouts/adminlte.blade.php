@@ -7,7 +7,7 @@
       <header class="main-header"> @include('includes.header') </header>
       
       <!-- Left side column. contains the logo and sidebar -->
-      <aside class="main-sidebar"> @include('includes.sidebar') </aside>
+      <aside class="main-sidebar no-print"> @include('includes.sidebar') </aside>
 
       <!-- Content Wrapper. Contains page content -->
       <div class="content-wrapper">
@@ -18,7 +18,8 @@
         <section class="content"> @yield('content') </section>
 
       </div><!-- /.content-wrapper -->
-
+      
+      
       @include('includes.footer')
     
       @section('core-javascript')
@@ -26,6 +27,7 @@
       
           @yield('javascript')
       @show
+      @include('includes.profile-modal')
     </div><!-- ./wrapper -->
   </body>
 </html>
