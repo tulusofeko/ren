@@ -41,48 +41,58 @@
   <div class="col-md-12">
     <div class="box">
       <div class="box-header with-border">
-        <h3 class="box-title">Rekapitulasi Data RKT</h3>
+        <h3 class="box-title">Rekapitulasi Data RKT
+          @if (isset($selected))
+            <small>{{ $selected->name or '' }}</small>
+          @endif
+        </h3>
+        <div class="pull-right box-tools  no-print">
+          <button class="btn btn-success btn-social" title="Cetak Tabel" onclick="window.print()">
+            <i class="fa fa-print"> </i> Cetak Data
+          </button>
+        </div>
       </div><!-- /.box-header -->
       <div class="box-body">
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
               <td>#</td>
+              <td style="width: 70px;" class="text-center">{{ $parent }}</td>
+              <td style="width: 50px;">Kode</td>
               <td class="text-center">Unit Kerja</td>
-              <td>Kode</td>
-              <td>Kegiatan</td>
               <td class="text-center">Personil</td>
               {{-- <td class="text-center">Intensitas<br/>(Menit)</td> --}}
-              <td class="text-center" style="width: 165px;">Beban Kegiatan Per Pegawai (Maks. 100%)</td>
+              <td class="text-center" style="width: 145px;">Beban Per Pegawai (Maks. 100%)</td>
               <td>Anggaran</td>
               <td class="text-center">DatDuk</td>
             </tr>
           </thead>
           <tbody>
-            @foreach ($kegiatans as $index => $kegiatan)
-<?php
-    $unit_kerja = $kegiatan->getUnitKerja();
-
-    $hari_pr   = "341";
-    $pegawai   = $unit_kerja->pegawai;
-    try {
-        $perkiraan = $kegiatan->durasi_sum / $hari_pr / $pegawai;
-    } catch (Exception $e) {
-        $perkiraan = 0;
-    }
-?>
+            @forelse ($units as $index => $unit)
                 <tr>
                   <td>{{ $index + 1 }}</td>
-                  <td>{{ $kegiatan->eselondua }}</td>
-                  <td>{{ $kegiatan->code }}</td>
-                  <td>{{ $kegiatan->name }}</td>
-                  <td class="text-right">{{ $pegawai }}</td>
-                  {{-- <td class="text-right">{{ $kegiatan->durasi }}</td> --}}
-                  <td class="text-right">{{ round($perkiraan/344*100) }} %</td>
-                  <td class="text-right">{{ $kegiatan->pagu }}</td>
+                  <td class="text-center">{{ $unit->parent }}</td>
+                  <td class="text-right" >{{ $unit->codename }}</td>
+                  <td class="text-left"  >
+                    @if (!isset($selected))
+                      <a href="{{ url()->current() }}/{{$unit->codename }}">
+                        {{ $unit->name }} <i class="fa fa-arrow-circle-o-right no-print"></i>
+                      </a>
+                    @else 
+                        {{ $unit->name }}
+                    @endif
+                  </td>
+                  <td class="text-right" >{{ $unit->pegawai }}</td>
+                  <td class="text-right" >
+                  @if ($unit->perkiraan > 98)
+                    <i class="fa fa-warning text-danger pull-left" style="padding-top: 4px;"></i>
+                  @endif
+                  {{ $unit->perkiraan }} %
+                  </td>
+                  <td class="text-right" >{{ $unit->pagu }}</td>
 <?php
-if ($kegiatan->total_sk > 0) {
-    $perc = sizeof($kegiatan->datduks) / $kegiatan->total_sk * 100;
+if (sizeof($unit->sub_komponens) > 0) {
+    $perc = sizeof($unit->datduks) / sizeof($unit->sub_komponens) * 100;
 } else {
     $perc = 0;
 }
@@ -99,20 +109,27 @@ switch (true) {
         break;
 }
 ?>
-                  <td class="text-center"><span class="badge {{ $bg }}">
-                    {{ sizeof($kegiatan->datduks->groupBy('parent')) }}/{{ $kegiatan->total_sk }}
-                  </span></td>
-                </tr>
-            @endforeach
+                <td class="text-center"><span class="badge {{ $bg }}">
+                  {{ sizeof($unit->datduks->groupBy('parent')) }}/
+                  {{ sizeof($unit->sub_komponens) }}
+                </span></td>
+              </tr>
+            @empty
+              <tr>
+                <td> # </td>
+                <td colspan="7"> No Data </td>
+              </tr>
+            @endforelse
           </tbody>
           <tfoot>
             <tr>
               <td colspan="4" class="text-center"><strong>Total</strong></td>
-              <td class="text-right text-bold"><strong>{{ 
-                number_format($kegiatans->sum(function ($kegiatan) {
-                  return str_replace('.', '', $kegiatan['pagu']);
+              <td colspan="3" class="text-right text-bold"><strong>{{ 
+                number_format($units->sum(function ($unit) {
+                  return str_replace('.', '', $unit['pagu']);
                 }), "0", ",", ".") }}</strong>
               </td>
+              <td></td>
             </tr>
           </tfoot>
         </table>
@@ -142,8 +159,4 @@ switch (true) {
 <!-- Bootstrap WYSIHTML5 -->
 <script src="{{ asset('adminlte/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js') }}"></script>
 
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('adminlte/dist/js/pages/dashboard.js') }}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{ asset('adminlte/dist/js/demo.js') }}"></script>
 @endsection

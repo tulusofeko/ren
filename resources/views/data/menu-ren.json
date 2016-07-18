@@ -6,7 +6,7 @@
     {
         "title" : "Dashboard",
         "icon"  : "fa-dashboard",
-        "url"   : "/"
+        "url"   : "/dashboard"
     },
     {
         "title" : "Data Usulan RKT",

@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Tambah Komponen</h4>
+        <h4 class="modal-title">Tambah Sub Komponen</h4>
       </div>
       <div class="modal-body overlay-wrapper">
         <!-- Modal body -->
@@ -17,20 +17,35 @@
             <input type="hidden" name="parent" >               
           </div>
           <div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-4">
               <label>Kode </label>
               <input class="form-control" name="code" placeholder="Kode SubKomponen" data-edit type="text" required maxlength="3">
             </div>
-            <div class="form-group col-md-9">
+            <div class="form-group col-md-8">
               <label>Nama SubKomponen</label>
               <input class="form-control" name="name" placeholder="Name SubKomponen" type="text" required />
             </div>
           </div>
-          <div class="form-group">
-            <label>Anggaran</label>
-            <div class="input-group">
-              <span class="input-group-addon">Rp.</span>
-              <input class="form-control" name="anggaran" placeholder="Anggaran" type="text" required />
+          <div class="row">
+            <div class="form-group col-md-4">
+              <label>Anggaran</label>
+              <div class="input-group">
+                <span class="input-group-addon">Rp.</span>
+                <input class="form-control" name="anggaran" placeholder="Anggaran" type="text" required />
+              </div>
+            </div>
+            <div class="form-group col-md-8">
+              <label>Unit Kerja</label>
+              <select name="unit_kerja" required data-parsley-required-message="Pilih Unit Kerja" id="es3" style="width: 100%;height: 34px;">
+                
+              </select>
+              <select style="display: none;" id="es3data">
+                @foreach ($eselon_tiga as $unit)
+                    <option value="{{ $unit->codename }}" data-parent={{ $unit->parent }}> 
+                      {{ $unit->name }}
+                    </option>
+                @endforeach
+              </select>
             </div>
           </div>
           <div class="form-group">
@@ -40,7 +55,7 @@
           <div class="form-group">
             <label for="datduk">Data Dukung</label>
             <div id="datduks"></div>
-            <input id="datduk" type="file" name="datduks[]" multiple data-parsley-max-file-size="10000">
+            <input id="datduk" type="file" name="datduks[]" multiple data-parsley-max-file-size="20000">
           </div>
           <div class="form-group">
             <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -128,6 +143,11 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
     modal.find('.modal-body [name="code"]').attr('data-parsley-remote', 
         $('#tree').data('url') + "?id=" + parent.mak + ".{value}&_t=" +d.getTime()
     );
+
+    modal.find('#es3').html('');
+    modal.find('#es3data [data-parent="' + parent.eselon_dua + '"]').clone().appendTo('#es3');
+    modal.find('#es3').append('<option selected value="">Pilih Unit Kerja</option>');
+
     modal.find('.modal-body [name="code"]').attr('data-parsley-remote-validator', 'reverse'); 
     modal.find('.modal-body [name="code"]').attr('data-parsley-remote-message', 'Kode sudah ada'); 
     modal.find('.modal-body [name="parent-kw"]').val(parent.code + " - " + parent.name); 
@@ -138,6 +158,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
         modal.find('.modal-body [name="code"]').data('edit', data.node.code); 
         modal.find('.modal-body [name="code"]').val(data.node.code).inputmask('A[AA]'); 
         modal.find('.modal-body [name="name"]').val(data.node.name); 
+        modal.find('.modal-body [name="unit_kerja"]').val(data.node.unit_kerja); 
         modal.find('.modal-body [name="anggaran"]').val(data.node.anggaran).inputmask("rupiah");  //static mask
         modal.find('.modal-body [name="_method"]').val("PUT"); 
 
@@ -203,6 +224,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
 
     $('#subkomponenmodal form').parsley().on('form:submit', function() {
         var formData = new FormData($('#create-subkomponen')[0]);
+        
         $.ajax({
             type        : 'POST', // define the type of HTTP verb we want to use (POST for our form)
             dataType    : 'JSON', // what type of data do we expect back from the server
@@ -249,7 +271,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
 $('#datduk').fileinput({
     showUpload: false,
     showPreview: false,
-    maxFileSize: 15000,
+    maxFileSize: 20000,
     browseIcon: "<i class='fa fa-folder-open-o'></i>"
 });
 </script>
