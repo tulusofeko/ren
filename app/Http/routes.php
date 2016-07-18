@@ -22,7 +22,9 @@ use Symfony\Component\Yaml\Yaml;
 
 Route::group(['middleware' => ['auth']], function() {
 
-    Route::get('/', 'DashboardController@v1')->name('dashboard');
+    Route::get('/', function () { return redirect()->route('dashboard');});
+    Route::get('/dashboard', 'DashboardController@v1')->name('dashboard');
+    Route::get('/dashboard/{eselon_dua}', 'DashboardController@v2');
 
     // Eselon Satu Controller Route
     Route::group(['prefix' => 'unit/eselon-satu', 'as' => 'eselon_satu.',], function () {
@@ -203,6 +205,9 @@ Route::group(['middleware' => ['auth']], function() {
             ->middleware(['auth']);
         
         Route::put('/update/{user}', 'UserController@postUpdate')->name('update')
+            ->middleware(['auth']);
+
+        Route::put('/profile', 'UserController@profileUpdate')->name('updateprofile')
             ->middleware(['auth']);
         
         Route::get('/manage', 'UserController@manage')->name('manage')

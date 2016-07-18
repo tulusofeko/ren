@@ -79,7 +79,7 @@
             <div class="form-group">
               <label>Email Pengguna</label>
               <div class="input-group">
-                <input class="form-control" name="email" placeholder="Name Pengguna" type="text" required 
+                <input class="form-control" name="email" placeholder="Email Pengguna" type="text" required 
                 maxlength="255" 
                 data-remote="{{ route('user.get', '') }}/{value}" 
                 data-parsley-remote-validator="reverse" 
@@ -147,8 +147,6 @@
 
 
 @section('javascript')
-  @include('includes.parsley')
-  
   <!-- iCheck 1.0.1 -->
   <script src="{{ asset('adminlte/plugins/iCheck/icheck.min.js') }}"></script>
   <!-- Select2 -->
@@ -293,13 +291,17 @@
 
       if (data.method == "put") {
           var user = table.row( $(e.relatedTarget).parents('tr') ).data();
+          action   =  $('#create-user').data('edit') + user.id;
           modal.find('.modal-title').html("<i class='fa fa-edit'></i> Edit Data");
           modal.find('.modal-body [name="name"]').val(user.name);
           modal.find('.modal-body [name="email"]').val(user.email.replace('@lemsaneg.go.id', ''));
+          modal.find('.modal-body [name="email"]').data('edit', user.email.replace('@lemsaneg.go.id', ''));
           modal.find('.modal-body [name="_method"]').val('PUT');
           modal.find('.modal-body [name="password"]').removeAttr('required');
+          modal.find('.modal-body [name="password_confirmation"]').removeAttr('required');
       } else {
           modal.find('.modal-body [name="password"]').attr('required', '');
+          modal.find('.modal-body [name="password_confirmation"]').attr('required', '');
       }
 
       $('#formuser [name="email"]').parsley()
