@@ -124,7 +124,7 @@
             </div>
           </div>
           <table id="tree" class="table table-bordered table-hover table-striped" 
-            data-url="{{ route('rkt.getdata') }}" style="height: 300px;" 
+            data-url="{{ route('rkt.getdata') }}" style="min-height: 300px;" 
           >
             <thead>
               <tr>

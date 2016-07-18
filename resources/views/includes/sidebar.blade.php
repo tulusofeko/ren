@@ -7,7 +7,14 @@
     </div>
     <div class="pull-left info">
       <p>{{ auth()->user()->name }}</p>
-      <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+      <a href="#" data-toggle="modal" data-target="#userprofile" aria-hidden="true">
+        <i class="fa fa-edit"></i> Edit Profile</a>
+    </div>
+  </div>
+  <div id="callout-message" style="display: none">
+    <div class="callout">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <p class="callout-messages"></p>
     </div>
   </div>
   <!-- search form -->
