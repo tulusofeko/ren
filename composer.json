@@ -11,7 +11,8 @@
         "laravel/framework": "5.2.*",
         "symfony/yaml": "*",
         "yajra/laravel-datatables-oracle": "^6.10",
-        "doctrine/dbal" : "*"
+        "doctrine/dbal" : "*",
+        "zizaco/entrust": "5.2.x-dev"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
