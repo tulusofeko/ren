@@ -55,7 +55,7 @@ $('#outputmodal').on('show.bs.modal', function (e) {
     $('#outputmodal form')[0].reset();
     $('#outputmodal form').parsley().reset();
 
-    var data     = $(e.relatedTarget).data(), d = new Date;
+    var data     = $(this).data(), d = new Date;
     var action   = $('#outputmodal form').attr('action');
     var kegiatan = data.kegiatan;
     var editee;

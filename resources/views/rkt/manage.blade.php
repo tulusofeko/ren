@@ -8,11 +8,13 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2/select2.min.css') }}">
   <!-- DataTables -->
-  <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">
+  <link rel="stylesheet" href="{{ asset('adminlte/plugins/datatables/dataTables.bootstrap.css') }}">  
   <!-- JEasyUI -->
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/metro-gray/easyui.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ asset('easyui/themes/icon.css') }}">
 
+  <!-- Context Menu -->
+  <link rel="stylesheet" href="{{ asset('plugins/contextMenu/dist/jquery.contextMenu.min.css') }}">
   <!-- File selector -->
   <link rel="stylesheet" type="text/css" href="{{ asset('plugins/bootstrap-fileinput/css/fileinput.min.css') }}">
   
@@ -142,7 +144,9 @@
       </div>
     </div>
   </div>
+  @include('rkt.context-menu')
 @endsection
+
 
 @section('javascript')
   @include('includes.parsley')
@@ -157,7 +161,8 @@
   <script src="{{ asset('plugins/inputmask/min/jquery.inputmask.bundle.min.js') }}"></script>
   <!-- EasyUI -->
   <script src="{{ asset('easyui/jquery.easyui.min.js') }}"></script>
-  
+  <!-- Context Menu -->
+  <script src="{{ asset('plugins/contextMenu/dist/jquery.contextMenu.min.js') }}"></script>
   <!-- Form validation -->
   <script>
   $('#kegiatan-selector').select2();
@@ -180,6 +185,64 @@
       $("#flash-message .close").on("click", function(){
           $("#flash-message").hide();
       });
+  });
+
+  $.contextMenu({
+      selector : '.datagrid-cell',
+      callback: function(key, opt) {
+          var datacet = {
+              kegiatan : {
+                  child  : 'output',
+              },
+              output   : {
+                  child  : 'suboutput',
+                  target : '#outputmodal'
+              },
+              suboutput   : {
+                  child  : 'komponen',
+                  target : '#suboutputmodal'
+              },
+              komponen : {
+                  child  : 'subkomponen',
+                  target : '#komponenmodal'
+              },
+              subkomponen : {
+                  child  : 'aktivitas',
+                  target : '#subkomponenmodal'
+              },
+              aktivitas : {
+                  child  : '#',
+                  target : '#aktivitasmodal'
+              }
+          }
+
+          var level  = opt.$trigger.data('level');
+          var child  = datacet[level].child;
+          var target = "";
+
+          switch(key) {
+              case "add":
+                  target = datacet[child].target;
+                  break;
+              case "add-sibling":
+                  target = $(datacet[level].target).data('method', 'POST');
+                  target = datacet[level].target;
+                  break;
+              case "edit":
+                  target = datacet[level].target;
+                  break;
+              case "delete":
+                  target = '#hapusmodal';
+                  break;
+          }
+
+          $(target).modal('show');
+      },
+      build: function($trigger, e) {
+          e.preventDefault();
+
+          return $trigger.data('menu-items');
+      }
   });
   </script>
 
@@ -259,30 +322,135 @@
               }
           }
       ]],
+      onContextMenu: function (e,row){
+          if (row.level == 'program') {
+              $(".datagrid-cell").contextMenu(false);
+          } else {
+              $(".datagrid-cell").contextMenu(true);
+          }
+
+          var parent = $(this).treegrid('getParent', row.mak), child;
+          
+          switch(row.level) {
+              case 'kegiatan':
+                  $('#outputmodal').data('kegiatan', row);
+                  $('#outputmodal').data('method', 'POST');
+                  $('#box-action [data-target="#outputmodal"][data-method="POST"]').show();
+                  child = 'output';
+                  break;
+              case 'output':
+                  $('#outputmodal').data('kegiatan', parent);
+                  $('#outputmodal').data('output', row);
+                  $('#outputmodal').data('method', 'PUT');
+                  $('#suboutputmodal').data('output', row);
+                  $('#suboutputmodal').data('method', 'POST');
+                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#suboutputmodal"][data-method="POST"]').show();
+                  child = 'suboutput';
+                  break;
+              case 'suboutput':
+                  $('#suboutputmodal').data('output', parent);
+                  $('#suboutputmodal').data('suboutput', row);
+                  $('#suboutputmodal').data('method', 'PUT');
+                  $('#komponenmodal').data('parent', row);
+                  $('#komponenmodal').data('method', 'POST');
+                  $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#komponenmodal"][data-method="POST"]').show();
+                  child = 'komponen';
+                  break;
+              case 'komponen' :
+                  $('#komponenmodal').data('parent', parent);
+                  $('#komponenmodal').data('node', row);
+                  $('#komponenmodal').data('method', 'PUT');
+                  $('#subkomponenmodal').data('parent', row);
+                  $('#subkomponenmodal').data('method', 'POST');
+                  $('#box-action [data-target="#komponenmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="POST"]').show();
+                  child = 'subkomponen';
+                  break;
+              case 'subkomponen' :
+                  $('#subkomponenmodal').data('parent', parent);
+                  $('#subkomponenmodal').data('node', row);
+                  $('#subkomponenmodal').data('method', 'PUT');
+                  $('#aktivitasmodal').data('parent', row);
+                  $('#aktivitasmodal').data('method', 'POST');
+                  $('#box-action [data-target="#subkomponenmodal"][data-method="PUT"]').show();
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="POST"]').show();
+                  child = 'aktivitas';
+                  break;
+              case 'aktivitas' :
+                  $('#aktivitasmodal').data('parent', parent);
+                  $('#aktivitasmodal').data('method', 'PUT');
+                  $('#aktivitasmodal').data('node', row);
+                  $('#box-action [data-target="#aktivitasmodal"][data-method="PUT"]').show();
+                  child = false;
+                  break;
+          }
+
+          if (row.level !== 'program' && row.level !== 'kegiatan') {
+              $('#hapusmodal').data('row', row);
+              $('#box-action [data-target="#hapusmodal"]').show();
+          }
+          
+          var data = { items: {
+                  "add": {
+                      name    : "Add " + child, 
+                      icon    : "add",
+                      visible : child ? true : false
+                  },
+                  separator2: { "type": "cm_separator" },
+                  "add-sibling": {
+                      name    : "Add " + row.level, 
+                      icon    : "add",
+                      visible : true
+                  },
+                  "edit": {
+                      name    : "Edit " + row.level, 
+                      icon    : "edit",
+                      visible : true
+                  },
+                  "delete": {
+                      name    : "Hapus " + row.level, 
+                      icon    : "delete",
+                      visible : true
+                  }
+              }
+          };
+
+          if (row.level == 'kegiatan') { 
+              data.items.edit.visible   = false;
+              data.items.delete.visible = false;
+          }
+
+          $(e.target).data('level', row.level);
+          $(e.target).data('menu-items', data);
+      },
       onSelect: function (row)
       {
           $('#box-action button').hide();
 
-          console.log(row);
-
           var parent = $(this).treegrid('getParent', row.mak);
+
           switch(row.level) {
               case 'kegiatan':
-                  $('#box-action [data-target="#outputmodal"][data-method="POST"]').data('kegiatan', row);
+                  $('#outputmodal').data('kegiatan', row);
+                  $('#outputmodal').data('method', 'POST');
                   $('#box-action [data-target="#outputmodal"][data-method="POST"]').show();
                   break;
               case 'output':
-                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('kegiatan', parent);
-                  $('#box-action [data-target="#outputmodal"][data-method="PUT"]').data('output', row);
+                  $('#outputmodal').data('kegiatan', parent);
+                  $('#outputmodal').data('output', row);
+                  $('#outputmodal').data('method', 'PUT');
+                  $('#suboutputmodal').data('output', row);
                   $('#box-action [data-target="#outputmodal"][data-method="PUT"]').show();
-                  $('#box-action [data-target="#suboutputmodal"][data-method="POST"]').data('output', row);
                   $('#box-action [data-target="#suboutputmodal"][data-method="POST"]').show();
                   break;
               case 'suboutput':
-                  $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').data('output', parent);
-                  $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').data('suboutput', row);
+                  $('#suboutputmodal').data('output', parent);
+                  $('#suboutputmodal').data('suboutput', row);
+                  $('#suboutputmodal').data('method', 'PUT');
+                  $('#komponenmodal').data('parent', row);
                   $('#box-action [data-target="#suboutputmodal"][data-method="PUT"]').show();
-                  $('#box-action [data-target="#komponenmodal"][data-method="POST"]').data('parent', row);
                   $('#box-action [data-target="#komponenmodal"][data-method="POST"]').show();
                   break;
               case 'komponen' :

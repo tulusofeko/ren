@@ -7,6 +7,7 @@ use InvalidArgumentException;
 use App\Http\Requests;
 use App\SubKomponen;
 use App\Datduk;
+use Storage;
 
 class SubKomponenController extends NodeController
 {
@@ -62,12 +63,15 @@ class SubKomponenController extends NodeController
 
                 $datduk    = new Datduk;
                 
+                if (!Storage::exists('DATDUK_1')) {
+                    continue;
+                }
+
                 $datduk->filename  = $file_name;
                 $datduk->mime_type = $file_type;
                 $datduk->hash      = $hash;
                 $datduk->parent    = $sub_komponen->id;
                 $datduk->save();
-
                 $file->move(storage_path('app/datduks'), 'DATDUK_' . $datduk->id);
             }
             
@@ -142,6 +146,13 @@ class SubKomponenController extends NodeController
                 $datduk->hash      = $hash;
                 $datduk->parent    = $sub_komponen->id;
                 $datduk->save();
+
+                if (Storage::exists('datduks/DATDUK_' . $datduk->id)) {
+                    Storage::move(
+                        'datduks/DATDUK_' . $datduk->id, 
+                        'datduks/DATDUK_' . $datduk->id . '_BAK'
+                    );
+                }
 
                 $file->move(storage_path('app/datduks'), 'DATDUK_' . $datduk->id);
             }

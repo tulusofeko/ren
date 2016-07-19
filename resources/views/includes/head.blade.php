@@ -23,7 +23,6 @@
       a[href]:after {
         content: none !important;
       }
-
       .box {
         border-top: 0;
       }

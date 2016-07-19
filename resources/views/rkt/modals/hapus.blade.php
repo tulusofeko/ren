@@ -37,7 +37,7 @@ $('#hapusmodal').on('show.bs.modal', function (e) {
     $('#hapusmodal form').parsley().reset(); 
 
     var modal  = $(this);
-    var row    = $(e.relatedTarget).data('row');
+    var row    = $(this).data('row');
     var base   = $('base').attr('href');
     var action = base + "/" + row.level + "/hapus/";
 

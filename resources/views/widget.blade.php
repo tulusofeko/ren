@@ -6,7 +6,13 @@
       <span class="info-box-icon"><i class="fa fa-puzzle-piece"></i></span>
       <div class="info-box-content">
         <span class="info-box-text">Rata-Rata Beban Kegiatan</span>
-        <span class="info-box-number">{{ round($units->sum('perkiraan')/sizeof($units), 2) }}%</span>
+        <span class="info-box-number">
+          @if (sizeof($units) > 0)
+            {{ round($units->sum('perkiraan')/sizeof($units), 2) }}%
+          @else
+            0%
+          @endif
+        </span>
       </div><!-- /.info-box-content -->
     </div>
   </div><!-- ./col -->

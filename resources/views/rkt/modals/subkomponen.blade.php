@@ -132,7 +132,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
     $('#subkomponenmodal form')[0].reset();
     $('#subkomponenmodal form').parsley().reset();
 
-    var data   = $(e.relatedTarget).data(), d = new Date;
+    var data   = $(this).data(), d = new Date;
     var action = $('#subkomponenmodal form').attr('action');
     var parent = data.parent;
     var modal  = $(this);

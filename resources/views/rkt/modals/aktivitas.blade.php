@@ -72,7 +72,7 @@ $('#aktivitasmodal').on('show.bs.modal', function (e) {
     $('#aktivitasmodal form')[0].reset();
     $('#aktivitasmodal form').parsley().reset();
 
-    var data   = $(e.relatedTarget).data(), d = new Date;
+    var data   = $(this).data(), d = new Date;
     var action = $('#aktivitasmodal form').attr('action');
     var parent = data.parent;
     var editee;

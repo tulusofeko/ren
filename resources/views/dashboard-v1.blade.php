@@ -76,7 +76,7 @@
                   <td class="text-left"  >
                     @if (!isset($selected))
                       <a href="{{ url()->current() }}/{{$unit->codename }}">
-                        {{ $unit->name }} <i class="fa fa-arrow-circle-o-right no-print"></i>
+                        {{ $unit->name }}
                       </a>
                     @else 
                         {{ $unit->name }}

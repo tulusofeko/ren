@@ -49,7 +49,7 @@ $('#komponenmodal').on('show.bs.modal', function (e) {
     $('#komponenmodal form')[0].reset();
     $('#komponenmodal form').parsley().reset();
 
-    var data   = $(e.relatedTarget).data(), d = new Date;
+    var data   = $(this).data(), d = new Date;
     var action = $('#komponenmodal form').attr('action');
     var parent = data.parent;
     var editee;
