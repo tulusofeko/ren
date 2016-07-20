@@ -35,6 +35,10 @@ class CreateDatduksTable extends Migration
      */
     public function down()
     {
+        Schema::table('datduks', function (Blueprint $table) {
+            $table->dropForeign('datduks_parent_foreign');
+        });
+
         Schema::drop('datduks');
     }
 }

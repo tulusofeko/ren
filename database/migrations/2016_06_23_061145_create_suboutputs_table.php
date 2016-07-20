@@ -34,6 +34,10 @@ class CreateSuboutputsTable extends Migration
      */
     public function down()
     {
+        Schema::table('suboutputs', function (Blueprint $table) {
+            $table->dropForeign('suboutputs_parent_foreign');
+        });
+
         Schema::drop('suboutputs');
     }
 }

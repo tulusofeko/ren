@@ -34,6 +34,10 @@ class CreateKomponensTable extends Migration
      */
     public function down()
     {
+        Schema::table('komponens', function (Blueprint $table) {
+            $table->dropForeign('komponens_parent_foreign');
+        });
+
         Schema::drop('komponens');
     }
 }

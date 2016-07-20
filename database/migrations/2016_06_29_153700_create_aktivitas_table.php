@@ -36,6 +36,10 @@ class CreateAktivitasTable extends Migration
      */
     public function down()
     {
+        Schema::table('aktivitas', function (Blueprint $table) {
+            $table->dropForeign('aktivitas_parent_foreign');
+        });
+
         Schema::drop('aktivitas');
     }
 }

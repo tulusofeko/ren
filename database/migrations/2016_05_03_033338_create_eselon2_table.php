@@ -17,6 +17,7 @@ class CreateEselon2Table extends Migration
             $table->string('codename', 3);
             $table->string('parent', 2)->nullable();
             $table->string('name');
+            $table->integer('pegawai');
             $table->timestamps();
 
             $table->unique('codename');
@@ -36,6 +37,10 @@ class CreateEselon2Table extends Migration
      */
     public function down()
     {
+        Schema::table('eselon_dua', function (Blueprint $table) {
+            $table->dropForeign('eselon_dua_parent_foreign');
+        });
+
         Schema::drop('eselon_dua');
     }
 }
