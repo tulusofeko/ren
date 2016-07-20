@@ -22,8 +22,9 @@ abstract class Usulan extends Model
         'durasi_sum'
     ];
 
-    protected $state    = 'closed';
-
+    protected $state   = 'closed';
+    protected $guarded = [];
+    
     /**
      * Getter for Parent MAK attribute
      * @param  mixed  $value

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use DB, Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+         DB::listen(function ($query) {
+            Log::debug($query->sql);
+            // $query->sql
+            // $query->bindings
+            // $query->time
+        });
+
         // Load menu to all view
         $menus = json_decode(file_get_contents(
             base_path() . '/resources/views/data/menu-ren.json')

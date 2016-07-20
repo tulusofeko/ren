@@ -8,6 +8,8 @@ use Storage;
 
 class Datduk extends Model
 {
+    protected $guarded = [];
+    
     public function delete()
     {
         Storage::delete('datduks/DATDUK_' . $this->id);
