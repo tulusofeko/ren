@@ -4,15 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use DB;
+use DB, Log;
 
 class Komponen extends Usulan
 {
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
         $this->append('eselon_dua');
 
-        parent::__construct();
+        parent::__construct($attributes);
     }
 
     /**

@@ -8,11 +8,11 @@ class Aktivitas extends Usulan
 {
     protected $state    = 'open';
 
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
         $this->append('code');
 
-        parent::__construct();
+        parent::__construct($attributes);
     }
 
     /**
