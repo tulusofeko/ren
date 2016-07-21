@@ -286,7 +286,7 @@
           {
               title : 'Kode',
               field : 'code',
-              width : 160,
+              width : 150,
               align : 'left'
           },
           {
@@ -304,13 +304,13 @@
               title : 'Durasi (Hari)',
               field : 'durasi',
               align : 'right',
-              width : 80
+              width : 90
           },
           {
               title : 'Waktu (Menit)',
               field : 'durasi_sum',
               align : 'right',
-              width : 90
+              width : 95
           },
           {
               title : 'Anggaran',
@@ -324,7 +324,7 @@
           {
               title : 'Unit Kerja',
               field : 'unit',
-              width : 70,
+              width : 75,
               align : 'center'
           },
           {
