@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class SubKomponen extends Usulan
 {
@@ -56,6 +57,27 @@ class SubKomponen extends Usulan
     public function setCodeAttribute($value)
     {
         $this->attributes['code'] = strtoupper($value);
+    }
+
+    public function getUnitAttribute($value)
+    {
+        return $this->attributes['unit_kerja'];
+    }
+
+    public function getDatdukAttribute($value)
+    {
+        $datduks = DB::table('datduks')
+            ->join('sub_komponens', 'datduks.parent', '=', 'sub_komponens.id')
+            ->join('komponens', 'sub_komponens.parent', '=', 'komponens.id')
+            ->join('suboutputs', 'komponens.parent', '=', 'suboutputs.id')
+            ->join('outputs', 'suboutputs.parent', '=', 'outputs.id')
+            ->join('kegiatans', 'outputs.parent', '=', 'kegiatans.code')
+            ->select('datduks.*')
+            ->where([
+                ['datduks.parent', $this->id]
+            ])->get();
+
+        return collect($datduks)->count();
     }
 
     /**

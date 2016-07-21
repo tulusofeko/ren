@@ -198,6 +198,7 @@ $('#subkomponenmodal').on('show.bs.modal', function (e) {
         });
 
     } else {
+        $('#datduks').html('');
         modal.find('.modal-body [name="code"]').val('').inputmask('A[AA]'); 
         modal.find('.modal-body [name="anggaran"]').val('').inputmask("rupiah");  //static mask
         modal.find('.modal-body .modal-title').val("Tambah Data");

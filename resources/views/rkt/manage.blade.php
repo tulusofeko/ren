@@ -286,31 +286,31 @@
           {
               title : 'Kode',
               field : 'code',
-              width : 180,
+              width : 160,
               align : 'left'
           },
           {
               title : 'Uraian Suboutput/Komponen/Subkomponen/Akun/Detil',
               field : 'name',
-              width : 470,
+              width : 440,
           },
           {
-              title : 'Jumlah Personil',
+              title : 'Personil',
               field : 'personil',
               align : 'right',
-              width : 100
+              width : 60
           },
           {
               title : 'Durasi (Hari)',
               field : 'durasi',
               align : 'right',
-              width : 100
+              width : 80
           },
           {
               title : 'Waktu (Menit)',
               field : 'durasi_sum',
               align : 'right',
-              width : 100
+              width : 90
           },
           {
               title : 'Anggaran',
@@ -320,6 +320,18 @@
               formatter: function(value,row,index) {
                   return value;
               }
+          },
+          {
+              title : 'Unit Kerja',
+              field : 'unit',
+              width : 70,
+              align : 'center'
+          },
+          {
+              title : 'Datduk',
+              field : 'datduk',
+              width : 50,
+              align : 'center'
           }
       ]],
       onContextMenu: function (e,row){

@@ -19,7 +19,9 @@ abstract class Usulan extends Model
         'pagu',
         'personil',
         'durasi',
-        'durasi_sum'
+        'durasi_sum',
+        'unit',
+        'datduk'
     ];
 
     protected $state   = 'closed';
@@ -145,6 +147,16 @@ abstract class Usulan extends Model
                 [   $this->getTable() . '.id', $this->id]
             ])->sum('durasi_sum');
         return $durasi;
+    }
+
+    public function getUnitAttribute($value)
+    {
+        return "-";
+    }
+
+    public function getDatdukAttribute($value)
+    {
+        return "-";
     }
 
     /**

@@ -63,10 +63,6 @@ class SubKomponenController extends NodeController
 
                 $datduk    = new Datduk;
                 
-                if (!Storage::exists('DATDUK_1')) {
-                    continue;
-                }
-
                 $datduk->filename  = $file_name;
                 $datduk->mime_type = $file_type;
                 $datduk->hash      = $hash;
