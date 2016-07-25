@@ -51,8 +51,11 @@ class RktController extends Controller
             $data = collect();
         }
         
-        $result = $data->sortBy('code')->values()->toArray();
-            
+        $sorted = $data->sortBy(function ($item, $key) {
+            return strlen($item['code']) . $item['code'];
+        });
+
+        $result = $sorted->values()->toArray();
         return response()->json($result);
     }
 
